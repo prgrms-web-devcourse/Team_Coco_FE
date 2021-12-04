@@ -1,8 +1,9 @@
 {
-  "name": "team_hi-five_fe",
+  "name": "team_coco_fe",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/react": "^1.7.2",
     "@craco/craco": "^6.4.2",
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
@@ -13,8 +14,12 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "framer-motion": "^4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-helmet-async": "^1.1.2",
+    "react-icons": "^4.3.1",
+    "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
@@ -59,8 +64,7 @@
       ],
       "@emotion/no-vanilla": "error",
       "@emotion/import-from-emotion": "error",
-      "@emotion/styled-import": "error",
-      "prettier/prettier": "error"
+      "@emotion/styled-import": "error"
     },
     "overrides": [
       {
@@ -85,20 +89,18 @@
       "last 1 safari version"
     ]
   },
-  "resolutions": {
-    "babel-loader": "8.1.0"
-  },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "@emotion/eslint-plugin": "^11.7.0",
-    "@storybook/addon-actions": "^6.4.0",
-    "@storybook/addon-essentials": "^6.4.0",
-    "@storybook/addon-links": "^6.4.0",
-    "@storybook/node-logger": "^6.4.0",
+    "@storybook/addon-a11y": "^6.4.1",
+    "@storybook/addon-actions": "^6.4.1",
+    "@storybook/addon-essentials": "^6.4.1",
+    "@storybook/addon-links": "^6.4.1",
+    "@storybook/node-logger": "^6.4.1",
     "@storybook/preset-create-react-app": "^3.2.0",
-    "@storybook/react": "^6.4.0",
+    "@storybook/react": "^6.4.1",
     "craco-alias": "^3.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
