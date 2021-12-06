@@ -1,6 +1,6 @@
 import { Box, Flex, HStack, Heading } from "@chakra-ui/react";
 
-import { PageLayout } from "@/components/Layout";
+import { PrivatePageLayout } from "@/components/Layout";
 import {
   Posts,
   PostsSearchForm,
@@ -9,7 +9,10 @@ import {
 
 export const PostsPage = () => {
   return (
-    <PageLayout title="플랜찾기" header={<Heading size="lg">플랜찾기</Heading>}>
+    <PrivatePageLayout
+      title="플랜찾기"
+      header={<Heading size="lg">플랜찾기</Heading>}
+    >
       <Box my={4}>
         <PostsSearchForm />
       </Box>
@@ -21,6 +24,6 @@ export const PostsPage = () => {
       <Box my={4}>
         <Posts />
       </Box>
-    </PageLayout>
+    </PrivatePageLayout>
   );
 };
