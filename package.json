@@ -16,8 +16,10 @@
     "@types/react-dom": "^17.0.0",
     "framer-motion": "^4",
     "react": "^17.0.2",
+    "react-datepicker": "^4.5.0",
     "react-dom": "^17.0.2",
     "react-helmet-async": "^1.1.2",
+    "react-hook-form": "^7.20.5",
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
@@ -64,7 +66,13 @@
       ],
       "@emotion/no-vanilla": "error",
       "@emotion/import-from-emotion": "error",
-      "@emotion/styled-import": "error"
+      "@emotion/styled-import": "error",
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ]
     },
     "overrides": [
       {
@@ -101,6 +109,7 @@
     "@storybook/node-logger": "^6.4.1",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.4.1",
+    "@types/react-datepicker": "^4.3.2",
     "craco-alias": "^3.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",

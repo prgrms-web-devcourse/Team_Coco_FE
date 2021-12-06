@@ -4,7 +4,6 @@ import { PropsWithChildren, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter as Router } from "react-router-dom";
 
-import { BottomNavigation } from "@/components/BottomNavigation";
 import { AppRoutes } from "@/routes";
 import theme from "@/theme";
 import { fontsStyle } from "@/theme/foundations/typography";
@@ -28,7 +27,6 @@ const App = () => {
   return (
     <AppProvider>
       <AppRoutes />
-      <BottomNavigation />
     </AppProvider>
   );
 };
