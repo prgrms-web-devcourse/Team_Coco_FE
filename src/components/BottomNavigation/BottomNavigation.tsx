@@ -17,40 +17,34 @@ import { Link } from "react-router-dom";
 import { useBottomNavigation } from "./useBottomNavigation";
 
 export const BottomNavigation = () => {
-  const { tabIndex, handleChange } = useBottomNavigation();
+  const { tabIndex, handleChange, visible } = useBottomNavigation();
 
   return (
     <Portal>
       <Tabs
         bg={mode("gray.50", "gray.800")}
         isFitted
-        isLazy
         index={tabIndex}
         onChange={handleChange}
         w="100%"
         pos="fixed"
         bottom="0"
+        h="64px"
+        size="lg"
+        d={visible ? undefined : "none"}
       >
-        <TabList h="80px">
-          <Tab>
-            <Link to="schedule">
-              <Icon as={IoTodaySharp} w={8} h={8} />
-            </Link>
+        <TabList>
+          <Tab as={Link} to="schedule">
+            <Icon as={IoTodaySharp} w={8} h={8} />
           </Tab>
-          <Tab>
-            <Link to="connection">
-              <Icon as={IoPeopleCircleOutline} w={8} h={8} />
-            </Link>
+          <Tab as={Link} to="connection">
+            <Icon as={IoPeopleCircleOutline} w={8} h={8} />
           </Tab>
-          <Tab>
-            <Link to="posts">
-              <Icon as={IoCompassSharp} w={8} h={8} />
-            </Link>
+          <Tab as={Link} to="posts">
+            <Icon as={IoCompassSharp} w={8} h={8} />
           </Tab>
-          <Tab>
-            <Link to="profile">
-              <Icon as={IoPersonSharp} w={8} h={8} />
-            </Link>
+          <Tab as={Link} to="profile">
+            <Icon as={IoPersonSharp} w={8} h={8} />
           </Tab>
         </TabList>
       </Tabs>
