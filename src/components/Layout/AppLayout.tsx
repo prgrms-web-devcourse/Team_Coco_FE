@@ -1,17 +1,20 @@
-import { Flex, useColorModeValue as mode } from "@chakra-ui/react";
+import { Box, useColorModeValue as mode } from "@chakra-ui/react";
 import { PropsWithChildren } from "react";
+
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 type AppLayoutProps = PropsWithChildren<{}>;
 
 export const AppLayout = ({ children }: AppLayoutProps) => {
   return (
-    <Flex
-      px="1rem"
-      direction="column"
-      bg={mode("gray.100", "gray.800")}
-      height="100vh"
+    <Box
+      px={4}
+      bg={mode("white", "gray.800")}
+      minHeight="100vh"
+      overflowX="hidden"
     >
       {children}
-    </Flex>
+      <BottomNavigation />
+    </Box>
   );
 };
