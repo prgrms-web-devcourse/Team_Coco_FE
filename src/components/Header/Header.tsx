@@ -1,4 +1,9 @@
-import { Portal, Box, useColorModeValue as mode } from "@chakra-ui/react";
+import {
+  Portal,
+  Box,
+  useColorModeValue as mode,
+  HStack,
+} from "@chakra-ui/react";
 import { PropsWithChildren } from "react";
 
 type HeaderProps = PropsWithChildren<{}>;
@@ -7,7 +12,7 @@ export const Header = ({ children }: HeaderProps) => {
   return (
     <Portal>
       <Box
-        w="100%"
+        w="full"
         pos="fixed"
         top="0"
         h="80px"
@@ -16,7 +21,9 @@ export const Header = ({ children }: HeaderProps) => {
         pb={0}
         bg={mode("white", "white")}
       >
-        {children}
+        <HStack h="full" align="center">
+          {children}
+        </HStack>
       </Box>
     </Portal>
   );

@@ -19,7 +19,7 @@ import { useForm, Controller } from "react-hook-form";
 
 import { DatePicker } from "@/components/DatePicker";
 
-export const SchedulePostsSearchForm = () => {
+export const PostsSearchForm = () => {
   const {
     handleSubmit,
     register,
@@ -32,7 +32,7 @@ export const SchedulePostsSearchForm = () => {
   });
 
   return (
-    <chakra.form my={4} onSubmit={onSubmit}>
+    <chakra.form onSubmit={onSubmit}>
       <Stack spacing={4}>
         <FormControl id="search-term">
           <VisuallyHidden>

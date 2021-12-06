@@ -6,19 +6,15 @@ import { Routes, Route } from "react-router-dom";
 import { AppLayout } from "@/components/Layout";
 import { lazyImport } from "@/utils/lazyImport";
 
-const { ConnectionPage } = lazyImport(
-  () => import("@/pages/connection"),
-  "ConnectionPage"
-);
-
 const { PostsPage } = lazyImport(() => import("@/pages/posts"), "PostsPage");
+
 const { ProfilePage } = lazyImport(
   () => import("@/pages/profile"),
   "ProfilePage"
 );
-const { SchedulePage } = lazyImport(
-  () => import("@/pages/schedule"),
-  "SchedulePage"
+const { SchedulesPage } = lazyImport(
+  () => import("@/pages/schedules"),
+  "SchedulesPage"
 );
 
 const App = () => {
@@ -42,9 +38,8 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<App />}>
         <Route path="posts" element={<PostsPage />} />
-        <Route path="connection" element={<ConnectionPage />} />
         <Route path="profile" element={<ProfilePage />} />
-        <Route path="schedule" element={<SchedulePage />} />
+        <Route path="schedule" element={<SchedulesPage />} />
       </Route>
     </Routes>
   );

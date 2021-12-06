@@ -2,13 +2,13 @@ import { Heading } from "@chakra-ui/react";
 
 import { PageLayout } from "@/components/Layout";
 
-export const ProfilePage = () => {
+export const SchedulesPage = () => {
   return (
     <PageLayout
-      title="마이 페이지"
-      header={<Heading size="lg">마이 페이지</Heading>}
+      title="나의 트립플랜"
+      header={<Heading size="lg">나의 트립플랜</Heading>}
     >
-      Profile
+      Schedule
     </PageLayout>
   );
 };

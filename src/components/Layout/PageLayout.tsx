@@ -17,7 +17,7 @@ export const PageLayout = ({
   header,
 }: PageLayoutProps) => {
   return (
-    <Box py="80px">
+    <Box pt="80px" pb="4rem">
       <Head title={title} description={description} />
       <Header>{header}</Header>
       {children}

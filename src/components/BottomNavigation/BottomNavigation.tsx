@@ -6,12 +6,7 @@ import {
   useColorModeValue as mode,
   Icon,
 } from "@chakra-ui/react";
-import {
-  IoPeopleCircleOutline,
-  IoTodaySharp,
-  IoCompassSharp,
-  IoPersonSharp,
-} from "react-icons/io5";
+import { IoTodaySharp, IoCompassSharp, IoPersonSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 import { useBottomNavigation } from "./useBottomNavigation";
@@ -36,9 +31,6 @@ export const BottomNavigation = () => {
         <TabList>
           <Tab as={Link} to="schedule">
             <Icon as={IoTodaySharp} w={8} h={8} />
-          </Tab>
-          <Tab as={Link} to="connection">
-            <Icon as={IoPeopleCircleOutline} w={8} h={8} />
           </Tab>
           <Tab as={Link} to="posts">
             <Icon as={IoCompassSharp} w={8} h={8} />
