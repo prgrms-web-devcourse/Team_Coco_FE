@@ -10,6 +10,12 @@ const { ProfilePage } = lazyImport(
   () => import("@/pages/profile"),
   "ProfilePage"
 );
+
+const { PostsRoutes } = lazyImport(
+  () => import("@/routes/posts"),
+  "PostsRoutes"
+);
+
 const { SchedulesPage } = lazyImport(
   () => import("@/pages/schedules"),
   "SchedulesPage"
@@ -29,7 +35,7 @@ const App = () => {
     <AppLayout>
       <Suspense
         fallback={
-          <Center w="100%" h="100vh">
+          <Center h="100vh">
             <Spinner />
           </Center>
         }
@@ -48,6 +54,7 @@ export const AppRoutes = () => {
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="posts/*" element={<PostsRoutes />} />
         <Route path="schedule" element={<SchedulesPage />} />
         <Route path="*" element={<Navigate to="." />} />
       </Route>

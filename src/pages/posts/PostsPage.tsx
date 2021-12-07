@@ -18,7 +18,7 @@ export const PostsPage = () => {
       </Box>
       <Flex justify="flex-end" my={4}>
         <HStack flexShrink={0}>
-          <SortBySelect variant="unstyled" />
+          <SortBySelect />
         </HStack>
       </Flex>
       <Box my={4}>
