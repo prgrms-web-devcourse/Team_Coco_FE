@@ -21,6 +21,8 @@ const { SchedulesRoutes } = lazyImport(
   "SchedulesRoutes"
 );
 
+const { VoteRoutes } = lazyImport(() => import("@/routes/vote"), "VoteRoutes");
+
 const { LandingPage } = lazyImport(() => import("@/pages/auth"), "LandingPage");
 
 const { LoginPage } = lazyImport(() => import("@/pages/auth"), "LoginPage");
@@ -56,6 +58,7 @@ export const AppRoutes = () => {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="posts/*" element={<PostsRoutes />} />
         <Route path="schedules/*" element={<SchedulesRoutes />} />
+        <Route path="vote/*" element={<VoteRoutes />} />
         <Route path="*" element={<Navigate to="." />} />
       </Route>
     </Routes>
