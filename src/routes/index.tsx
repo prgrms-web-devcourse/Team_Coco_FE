@@ -23,6 +23,7 @@ const { SchedulesRoutes } = lazyImport(
 
 const { VoteRoutes } = lazyImport(() => import("@/routes/vote"), "VoteRoutes");
 
+const { MemoRoutes } = lazyImport(() => import("@/routes/memo"), "MemoRoutes");
 const { NoteRoutes } = lazyImport(() => import("@/routes/note"), "NoteRoutes");
 
 const { LandingPage } = lazyImport(() => import("@/pages/auth"), "LandingPage");
@@ -62,6 +63,7 @@ export const AppRoutes = () => {
         <Route path="schedules/*" element={<SchedulesRoutes />} />
         <Route path="note/*" element={<NoteRoutes />} />
         <Route path="vote/*" element={<VoteRoutes />} />
+        <Route path="memo/*" element={<MemoRoutes />} />
         <Route path="*" element={<Navigate to="." />} />
       </Route>
     </Routes>
