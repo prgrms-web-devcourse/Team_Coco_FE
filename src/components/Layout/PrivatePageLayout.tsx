@@ -10,7 +10,7 @@ type PageLayoutProps = PropsWithChildren<{
   header: ReactNode;
 }>;
 
-export const PageLayout = ({
+export const PrivatePageLayout = ({
   children,
   title,
   description = "",
