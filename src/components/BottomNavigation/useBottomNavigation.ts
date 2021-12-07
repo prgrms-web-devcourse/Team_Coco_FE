@@ -2,7 +2,7 @@ import { useBoolean } from "@chakra-ui/hooks";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 
-const allowedPathNames = ["schedule", "posts", "profile"];
+const allowedPathNames = ["schedules", "posts", "profile"];
 
 export const useBottomNavigation = () => {
   const [visible, setVisible] = useBoolean(false);
