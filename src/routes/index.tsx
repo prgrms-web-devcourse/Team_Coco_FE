@@ -1,30 +1,46 @@
 import { Spinner, Center } from "@chakra-ui/react";
 import { Suspense } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 
 import { AppLayout } from "@/components/Layout";
 import { lazyImport } from "@/utils/lazyImport";
 
-const { PostsPage } = lazyImport(() => import("@/pages/posts"), "PostsPage");
-
 const { ProfilePage } = lazyImport(
   () => import("@/pages/profile"),
   "ProfilePage"
 );
-const { SchedulesPage } = lazyImport(
-  () => import("@/pages/schedules"),
-  "SchedulesPage"
+
+const { PostsRoutes } = lazyImport(
+  () => import("@/routes/posts"),
+  "PostsRoutes"
 );
 
+const { SchedulesRoutes } = lazyImport(
+  () => import("@/routes/schedules"),
+  "SchedulesRoutes"
+);
+
+const { VoteRoutes } = lazyImport(() => import("@/routes/vote"), "VoteRoutes");
+
+const { MemoRoutes } = lazyImport(() => import("@/routes/memo"), "MemoRoutes");
+const { NoteRoutes } = lazyImport(() => import("@/routes/note"), "NoteRoutes");
+
 const { LandingPage } = lazyImport(() => import("@/pages/auth"), "LandingPage");
+
+const { LoginPage } = lazyImport(() => import("@/pages/auth"), "LoginPage");
+
+const { RegisterPage } = lazyImport(
+  () => import("@/pages/auth"),
+  "RegisterPage"
+);
 
 const App = () => {
   return (
     <AppLayout>
       <Suspense
         fallback={
-          <Center w="100%" h="100vh">
+          <Center h="100vh">
             <Spinner />
           </Center>
         }
@@ -40,9 +56,15 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<App />}>
         <Route index element={<LandingPage />} />
-        <Route path="posts" element={<PostsPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
         <Route path="profile" element={<ProfilePage />} />
-        <Route path="schedule" element={<SchedulesPage />} />
+        <Route path="posts/*" element={<PostsRoutes />} />
+        <Route path="schedules/*" element={<SchedulesRoutes />} />
+        <Route path="note/*" element={<NoteRoutes />} />
+        <Route path="vote/*" element={<VoteRoutes />} />
+        <Route path="memo/*" element={<MemoRoutes />} />
+        <Route path="*" element={<Navigate to="." />} />
       </Route>
     </Routes>
   );

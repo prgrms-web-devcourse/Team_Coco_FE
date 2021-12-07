@@ -9,6 +9,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 import { TextWithIcon } from "@/components/TextWithIcon";
 
@@ -30,7 +31,9 @@ export const Post = () => {
         <Box>테마</Box>
       </HStack>
       <Heading size="md" my={4}>
-        <LinkOverlay href="#">제목</LinkOverlay>
+        <LinkOverlay as={Link} to="id">
+          제목
+        </LinkOverlay>
       </Heading>
       <Flex justify="space-between">
         <TextWithIcon icon={<IoLocationSharp />}>도시명</TextWithIcon>

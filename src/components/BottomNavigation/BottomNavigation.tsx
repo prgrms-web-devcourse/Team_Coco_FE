@@ -29,7 +29,7 @@ export const BottomNavigation = () => {
         d={visible ? undefined : "none"}
       >
         <TabList>
-          <Tab as={Link} to="schedule">
+          <Tab as={Link} to="schedules">
             <Icon as={IoTodaySharp} w={8} h={8} />
           </Tab>
           <Tab as={Link} to="posts">
