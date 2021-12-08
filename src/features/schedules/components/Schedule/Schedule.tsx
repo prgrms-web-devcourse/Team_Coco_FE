@@ -1,7 +1,7 @@
 import { Box, Heading, Text, LinkBox, Stack, HStack } from "@chakra-ui/layout";
 import { Tag } from "@chakra-ui/tag";
 import { isBefore } from "date-fns";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 type ScheduleProps = {
   title: string;
@@ -32,23 +32,20 @@ const dynamicStyles: DynamicStyles = {
 };
 
 export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
-  const [dateState, setDateState] = useState("");
-
-  useEffect(() => {
+  const scheduleStatus = useMemo(() => {
     const today = Date.now();
     const formattedStartedDate = new Date(startedDate);
     const formattedEndedDate = new Date(endedDate);
     const isBeforeStarted = isBefore(today, formattedStartedDate);
     const isBeforeEnded = isBefore(today, formattedEndedDate);
 
-    let state = isBeforeStarted ? "before" : isBeforeEnded ? "during" : "end";
-    setDateState(state);
-  }, [startedDate, endedDate]);
+    return isBeforeStarted ? "before" : isBeforeEnded ? "during" : "end";
+  }, []);
 
   return (
     <LinkBox w="full">
       <Box maxW="sm" borderRadius="xl" overflow="hidden">
-        <Box bg={dynamicStyles[dateState]?.bgColor} h={"106px"} p={4}>
+        <Box bg={dynamicStyles[scheduleStatus]?.bgColor} h={"106px"} p={4}>
           <Stack spacing={4}>
             <Heading color="gray.50" fontSize="xl" fontFamily={"body"}>
               {title}
@@ -66,12 +63,10 @@ export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
             <Box>
               <Tag
                 size="md"
-                key="md"
                 variant="solid"
-                bg={dynamicStyles[dateState]?.bgColor}
-                mr="4"
+                bg={dynamicStyles[scheduleStatus]?.bgColor}
               >
-                {dynamicStyles[dateState]?.label}
+                {dynamicStyles[scheduleStatus]?.label}
               </Tag>
             </Box>
           </HStack>
