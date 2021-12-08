@@ -1,7 +1,9 @@
 import { Box, Heading, Text, LinkBox, Stack, HStack } from "@chakra-ui/layout";
-import { Tag } from "@chakra-ui/tag";
 import { isBefore } from "date-fns";
 import { useMemo } from "react";
+import { IoCalendarSharp } from "react-icons/io5";
+
+import { TextWithIcon } from "@/components/TextWithIcon";
 
 type ScheduleProps = {
   title: string;
@@ -27,7 +29,7 @@ const dynamicStyles: DynamicStyles = {
   },
   end: {
     label: "완료",
-    bgColor: "gray.500",
+    bgColor: "gray.400",
   },
 };
 
@@ -56,18 +58,24 @@ export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
         <Box bg="gray.100" p={4}>
           <HStack justify="space-between">
             <Box>
-              <Text color="gray.500" fontSize="md">
+              <TextWithIcon icon={<IoCalendarSharp />}>
                 {startedDate} ~ {endedDate}
-              </Text>
+              </TextWithIcon>
             </Box>
             <Box>
-              <Tag
-                size="md"
-                variant="solid"
-                bg={dynamicStyles[scheduleStatus]?.bgColor}
-              >
-                {dynamicStyles[scheduleStatus]?.label}
-              </Tag>
+              <Box>
+                <Box
+                  py="1"
+                  width="16"
+                  align="center"
+                  fontSize="sm"
+                  borderRadius="md"
+                  color="gray.50"
+                  bg={dynamicStyles[scheduleStatus]?.bgColor}
+                >
+                  {dynamicStyles[scheduleStatus]?.label}
+                </Box>
+              </Box>
             </Box>
           </HStack>
         </Box>
