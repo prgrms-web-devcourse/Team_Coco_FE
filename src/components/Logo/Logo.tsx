@@ -4,8 +4,8 @@ export const Logo = (props: HTMLChakraProps<"svg">) => {
   return (
     <chakra.svg
       aria-hidden
-      width="241px"
-      height="80px"
+      width="180px"
+      height="60px"
       viewBox="0 0 241 80"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
