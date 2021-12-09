@@ -76,13 +76,12 @@ export const List = ({ item }: ListProps) => {
     <SimpleGrid columns={2} spacing={4}>
       {item === "memo"
         ? items.map((item) => (
-            <ChakraLink as={Link} to={`/memo/1${item.id}`}>
+            <ChakraLink as={Link} to={`/memo/${item.id}`} key={item.id}>
               <Box
                 padding={1}
                 height="230px"
                 backgroundColor={"gray.100"}
                 borderRadius={6}
-                key={item.id}
               >
                 <Text fontSize="md" color="gray.600" isTruncated>
                   {item.title}
@@ -94,13 +93,12 @@ export const List = ({ item }: ListProps) => {
             </ChakraLink>
           ))
         : items.map((item) => (
-            <ChakraLink as={Link} to={`/vote/1${item.id}`}>
+            <ChakraLink as={Link} to={`/vote/${item.id}`} key={item.id}>
               <Box
                 padding={1}
                 height="230px"
                 backgroundColor={"gray.100"}
                 borderRadius={6}
-                key={item.id}
               >
                 <Text fontSize="md" color="gray.600" isTruncated>
                   제목{item.title}
