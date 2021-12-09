@@ -5,7 +5,6 @@ import {
   Textarea,
   Button,
   HStack,
-  Spacer,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -72,7 +71,7 @@ export const MemoUpdateForm = ({ memoId }: MemoUpdateFormType) => {
 
   return (
     <form>
-      <VStack direction="column" marginTop={4} spacing={4}>
+      <VStack marginTop={4} spacing={4} height="550px">
         <FormControl id="title">
           <Input
             placeholder="제목을 입력하세요"
@@ -80,17 +79,21 @@ export const MemoUpdateForm = ({ memoId }: MemoUpdateFormType) => {
             onChange={() => {}}
           />
         </FormControl>
-        <FormControl id="body">
+        <FormControl id="body" flexGrow={1}>
           <Textarea
+            height="100%"
             placeholder="내용을 입력하세요"
-            height="500px"
             value={memo && memo.body}
             onChange={() => {}}
           />
         </FormControl>
-        <Spacer />
         <HStack w="full" spacing={4}>
-          <Button size="lg" flexGrow={1} onClick={() => navigate(-1)}>
+          <Button
+            type="button"
+            size="lg"
+            flexGrow={1}
+            onClick={() => navigate(-1)}
+          >
             취소
           </Button>
           <Button
