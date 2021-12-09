@@ -1,5 +1,14 @@
-import { Flex, Box, Text } from "@chakra-ui/react";
+import {
+  VStack,
+  FormControl,
+  Input,
+  Textarea,
+  Button,
+  HStack,
+  Spacer,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const dummy = [
   {
@@ -47,30 +56,54 @@ const dummy = [
   },
 ];
 
-type MemoContentType = {
+type MemoUpdateFormType = {
   memoId: string | undefined;
 };
 
-export const MemoContent = ({ memoId }: MemoContentType) => {
-  const [memo, setMemo] = useState({ userId: 0, id: 0, title: "", body: "" });
+export const MemoUpdateForm = ({ memoId }: MemoUpdateFormType) => {
+  const navigate = useNavigate();
 
   useEffect(() => {
     const selectedMemo = dummy.find((data) => data.id === Number(memoId));
     setMemo({ ...memo, ...selectedMemo });
   }, []);
 
+  const [memo, setMemo] = useState({ userId: 0, id: 0, title: "", body: "" });
+
   return (
-    <Flex direction="column">
-      <Box minHeight="40px" borderBottom="1px solid #E2E8F0">
-        <Text fontSize="md" color="gray.600">
-          {memo && memo.title}
-        </Text>
-      </Box>
-      <Box marginTop="1rem">
-        <Text fontSize="sm" color="gray.500">
-          {memo && memo.body}
-        </Text>
-      </Box>
-    </Flex>
+    <form>
+      <VStack direction="column" marginTop={4} spacing={4}>
+        <FormControl id="title">
+          <Input
+            placeholder="제목을 입력하세요"
+            value={memo && memo.title}
+            onChange={() => {}}
+          />
+        </FormControl>
+        <FormControl id="body">
+          <Textarea
+            placeholder="내용을 입력하세요"
+            height="500px"
+            value={memo && memo.body}
+            onChange={() => {}}
+          />
+        </FormControl>
+        <Spacer />
+        <HStack w="full" spacing={4}>
+          <Button size="lg" flexGrow={1} onClick={() => navigate(-1)}>
+            취소
+          </Button>
+          <Button
+            type="submit"
+            size="lg"
+            flexGrow={1}
+            backgroundColor="cyan.500"
+            color="white"
+          >
+            저장
+          </Button>
+        </HStack>
+      </VStack>
+    </form>
   );
 };
