@@ -1,7 +1,8 @@
-import { Center } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 
 import { PublicPageLayout } from "@/components/Layout";
 import { Logo } from "@/components/Logo";
+import { LoginForm } from "@/features/auth/components";
 
 export const LoginPage = () => {
   return (
@@ -9,7 +10,9 @@ export const LoginPage = () => {
       <Center>
         <Logo />
       </Center>
-      로그인 페이지
+      <Box mt={4}>
+        <LoginForm />
+      </Box>
     </PublicPageLayout>
   );
 };
