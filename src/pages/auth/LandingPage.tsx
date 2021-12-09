@@ -12,7 +12,7 @@ export const LandingPage = () => {
           <Logo />
         </Center>
 
-        <Button as={Link} to="/login" isFullWidth size="lg">
+        <Button as={Link} to="/login" colorScheme="cyan" isFullWidth size="lg">
           시작하기
         </Button>
       </Flex>
