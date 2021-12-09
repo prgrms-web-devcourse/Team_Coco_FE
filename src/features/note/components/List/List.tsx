@@ -1,12 +1,17 @@
-import { SimpleGrid, Text, Box, Link as ChakraLink } from "@chakra-ui/react";
+import {
+  SimpleGrid,
+  Text,
+  Box,
+  Flex,
+  Spacer,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { IoPersonSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-/*
-메모및투표 api 요청
--> 메모일 경우 제목+본문
--> 투표일 경우 제목+참여자
-*/
+import { TextWithIcon } from "@/components/TextWithIcon";
+
 const dummy = [
   {
     userId: 1,
@@ -60,17 +65,19 @@ type ListProps = {
 export const List = ({ item }: ListProps) => {
   const [items, setItems] = useState(dummy);
 
-  // const [items, setItems] = useState<{ title: string; body: string }[]>([]);
+  /** dummy 데이터로 교체했습니다.
+  const [items, setItems] = useState<{ title: string; body: string }[]>([]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetch(
-  //       "https://jsonplaceholder.typicode.com/posts/"
-  //     );
-  //     const json = await response.json();
-  //     setItems([...items, json]);
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/posts/"
+      );
+      const json = await response.json();
+      setItems([...items, json]);
+    })();
+  }, []);
+  */
 
   return (
     <SimpleGrid columns={2} spacing={4}>
@@ -78,9 +85,9 @@ export const List = ({ item }: ListProps) => {
         ? items.map((item) => (
             <ChakraLink as={Link} to={`/memo/${item.id}`} key={item.id}>
               <Box
-                padding={1}
+                padding={4}
                 height="230px"
-                backgroundColor={"gray.100"}
+                backgroundColor="gray.100"
                 borderRadius={6}
               >
                 <Text fontSize="md" color="gray.600" isTruncated>
@@ -95,15 +102,23 @@ export const List = ({ item }: ListProps) => {
         : items.map((item) => (
             <ChakraLink as={Link} to={`/vote/${item.id}`} key={item.id}>
               <Box
-                padding={1}
-                height="230px"
+                padding={4}
+                height="100px"
                 backgroundColor={"gray.100"}
                 borderRadius={6}
               >
-                <Text fontSize="md" color="gray.600" isTruncated>
-                  제목{item.title}
-                </Text>
-                참여자리스트
+                <Flex direction="column" height="full">
+                  <Text fontSize="md" color="gray.600" isTruncated>
+                    {item.title}
+                  </Text>
+                  <Spacer flexGrow={1} />
+                  <TextWithIcon
+                    justifyContent="flex-end"
+                    icon={<IoPersonSharp />}
+                  >
+                    n명 참여
+                  </TextWithIcon>
+                </Flex>
               </Box>
             </ChakraLink>
           ))}

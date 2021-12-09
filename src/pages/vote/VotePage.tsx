@@ -1,7 +1,10 @@
 import { Heading } from "@chakra-ui/react";
+import React from "react";
 import { useParams } from "react-router-dom";
 
+import { BackButton } from "@/components/BackButton";
 import { PrivatePageLayout } from "@/components/Layout";
+import { VoteHeader, VoteContent } from "@/features/vote/components";
 
 export const VotePage = () => {
   const { voteId } = useParams();
@@ -9,9 +12,15 @@ export const VotePage = () => {
   return (
     <PrivatePageLayout
       title="메모 및 투표"
-      header={<Heading size="lg">메모 및 투표</Heading>}
+      header={
+        <>
+          <BackButton />
+          <Heading size="lg">메모 및 투표</Heading>
+        </>
+      }
     >
-      투표 상세 보기
+      <VoteHeader />
+      <VoteContent voteId={voteId} />
     </PrivatePageLayout>
   );
 };
