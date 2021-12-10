@@ -23,9 +23,9 @@ export const CustomizedModal = ({
   children,
 }: CustomizedModalProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside" size="xs">
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent m={4}>
         <ModalHeader>{head}</ModalHeader>
         <ModalCloseButton />
 
