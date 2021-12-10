@@ -10,10 +10,12 @@ type friend = {
   role: string;
 };
 
-export const FriendsList: React.FC<{
+type FriendsListProps = {
   showRole: boolean;
   showInvitation: boolean;
-}> = ({ showRole, showInvitation }) => {
+};
+
+export const FriendsList = ({ showRole, showInvitation }: FriendsListProps) => {
   const [friends, setFriends] = useState<friend[]>([]);
 
   useEffect(() => {
