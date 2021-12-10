@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { IoPersonAddSharp } from "react-icons/io5";
 
-export const AddUserButton: React.FC<{ onClick: () => void }> = ({
-  onClick,
-}) => {
+type RoundUserAddButtonProps = {
+  onClick: React.MouseEventHandler;
+};
+
+export const RoundUserAddButton = ({ onClick }: RoundUserAddButtonProps) => {
   return (
     <StyledButton onClick={onClick} type="button">
       <IoPersonAddSharp size="24" color="718096" />
