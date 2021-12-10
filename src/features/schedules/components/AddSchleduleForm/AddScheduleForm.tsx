@@ -46,16 +46,7 @@ type Marker = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type DailyPlace = {
-  spotId: string;
-  addressName: string;
-  roadAddressName: string;
-  phone: string;
-  position: { lat: number; lng: number };
-  placeName: string;
-  date: number;
-  order: number;
-};
+type DailyPlace = Marker & { date: number; order: number };
 
 export const AddScheduleForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

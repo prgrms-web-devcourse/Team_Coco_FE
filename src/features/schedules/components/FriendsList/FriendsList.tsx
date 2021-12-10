@@ -1,7 +1,7 @@
 import { Avatar, Text, HStack, Stack, Box, Tag } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-type friend = {
+type Friend = {
   src: string;
   alt: string;
   nickName: string;
@@ -16,7 +16,7 @@ type FriendsListProps = {
 };
 
 export const FriendsList = ({ showRole, showInvitation }: FriendsListProps) => {
-  const [friends, setFriends] = useState<friend[]>([]);
+  const [friends, setFriends] = useState<Friend[]>([]);
 
   useEffect(() => {
     setFriends(

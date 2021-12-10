@@ -11,12 +11,10 @@ type ScheduleProps = {
   endedDate: string;
 };
 
-type DynamicStyles = {
-  [key: string]: {
-    label: string;
-    bgColor: string;
-  };
-};
+type DynamicStyles = Record<
+  "before" | "during" | "end",
+  { label: string; bgColor: string }
+>;
 
 const dynamicStyles: DynamicStyles = {
   before: {

@@ -5,17 +5,24 @@ import React, { useState } from "react";
 
 import { MapContainer } from "../MapContainer";
 
+type Marker = {
+  spotId: string;
+  addressName: string;
+  roadAddressName: string;
+  phone: string;
+  position: { lat: number; lng: number };
+  placeName: string;
+};
+
 type SearchPlaceProps = {
-  setSelectedPlace: any;
+  setSelectedPlace: (value?: Marker) => void;
 };
 
 export const SearchPlace = ({ setSelectedPlace }: SearchPlaceProps) => {
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
 
-  const handleInputChange = (e: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
   };
 

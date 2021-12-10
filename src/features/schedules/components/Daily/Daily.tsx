@@ -1,10 +1,16 @@
 import { Box, Heading, Stack, Text } from "@chakra-ui/react";
 
+type DailyPlace = {
+  date: number;
+  placeName: string;
+  spotId: string;
+};
+
 type DailyProps = {
   idx: number;
   focus: boolean;
   onClick: (idx: number) => void;
-  dailyPlaces: any;
+  dailyPlaces: DailyPlace[];
 };
 
 export const Daily = ({ idx, focus, onClick, dailyPlaces }: DailyProps) => {
@@ -24,29 +30,22 @@ export const Daily = ({ idx, focus, onClick, dailyPlaces }: DailyProps) => {
           day{idx + 1}
         </Heading>
         <Stack spacing={2}>
-          {dailyPlaces.map(
-            (dailyPlace: {
-              date: number;
-              placeName: string;
-              spotId: string;
-              // eslint-disable-next-line array-callback-return
-            }) => {
-              if (dailyPlace.date === idx) {
-                return (
-                  <Box
-                    key={dailyPlace.spotId}
-                    bg={focus ? "gray.200" : "gray.100"}
-                    p={2}
-                    textAlign="center"
-                  >
-                    <Text fontSize="sm" color={focus ? "gray.900" : "gray.500"}>
-                      {dailyPlace.placeName}
-                    </Text>
-                  </Box>
-                );
-              }
+          {dailyPlaces.map((dailyPlace, _idx) => {
+            if (dailyPlace.date === idx) {
+              return (
+                <Box
+                  key={dailyPlace.spotId + _idx}
+                  bg={focus ? "gray.200" : "gray.100"}
+                  p={2}
+                  textAlign="center"
+                >
+                  <Text fontSize="sm" color={focus ? "gray.900" : "gray.500"}>
+                    {dailyPlace.placeName}
+                  </Text>
+                </Box>
+              );
             }
-          )}
+          })}
         </Stack>
       </Stack>
     </Box>

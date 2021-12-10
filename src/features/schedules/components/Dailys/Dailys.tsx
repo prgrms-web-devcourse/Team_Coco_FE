@@ -15,19 +15,19 @@ export const Dailys = ({
   setSelectedDateIdx,
   dailyPlaces,
 }: DailysProps) => {
-  return (
-    <Fragment>
-      {Array(totalDays)
-        .fill(1)
-        .map((_, idx) => (
-          <Daily
-            key={idx}
-            idx={idx}
-            focus={selectedDateIdx === idx ? true : false}
-            dailyPlaces={dailyPlaces}
-            onClick={setSelectedDateIdx}
-          />
-        ))}
-    </Fragment>
-  );
+  const dailyList = [];
+
+  for (let i = 0; i < totalDays; i++) {
+    dailyList.push(
+      <Daily
+        key={i}
+        idx={i}
+        focus={selectedDateIdx === i ? true : false}
+        dailyPlaces={dailyPlaces}
+        onClick={setSelectedDateIdx}
+      />
+    );
+  }
+
+  return <Fragment>{dailyList}</Fragment>;
 };

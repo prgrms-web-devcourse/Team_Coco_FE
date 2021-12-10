@@ -18,7 +18,7 @@ type Marker = {
 
 type MapContainerProps = {
   searchPlace: string;
-  setSelectedPlace: (value: Marker | undefined) => void;
+  setSelectedPlace: (value?: Marker) => void;
 };
 
 export const MapContainer = ({
@@ -28,6 +28,11 @@ export const MapContainer = ({
   const [info, setInfo] = useState<Marker>();
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [map, setMap] = useState<kakao.maps.Map>();
+
+  useEffect(() => {
+    setSelectedPlace(info);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [info]);
 
   useEffect(() => {
     if (!map) return;
