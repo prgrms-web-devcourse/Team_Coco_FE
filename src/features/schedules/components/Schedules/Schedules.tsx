@@ -1,10 +1,10 @@
-import { VStack } from "@chakra-ui/layout";
+import { Stack } from "@chakra-ui/layout";
 
 import { Schedule } from "../Schedule";
 
 export const Schedules = () => {
   return (
-    <VStack spacing={4}>
+    <Stack spacing={4}>
       <Schedule
         title={"1"}
         startedDate={"2022-02-29"}
@@ -35,6 +35,6 @@ export const Schedules = () => {
         startedDate={"2020-12-29"}
         endedDate={"2020-12-30"}
       />
-    </VStack>
+    </Stack>
   );
 };

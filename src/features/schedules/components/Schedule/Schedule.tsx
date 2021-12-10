@@ -43,8 +43,8 @@ export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
   }, []);
 
   return (
-    <LinkBox w="full">
-      <Box maxW="sm" borderRadius="xl" overflow="hidden">
+    <LinkBox w="full" display="flex" justifyContent="center">
+      <Box maxW="sm" borderRadius="xl" overflow="hidden" flex="1">
         <Box bg={dynamicStyles[scheduleStatus]?.bgColor} h={"106px"} p={4}>
           <Stack spacing={4}>
             <Heading color="gray.50" fontSize="xl" fontFamily={"body"}>
