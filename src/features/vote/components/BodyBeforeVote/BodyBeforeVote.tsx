@@ -3,11 +3,11 @@ import {
   HStack,
   Spacer,
   Checkbox,
-  Button,
   Text,
   Stack,
 } from "@chakra-ui/react";
 
+import { SaveButton } from "@/features/vote/components";
 const dummy = {
   option: ["한식", "중식", "양식", "일식", "괴식"],
 };
@@ -41,20 +41,7 @@ export const BodyBeforeVote = ({ voteId }: BodyBeforeVoteType) => {
         ))}
       </Stack>
       <Spacer />
-      <HStack w="full" spacing={4}>
-        <Button size="lg" flexGrow={1}>
-          취소
-        </Button>
-        <Button
-          type="submit"
-          size="lg"
-          flexGrow={1}
-          backgroundColor="cyan.500"
-          color="white"
-        >
-          저장
-        </Button>
-      </HStack>
+      <SaveButton />
     </VStack>
   );
 };

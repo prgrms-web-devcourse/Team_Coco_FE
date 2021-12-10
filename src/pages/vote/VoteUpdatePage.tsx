@@ -1,7 +1,12 @@
-import { Heading } from "@chakra-ui/react";
+import { Heading, Flex, Spacer } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 
 import { PrivatePageLayout } from "@/components/Layout";
+import {
+  VoteUpdateForm,
+  SaveButton,
+  VoteHeader,
+} from "@/features/vote/components";
 
 export const VoteUpdatePage = () => {
   const { voteId } = useParams();
@@ -11,7 +16,12 @@ export const VoteUpdatePage = () => {
       title="id"
       header={<Heading size="lg">투표 {voteId ? "수정" : "생성"}</Heading>}
     >
-      투표 갱신
+      <VoteHeader />
+      <Flex direction="column" height="550px">
+        <VoteUpdateForm />
+        <Spacer />
+        <SaveButton />
+      </Flex>
     </PrivatePageLayout>
   );
 };
