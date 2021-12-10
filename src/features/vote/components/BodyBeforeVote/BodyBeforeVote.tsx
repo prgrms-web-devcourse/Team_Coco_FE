@@ -5,18 +5,18 @@ import {
   Checkbox,
   Text,
   Stack,
+  Button,
 } from "@chakra-ui/react";
 
-import { SaveButton } from "@/features/vote/components";
 const dummy = {
   option: ["한식", "중식", "양식", "일식", "괴식"],
 };
 
-type BodyBeforeVoteType = {
+type BodyBeforeVoteProps = {
   voteId: string | undefined;
 };
 
-export const BodyBeforeVote = ({ voteId }: BodyBeforeVoteType) => {
+export const BodyBeforeVote = (props: BodyBeforeVoteProps) => {
   const { option } = dummy;
 
   return (
@@ -41,7 +41,9 @@ export const BodyBeforeVote = ({ voteId }: BodyBeforeVoteType) => {
         ))}
       </Stack>
       <Spacer />
-      <SaveButton />
+      <Button type="submit" size="lg" color="white" bg="cyan.600" isFullWidth>
+        투표하기
+      </Button>
     </VStack>
   );
 };

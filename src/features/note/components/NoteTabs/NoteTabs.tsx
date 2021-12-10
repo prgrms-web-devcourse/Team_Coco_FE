@@ -1,13 +1,12 @@
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
 
-import { List } from "../List";
+import { ThumbnailGrid } from "../ThumbnailGrid";
 
-type NoteTabsType = {
-  onChange: (index: number) => void;
+type NoteTabsProps = {
+  onChange?: (index: number) => void;
 };
 
-// export const NoteTabs = ({ index, onChange }: NoteTabsType) => {
-export const NoteTabs = ({ onChange }: NoteTabsType) => {
+export const NoteTabs = ({ onChange = () => {} }: NoteTabsProps) => {
   return (
     <Tabs height="1" paddingTop={4} variant="soft-rounded">
       <TabList marginBottom="1rem">
@@ -20,10 +19,10 @@ export const NoteTabs = ({ onChange }: NoteTabsType) => {
       </TabList>
       <TabPanels height="630px" overflow="auto">
         <TabPanel paddingTop="0">
-          <List item={"memo"} />
+          <ThumbnailGrid tab="memo" />
         </TabPanel>
         <TabPanel paddingTop="0">
-          <List item={"vote"} />
+          <ThumbnailGrid tab="vote" />
         </TabPanel>
       </TabPanels>
     </Tabs>

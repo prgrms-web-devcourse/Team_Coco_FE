@@ -1,16 +1,9 @@
-import {
-  SimpleGrid,
-  Text,
-  Box,
-  Flex,
-  Spacer,
-  Link as ChakraLink,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { IoPersonSharp } from "react-icons/io5";
+import { SimpleGrid, Box, Link as ChakraLink } from "@chakra-ui/react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { TextWithIcon } from "@/components/TextWithIcon";
+import { MemoThumbnail } from "../MemoThumbnail";
+import { VoteThumbnail } from "../VoteThumbnail";
 
 const dummy = [
   {
@@ -58,11 +51,12 @@ const dummy = [
   },
 ];
 
-type ListProps = {
-  item: string;
+type ThumbnailGridProps = {
+  tab: string;
 };
 
-export const List = ({ item }: ListProps) => {
+export const ThumbnailGrid = (props: ThumbnailGridProps) => {
+  const { tab } = props;
   const [items, setItems] = useState(dummy);
 
   /** dummy 데이터로 교체했습니다.
@@ -81,47 +75,22 @@ export const List = ({ item }: ListProps) => {
 
   return (
     <SimpleGrid columns={2} spacing={4}>
-      {item === "memo"
-        ? items.map((item) => (
-            <ChakraLink as={Link} to={`/memo/${item.id}`} key={item.id}>
-              <Box
-                padding={4}
-                height="230px"
-                backgroundColor="gray.100"
-                borderRadius={6}
-              >
-                <Text fontSize="md" color="gray.600" isTruncated>
-                  {item.title}
-                </Text>
-                <Text fontSize="sm" color="gray.500" noOfLines={8}>
-                  {item.body}
-                </Text>
-              </Box>
-            </ChakraLink>
-          ))
-        : items.map((item) => (
-            <ChakraLink as={Link} to={`/vote/${item.id}`} key={item.id}>
-              <Box
-                padding={4}
-                height="100px"
-                backgroundColor={"gray.100"}
-                borderRadius={6}
-              >
-                <Flex direction="column" height="full">
-                  <Text fontSize="md" color="gray.600" isTruncated>
-                    {item.title}
-                  </Text>
-                  <Spacer flexGrow={1} />
-                  <TextWithIcon
-                    justifyContent="flex-end"
-                    icon={<IoPersonSharp />}
-                  >
-                    n명 참여
-                  </TextWithIcon>
-                </Flex>
-              </Box>
-            </ChakraLink>
-          ))}
+      {items.map((item) => (
+        <ChakraLink as={Link} to={`/${tab}/${item.id}`} key={item.id}>
+          <Box
+            padding={4}
+            height={tab === "memo" ? "230px" : "100px"}
+            backgroundColor="gray.100"
+            borderRadius={6}
+          >
+            {tab === "memo" ? (
+              <MemoThumbnail title={item.title} body={item.body} />
+            ) : (
+              <VoteThumbnail title={item.title} />
+            )}
+          </Box>
+        </ChakraLink>
+      ))}
     </SimpleGrid>
   );
 };

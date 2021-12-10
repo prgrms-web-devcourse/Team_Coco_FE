@@ -1,27 +1,23 @@
-import { Heading, Flex, Spacer } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { Heading } from "@chakra-ui/react";
+import React from "react";
 
+import { IconButton } from "@/components/IconButton";
 import { PrivatePageLayout } from "@/components/Layout";
-import {
-  VoteUpdateForm,
-  SaveButton,
-  VoteHeader,
-} from "@/features/vote/components";
+import { VoteUpdateForm, VoteHeader } from "@/features/vote/components";
 
 export const VoteUpdatePage = () => {
-  const { voteId } = useParams();
-
   return (
     <PrivatePageLayout
       title="id"
-      header={<Heading size="lg">투표 {voteId ? "수정" : "생성"}</Heading>}
+      header={
+        <>
+          <IconButton />
+          <Heading size="lg">투표 생성</Heading>
+        </>
+      }
     >
       <VoteHeader />
-      <Flex direction="column" height="550px">
-        <VoteUpdateForm />
-        <Spacer />
-        <SaveButton />
-      </Flex>
+      <VoteUpdateForm />
     </PrivatePageLayout>
   );
 };

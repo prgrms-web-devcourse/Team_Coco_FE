@@ -1,5 +1,4 @@
-import { Flex, Box, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Flex, Box, Text, Input } from "@chakra-ui/react";
 
 const dummy = [
   {
@@ -47,28 +46,29 @@ const dummy = [
   },
 ];
 
-type MemoContentType = {
+type MemoContentProps = {
   memoId: string | undefined;
 };
 
-export const MemoContent = ({ memoId }: MemoContentType) => {
-  const [memo, setMemo] = useState({ userId: 0, id: 0, title: "", body: "" });
-
-  useEffect(() => {
-    const selectedMemo = dummy.find((data) => data.id === Number(memoId));
-    setMemo({ ...memo, ...selectedMemo });
-  }, []);
+export const MemoContent = (props: MemoContentProps) => {
+  const { memoId } = props;
+  const memo = dummy.find((data) => data.id === Number(memoId));
 
   return (
     <Flex direction="column">
-      <Box minHeight="40px" borderBottom="1px solid #E2E8F0">
-        <Text fontSize="md" color="gray.600">
-          {memo && memo.title}
-        </Text>
+      <Box minHeight="40px">
+        <Input
+          fontSize="md"
+          color="gray.600"
+          fontWeight="bold"
+          variant="flushed"
+          value={memo?.title}
+          disabled
+        />
       </Box>
       <Box marginTop="1rem">
         <Text fontSize="sm" color="gray.500">
-          {memo && memo.body}
+          {memo?.body}
         </Text>
       </Box>
     </Flex>

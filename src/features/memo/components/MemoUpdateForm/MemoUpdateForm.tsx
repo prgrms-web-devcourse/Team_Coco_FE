@@ -7,7 +7,6 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const dummy = [
   {
@@ -55,19 +54,14 @@ const dummy = [
   },
 ];
 
-type MemoUpdateFormType = {
-  memoId: string | undefined;
+type MemoUpdateFormProps = {
+  memoId?: string;
 };
 
-export const MemoUpdateForm = ({ memoId }: MemoUpdateFormType) => {
-  const navigate = useNavigate();
+export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
+  const { memoId } = props;
 
-  useEffect(() => {
-    const selectedMemo = dummy.find((data) => data.id === Number(memoId));
-    setMemo({ ...memo, ...selectedMemo });
-  }, []);
-
-  const [memo, setMemo] = useState({ userId: 0, id: 0, title: "", body: "" });
+  const memo = dummy.find((data) => data.id === Number(memoId));
 
   return (
     <form>
@@ -75,35 +69,28 @@ export const MemoUpdateForm = ({ memoId }: MemoUpdateFormType) => {
         <FormControl id="title">
           <Input
             placeholder="제목을 입력하세요"
-            value={memo && memo.title}
+            value={memo?.title}
             onChange={() => {}}
+            variant="flushed"
           />
         </FormControl>
         <FormControl id="body" flexGrow={1}>
           <Textarea
             height="100%"
             placeholder="내용을 입력하세요"
-            value={memo && memo.body}
+            value={memo?.body}
             onChange={() => {}}
           />
         </FormControl>
         <HStack w="full" spacing={4}>
           <Button
-            type="button"
-            size="lg"
-            flexGrow={1}
-            onClick={() => navigate(-1)}
-          >
-            취소
-          </Button>
-          <Button
             type="submit"
             size="lg"
             flexGrow={1}
-            backgroundColor="cyan.500"
             color="white"
+            bg="cyan.600"
           >
-            저장
+            메모 {memoId ? "수정하기" : "생성하기"}
           </Button>
         </HStack>
       </VStack>

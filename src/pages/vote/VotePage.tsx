@@ -2,7 +2,7 @@ import { Heading, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { BackButton } from "@/components/BackButton";
+import { IconButton } from "@/components/IconButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import {
   VoteHeader,
@@ -20,14 +20,14 @@ const dummy = {
 
 export const VotePage = () => {
   const { voteId } = useParams();
-  const [isJoined, setIsJoined] = useState(true);
+  const [isJoined, setIsJoined] = useState(false);
 
   return (
     <PrivatePageLayout
       title="메모 및 투표"
       header={
         <>
-          <BackButton />
+          <IconButton />
           <Heading size="lg">메모 및 투표</Heading>
         </>
       }

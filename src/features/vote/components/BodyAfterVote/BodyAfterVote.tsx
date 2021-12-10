@@ -1,5 +1,5 @@
 import { HStack, Spacer, Box, Text, Stack } from "@chakra-ui/react";
-import { IoCheckmark } from "react-icons/io5";
+import { IoCheckmarkSharp } from "react-icons/io5";
 
 const dummy = {
   // 옵션 리스트
@@ -10,11 +10,11 @@ const dummy = {
   total: [4, 1, 0, 2],
 };
 
-type BodyAfterVoteType = {
+type BodyAfterVoteProps = {
   voteId: string | undefined;
 };
 
-export const BodyAfterVote = ({ voteId }: BodyAfterVoteType) => {
+export const BodyAfterVote = (props: BodyAfterVoteProps) => {
   const { option, participate, total } = dummy;
   const counts = Object.values(total);
   const maxCount = Math.max(...counts);
@@ -23,7 +23,13 @@ export const BodyAfterVote = ({ voteId }: BodyAfterVoteType) => {
     <Stack marginTop={4} spacing={4} w="full">
       {option.map((value, index) => (
         <HStack key={index} spacing={4} flex={1}>
-          {participate[index] ? <IoCheckmark width={4} /> : <Box width={4} />}
+          {participate[index] ? (
+            <Box width={8} aria-hidden>
+              <IoCheckmarkSharp width={4} size={24} color="#00A3C4" />
+            </Box>
+          ) : (
+            <Box width={8} />
+          )}
           <HStack
             position="relative"
             w="100%"
