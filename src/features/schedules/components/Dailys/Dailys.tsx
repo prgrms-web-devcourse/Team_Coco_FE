@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { Daily } from "../Daily";
 
 type DailysProps = {
@@ -14,7 +16,7 @@ export const Dailys = ({
   dailyPlaces,
 }: DailysProps) => {
   return (
-    <>
+    <Fragment>
       {Array(totalDays)
         .fill(1)
         .map((_, idx) => (
@@ -26,6 +28,6 @@ export const Dailys = ({
             onClick={setSelectedDateIdx}
           />
         ))}
-    </>
+    </Fragment>
   );
 };
