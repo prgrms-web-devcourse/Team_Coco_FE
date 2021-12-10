@@ -30,11 +30,6 @@ export const MapContainer = ({
   const [map, setMap] = useState<kakao.maps.Map>();
 
   useEffect(() => {
-    setSelectedPlace(info);
-    console.log(info);
-  }, [info]);
-
-  useEffect(() => {
     if (!map) return;
 
     const ps = new window.kakao.maps.services.Places();
@@ -45,8 +40,6 @@ export const MapContainer = ({
         if (status === window.kakao.maps.services.Status.OK) {
           const bounds = new window.kakao.maps.LatLngBounds();
           const markers = [];
-
-          console.log(data, _pagination);
 
           for (let i = 0; i < data.length; i++) {
             // @ts-ignore

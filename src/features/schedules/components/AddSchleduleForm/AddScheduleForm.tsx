@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { differenceInDays } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAdd } from "react-icons/io5";
 
@@ -45,6 +45,7 @@ type Marker = {
   placeName: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type DailyPlace = {
   spotId: string;
   addressName: string;
@@ -72,12 +73,7 @@ export const AddScheduleForm = () => {
       ...prev,
       { date: selectedDateIdx, order: 1, ...selectedPlace },
     ]);
-    console.log(dailyPlaces);
   };
-
-  useEffect(() => {
-    console.log(selectedPlace);
-  }, [selectedPlace]);
 
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
