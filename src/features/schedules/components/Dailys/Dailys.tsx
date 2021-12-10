@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React from "react";
 
 import { Daily } from "../Daily";
 
@@ -15,19 +15,17 @@ export const Dailys = ({
   setSelectedDateIdx,
   dailyPlaces,
 }: DailysProps) => {
-  const dailyList = [];
-
-  for (let i = 0; i < totalDays; i++) {
-    dailyList.push(
-      <Daily
-        key={i}
-        idx={i}
-        focus={selectedDateIdx === i ? true : false}
-        dailyPlaces={dailyPlaces}
-        onClick={setSelectedDateIdx}
-      />
-    );
-  }
-
-  return <Fragment>{dailyList}</Fragment>;
+  return (
+    <>
+      {Array.from({ length: totalDays }, (_, idx) => idx).map((i) => (
+        <Daily
+          key={i}
+          idx={i}
+          focus={selectedDateIdx === i ? true : false}
+          dailyPlaces={dailyPlaces}
+          onClick={setSelectedDateIdx}
+        />
+      ))}
+    </>
+  );
 };
