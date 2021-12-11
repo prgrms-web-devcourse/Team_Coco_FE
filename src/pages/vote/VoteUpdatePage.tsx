@@ -1,17 +1,23 @@
 import { Heading } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import React from "react";
 
+import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
+import { VoteUpdateForm, VoteHeader } from "@/features/vote/components";
 
 export const VoteUpdatePage = () => {
-  const { voteId } = useParams();
-
   return (
     <PrivatePageLayout
       title="id"
-      header={<Heading size="lg">투표 {voteId ? "수정" : "생성"}</Heading>}
+      header={
+        <>
+          <GoToBackButton />
+          <Heading size="lg">투표 생성</Heading>
+        </>
+      }
     >
-      투표 갱신
+      <VoteHeader />
+      <VoteUpdateForm />
     </PrivatePageLayout>
   );
 };
