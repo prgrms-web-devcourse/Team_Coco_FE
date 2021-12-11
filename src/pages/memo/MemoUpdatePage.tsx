@@ -2,7 +2,7 @@ import { Heading } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { IconButton } from "@/components/IconButton";
+import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { MemoUpdateForm, MemoHeader } from "@/features/memo/components";
 
@@ -14,7 +14,7 @@ export const MemoUpdatePage = () => {
       title="id"
       header={
         <>
-          <IconButton />
+          <GoToBackButton />
           <Heading size="lg">메모 {memoId ? "수정" : "생성"}</Heading>
         </>
       }

@@ -66,7 +66,7 @@ export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
   return (
     <form>
       <VStack marginTop={4} spacing={4} height="550px">
-        <FormControl id="title">
+        <FormControl id="title" isRequired>
           <Input
             placeholder="제목을 입력하세요"
             value={memo?.title}
@@ -74,12 +74,13 @@ export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
             variant="flushed"
           />
         </FormControl>
-        <FormControl id="body" flexGrow={1}>
+        <FormControl id="body" flexGrow={1} isRequired>
           <Textarea
             height="100%"
             placeholder="내용을 입력하세요"
             value={memo?.body}
             onChange={() => {}}
+            variant="unstyled"
           />
         </FormControl>
         <HStack w="full" spacing={4}>

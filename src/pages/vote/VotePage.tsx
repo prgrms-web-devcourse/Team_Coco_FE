@@ -2,7 +2,7 @@ import { Heading, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { IconButton } from "@/components/IconButton";
+import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import {
   VoteHeader,
@@ -27,7 +27,7 @@ export const VotePage = () => {
       title="메모 및 투표"
       header={
         <>
-          <IconButton />
+          <GoToBackButton />
           <Heading size="lg">메모 및 투표</Heading>
         </>
       }

@@ -1,7 +1,7 @@
 import { Heading } from "@chakra-ui/react";
 import React from "react";
 
-import { IconButton } from "@/components/IconButton";
+import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { VoteUpdateForm, VoteHeader } from "@/features/vote/components";
 
@@ -11,7 +11,7 @@ export const VoteUpdatePage = () => {
       title="id"
       header={
         <>
-          <IconButton />
+          <GoToBackButton />
           <Heading size="lg">투표 생성</Heading>
         </>
       }
