@@ -11,23 +11,14 @@ import {
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
+import { SimpleUser } from "@/components/SimpleUser";
 import { TextWithIcon } from "@/components/TextWithIcon";
 
 export const Post = () => {
   return (
     <LinkBox p={4} w="full" bg="gray.50">
       <HStack justify="space-between">
-        <HStack spacing={4}>
-          <Avatar
-            src={"https://avatars0.githubusercontent.com/u/1164541?v=4"}
-            alt={"Author"}
-            size="md"
-          />
-          <Box>
-            <Text fontWeight={600}>닉네임</Text>
-            <Text color={"gray.500"}>연령대 / 성별</Text>
-          </Box>
-        </HStack>
+        <SimpleUser />
         <Box>테마</Box>
       </HStack>
       <Heading size="md" my={4}>

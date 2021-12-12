@@ -7,10 +7,7 @@ import {
   Button,
   Stack,
   Select,
-  Grid,
   HStack,
-  GridItem,
-  VStack,
   chakra,
   VisuallyHidden,
   CheckboxGroup,
@@ -20,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
 
-import { DatePicker } from "@/components/DatePicker";
+// import { DatePicker } from "@/components/DatePicker";
 
 export const PostsSearchForm = () => {
   const {
