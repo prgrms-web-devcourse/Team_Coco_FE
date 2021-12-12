@@ -1,11 +1,10 @@
 import { Flex, Box, Text, Input } from "@chakra-ui/react";
 
-type PostContentProps = {
+type PostDetailContentProps = {
   postId: string | undefined;
 };
 
-export const PostContent = (props: PostContentProps) => {
-  const { postId } = props;
+export const PostDetailContent = ({ postId }: PostDetailContentProps) => {
   const post = {
     title: "제목",
     body: "동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람, 대한으로 길이 보전하세동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람, 대한으로 길이 보전하세동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람, 대한으로 길이 보전하세동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람, 대한으로 길이 보전하세동해 물과 백",

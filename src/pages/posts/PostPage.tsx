@@ -1,11 +1,14 @@
-import { Heading, Box, Stack } from "@chakra-ui/react";
+import { Heading, Stack, Flex } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
-import { PostContent, Comment } from "@/features/posts/components";
-
+import {
+  PostDetailHeader,
+  PostDetailContent,
+  Comment,
+} from "@/features/posts/components";
 export const PostPage = () => {
   const { postId } = useParams();
   return (
@@ -18,11 +21,9 @@ export const PostPage = () => {
         </>
       }
     >
-      <Stack spacing={4}>
-        <Box height="100px" bgColor="gray.100">
-          작성자 상세정보 공통컴포넌트
-        </Box>
-        <PostContent postId={postId} />
+      <Stack py={4} spacing={4}>
+        <PostDetailHeader postId={postId} />
+        <PostDetailContent postId={postId} />
         <Comment />
       </Stack>
     </PrivatePageLayout>
