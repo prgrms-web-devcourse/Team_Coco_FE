@@ -10385,6 +10385,11 @@ kakao.maps.d.ts@^0.1.24:
   resolved "https://registry.yarnpkg.com/kakao.maps.d.ts/-/kakao.maps.d.ts-0.1.24.tgz#64bd2e9a656c900ee139c60d45a562c5e3bfd72c"
   integrity sha512-QPtcdPSc1/tDzlRrWtBoeIbD524CaFxsSuShyFyGsvXDF0mWpezvuWysWAcE4O8B2rklZhD3oK++hw8nnJgCGQ==
 
+keen-slider@^6.3.5:
+  version "6.3.5"
+  resolved "https://registry.yarnpkg.com/keen-slider/-/keen-slider-6.3.5.tgz#612548181e21e4932f356c0500a63fe751210145"
+  integrity sha512-pzV8sHB3dVQgcfMVH+oiiJxTo5LbfeXgHmWdWjdzSpswMuGK7Gfu0UmVVj/VxQY/xiUu5i0yAAYHOZxb/cEPZw==
+
 killable@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
