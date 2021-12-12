@@ -10,10 +10,13 @@ import {
   Grid,
   HStack,
   GridItem,
+  VStack,
   chakra,
   VisuallyHidden,
   CheckboxGroup,
   Checkbox,
+  Text,
+  Flex,
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
 
@@ -34,6 +37,81 @@ export const PostsSearchForm = () => {
   return (
     <chakra.form onSubmit={onSubmit}>
       <Stack spacing={4}>
+        <FormControl id="city">
+          {/* <Grid templateColumns="repeat(12, 1fr)">
+            <GridItem
+              colSpan={2}
+              d="flex"
+              alignItems="center"
+              justifyContent="center"
+            ></GridItem>
+            <GridItem colSpan={10}></GridItem>
+          </Grid> */}
+          <FormLabel>도시</FormLabel>
+          <Select placeholder="도시를 선택해 주세요" {...register("city")}>
+            <option>서울</option>
+            <option>제주</option>
+            <option>부산</option>
+            <option>인천</option>
+            <option>대구</option>
+            <option>대전</option>
+            <option>광주</option>
+            <option>울산</option>
+            <option>전주</option>
+          </Select>
+        </FormControl>
+
+        <FormControl id="theme">
+          {/* <Grid templateColumns="repeat(12, 1fr)">
+            <GridItem
+              colSpan={2}
+              d="flex"
+              alignItems="center"
+              justifyContent="center"
+            ></GridItem>
+            <GridItem colSpan={10} overflow="scroll"></GridItem>
+          </Grid> */}
+          <FormLabel>테마</FormLabel>
+          <Controller
+            name="theme"
+            control={control}
+            render={({ field: { ref, ...rest } }) => (
+              <CheckboxGroup
+                colorScheme="cyan"
+                {...rest}
+                defaultValue={["all"]}
+              >
+                <HStack>
+                  <Flex direction="column" alignItems="center" flexGrow={1}>
+                    <Checkbox value="all"></Checkbox>
+                    <Text color="gray.400">전체</Text>
+                  </Flex>
+                  <Flex direction="column" alignItems="center" flexGrow={1}>
+                    <Checkbox value="nature"></Checkbox>
+                    <Text color="gray.400">자연</Text>
+                  </Flex>
+                  <Flex direction="column" alignItems="center" flexGrow={1}>
+                    <Checkbox value="art"></Checkbox>
+                    <Text color="gray.400">예술</Text>
+                  </Flex>
+                  <Flex direction="column" alignItems="center" flexGrow={1}>
+                    <Checkbox value="history"></Checkbox>
+                    <Text color="gray.400">역사</Text>
+                  </Flex>
+                  <Flex direction="column" alignItems="center" flexGrow={1}>
+                    <Checkbox value="food"></Checkbox>
+                    <Text color="gray.400">맛집</Text>
+                  </Flex>
+                  <Flex direction="column" alignItems="center" flexGrow={1}>
+                    <Checkbox value="activity"></Checkbox>
+                    <Text color="gray.400">액티비티</Text>
+                  </Flex>
+                </HStack>
+              </CheckboxGroup>
+            )}
+          />
+        </FormControl>
+
         <FormControl id="search-term">
           <VisuallyHidden>
             <FormLabel>검색어</FormLabel>
@@ -49,76 +127,24 @@ export const PostsSearchForm = () => {
             />
           </InputGroup>
         </FormControl>
-
-        <FormControl id="city">
-          <Grid templateColumns="repeat(12, 1fr)">
-            <GridItem
-              colSpan={2}
-              d="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <FormLabel m="0">도시</FormLabel>
-            </GridItem>
-
-            <GridItem colSpan={10}>
-              <Select placeholder="도시를 선택해 주세요" {...register("city")}>
-                <option>서울</option>
-                <option>제주</option>
-                <option>부산</option>
-                <option>인천</option>
-                <option>대구</option>
-                <option>대전</option>
-                <option>광주</option>
-                <option>울산</option>
-                <option>전주</option>
-              </Select>
-            </GridItem>
-          </Grid>
-        </FormControl>
-        <FormControl id="date">
-          <Grid templateColumns="repeat(12, 1fr)">
-            <GridItem
-              colSpan={2}
-              d="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <FormLabel m="0">날짜</FormLabel>
-            </GridItem>
-            <GridItem colSpan={10}>
-              <DatePicker value={new Date()} onChange={console.log} />
-            </GridItem>
-          </Grid>
-        </FormControl>
-        <FormControl id="theme">
-          <Grid templateColumns="repeat(12, 1fr)">
-            <GridItem
-              colSpan={2}
-              d="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <FormLabel m="0">테마</FormLabel>
-            </GridItem>
-            <GridItem colSpan={10} overflow="scroll">
-              <Controller
-                name="theme"
-                control={control}
-                render={({ field: { ref, ...rest } }) => (
-                  <CheckboxGroup {...rest}>
-                    <HStack>
-                      <Checkbox value="naruto">Naruto</Checkbox>
-                      <Checkbox value="sasuke">Sasuke</Checkbox>
-                      <Checkbox value="kakashi">kakashi</Checkbox>
-                    </HStack>
-                  </CheckboxGroup>
-                )}
-              />
-            </GridItem>
-          </Grid>
-        </FormControl>
       </Stack>
     </chakra.form>
   );
 };
+/*
+<FormControl id="date">
+  <Grid templateColumns="repeat(12, 1fr)">
+    <GridItem
+      colSpan={2}
+      d="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <FormLabel m="0">날짜</FormLabel>
+    </GridItem>
+    <GridItem colSpan={10}>
+      <DatePicker value={new Date()} onChange={console.log} />
+    </GridItem>
+  </Grid>
+  </FormControl>
+  */
