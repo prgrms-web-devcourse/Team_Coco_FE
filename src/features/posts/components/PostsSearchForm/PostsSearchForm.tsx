@@ -87,7 +87,7 @@ export const PostsSearchForm = () => {
               <FormLabel m="0">날짜</FormLabel>
             </GridItem>
             <GridItem colSpan={10}>
-              <DatePicker value={new Date()} onChange={console.log} />
+              <DatePicker selected={new Date()} onChange={console.log} />
             </GridItem>
           </Grid>
         </FormControl>
