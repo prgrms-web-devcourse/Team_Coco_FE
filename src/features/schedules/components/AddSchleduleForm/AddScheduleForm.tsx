@@ -87,13 +87,13 @@ export const AddScheduleForm = () => {
           <Stack>
             <FormControl id="start-date" isRequired>
               <FormLabel>출발 날짜</FormLabel>
-              <DatePicker value={tempStartDate} onChange={console.log} />
+              <DatePicker selected={tempStartDate} onChange={console.log} />
             </FormControl>
           </Stack>
           <Stack>
             <FormControl id="end-date" isRequired>
               <FormLabel>완료 날짜</FormLabel>
-              <DatePicker value={tempEndDate} onChange={console.log} />
+              <DatePicker selected={tempEndDate} onChange={console.log} />
             </FormControl>
           </Stack>
         </SimpleGrid>
