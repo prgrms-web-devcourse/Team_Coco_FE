@@ -1,6 +1,8 @@
-import { Box, useBreakpointValue } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { useBreakpointValue } from "@chakra-ui/react";
 import { useKeenSlider } from "keen-slider/react";
 import { Children, cloneElement, PropsWithChildren } from "react";
+import "keen-slider/keen-slider.min.css";
 
 import { getValidChildren } from "@/utils/children";
 
@@ -14,8 +16,8 @@ type CarouselProps = PropsWithChildren<{
 export const Carousel = (props: CarouselProps) => {
   const { perViewInfo = { base: 1 }, spacing = 10, children } = props;
 
-  const validChildren = getValidChildren(children);
   const perView = useBreakpointValue(perViewInfo);
+  const validChildren = getValidChildren(children);
   const [sliderRef] = useKeenSlider<HTMLDivElement>({
     slides: {
       perView,

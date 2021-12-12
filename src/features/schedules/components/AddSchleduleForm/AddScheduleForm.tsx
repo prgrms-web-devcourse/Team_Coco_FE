@@ -15,11 +15,12 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { differenceInDays } from "date-fns";
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAdd } from "react-icons/io5";
 
-import { Dailys } from "../Dailys";
+import { Carousel } from "../Carousel";
+import { Daily } from "../Daily";
 import { FriendsList } from "../FriendsList";
 import { RoundAddButton } from "../RoundAddButton";
 import { RoundUserAddButton } from "../RoundUserAddButton";
@@ -87,13 +88,23 @@ export const AddScheduleForm = () => {
           <Stack>
             <FormControl id="start-date" isRequired>
               <FormLabel>출발 날짜</FormLabel>
-              <DatePicker selected={tempStartDate} onChange={console.log} />
+              <DatePicker
+                onChange={function (
+                  date: Date | [Date | null, Date | null] | null,
+                  event: SyntheticEvent<any, Event> | undefined
+                ): void {}}
+              />
             </FormControl>
           </Stack>
           <Stack>
             <FormControl id="end-date" isRequired>
               <FormLabel>완료 날짜</FormLabel>
-              <DatePicker selected={tempEndDate} onChange={console.log} />
+              <DatePicker
+                onChange={function (
+                  date: Date | [Date | null, Date | null] | null,
+                  event: SyntheticEvent<any, Event> | undefined
+                ): void {}}
+              />
             </FormControl>
           </Stack>
         </SimpleGrid>
@@ -154,14 +165,17 @@ export const AddScheduleForm = () => {
           </HStack>
         </FormControl>
 
-        <HStack spacing={4} overflow="scroll" align="stretch">
-          <Dailys
-            totalDays={totalDays}
-            selectedDateIdx={selectedDateIdx}
-            setSelectedDateIdx={setSelectedDateIdx}
-            dailyPlaces={dailyPlaces}
-          />
-        </HStack>
+        <Carousel perViewInfo={{ base: 3, sm: 4 }}>
+          {Array.from({ length: totalDays }, (_, idx) => idx).map((i) => (
+            <Daily
+              key={i}
+              idx={i}
+              focus={selectedDateIdx === i}
+              dailyPlaces={dailyPlaces}
+              onClick={setSelectedDateIdx}
+            />
+          ))}
+        </Carousel>
       </Stack>
 
       <Button

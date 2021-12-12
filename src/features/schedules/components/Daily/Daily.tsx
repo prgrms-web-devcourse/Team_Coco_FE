@@ -11,9 +11,16 @@ type DailyProps = {
   focus: boolean;
   onClick: (idx: number) => void;
   dailyPlaces: DailyPlace[];
+  className?: string;
 };
 
-export const Daily = ({ idx, focus, onClick, dailyPlaces }: DailyProps) => {
+export const Daily = ({
+  idx,
+  focus,
+  onClick,
+  dailyPlaces,
+  className,
+}: DailyProps) => {
   return (
     <Box
       bg={focus ? "gray.100" : "gray.50"}
@@ -24,6 +31,7 @@ export const Daily = ({ idx, focus, onClick, dailyPlaces }: DailyProps) => {
       onClick={() => {
         onClick(idx);
       }}
+      className={className}
     >
       <Stack spacing={4}>
         <Heading size="sm" px={2} color={focus ? "cyan.500" : "gray.400"}>
