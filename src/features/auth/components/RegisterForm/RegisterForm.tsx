@@ -94,7 +94,7 @@ export const RegisterForm = () => {
             <FormControl id="gender" isInvalid={Boolean(errors.gender)}>
               <FormLabel>성별</FormLabel>
               <Select {...register("gender")}>
-                <option value="man">남성</option>
+                <option value="male">남성</option>
                 <option value="female">여성</option>
               </Select>
               <FormErrorMessage>
