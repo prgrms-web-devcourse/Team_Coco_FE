@@ -17,8 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
 
-// import { DatePicker } from "@/components/DatePicker";
-
 export const PostsSearchForm = () => {
   const {
     handleSubmit,
@@ -128,20 +126,3 @@ export const PostsSearchForm = () => {
     </chakra.form>
   );
 };
-/*
-<FormControl id="date">
-  <Grid templateColumns="repeat(12, 1fr)">
-    <GridItem
-      colSpan={2}
-      d="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <FormLabel m="0">날짜</FormLabel>
-    </GridItem>
-    <GridItem colSpan={10}>
-      <DatePicker value={new Date()} onChange={console.log} />
-    </GridItem>
-  </Grid>
-  </FormControl>
-  */

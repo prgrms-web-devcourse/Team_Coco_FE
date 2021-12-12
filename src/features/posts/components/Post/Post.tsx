@@ -3,22 +3,20 @@ import {
   Box,
   LinkOverlay,
   Heading,
-  Avatar,
-  Text,
   HStack,
   Flex,
 } from "@chakra-ui/react";
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-import { SimpleUser } from "@/components/SimpleUser";
 import { TextWithIcon } from "@/components/TextWithIcon";
+import { User } from "@/components/User";
 
 export const Post = () => {
   return (
     <LinkBox p={4} w="full" bg="gray.50">
       <HStack justify="space-between">
-        <SimpleUser />
+        <User size="sm" />
         <Box>테마</Box>
       </HStack>
       <Heading size="md" my={4}>
