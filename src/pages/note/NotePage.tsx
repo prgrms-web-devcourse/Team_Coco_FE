@@ -1,6 +1,7 @@
 import { Heading } from "@chakra-ui/react";
 
 import { PrivatePageLayout } from "@/components/Layout";
+import { NoteTabs } from "@/features/note/components";
 
 export const NotePage = () => {
   return (
@@ -8,7 +9,7 @@ export const NotePage = () => {
       title="메모 및 투표"
       header={<Heading size="lg">메모 및 투표</Heading>}
     >
-      메모, 투표 리스트
+      <NoteTabs />
     </PrivatePageLayout>
   );
 };

@@ -3,8 +3,6 @@ import {
   Box,
   LinkOverlay,
   Heading,
-  Avatar,
-  Text,
   HStack,
   Flex,
 } from "@chakra-ui/react";
@@ -12,22 +10,13 @@ import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 import { TextWithIcon } from "@/components/TextWithIcon";
+import { User } from "@/components/User";
 
 export const Post = () => {
   return (
     <LinkBox p={4} w="full" bg="gray.50">
       <HStack justify="space-between">
-        <HStack spacing={4}>
-          <Avatar
-            src={"https://avatars0.githubusercontent.com/u/1164541?v=4"}
-            alt={"Author"}
-            size="md"
-          />
-          <Box>
-            <Text fontWeight={600}>닉네임</Text>
-            <Text color={"gray.500"}>연령대 / 성별</Text>
-          </Box>
-        </HStack>
+        <User size="sm" />
         <Box>테마</Box>
       </HStack>
       <Heading size="md" my={4}>

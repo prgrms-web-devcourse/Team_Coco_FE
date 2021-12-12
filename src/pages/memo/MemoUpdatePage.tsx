@@ -1,7 +1,10 @@
 import { Heading } from "@chakra-ui/react";
+import React from "react";
 import { useParams } from "react-router-dom";
 
+import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
+import { MemoUpdateForm, MemoHeader } from "@/features/memo/components";
 
 export const MemoUpdatePage = () => {
   const { memoId } = useParams();
@@ -9,9 +12,15 @@ export const MemoUpdatePage = () => {
   return (
     <PrivatePageLayout
       title="id"
-      header={<Heading size="lg">메모 {memoId ? "수정" : "생성"}</Heading>}
+      header={
+        <>
+          <GoToBackButton />
+          <Heading size="lg">메모 {memoId ? "수정" : "생성"}</Heading>
+        </>
+      }
     >
-      메모 갱신
+      <MemoHeader />
+      <MemoUpdateForm memoId={memoId} />
     </PrivatePageLayout>
   );
 };

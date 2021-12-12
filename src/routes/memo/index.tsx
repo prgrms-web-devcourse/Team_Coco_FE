@@ -9,7 +9,7 @@ export const MemoRoutes = () => {
       <Route index element={<Navigate to="/" />} />
       <Route path=":memoId" element={<MemoPage />} />
       <Route path="update" element={<MemoUpdatePage />} />
-      <Route path="update/:voteId" element={<MemoUpdatePage />} />
+      <Route path="update/:memoId" element={<MemoUpdatePage />} />
       <Route path="*" element={<Navigate to="." />} />
     </Routes>
   );
