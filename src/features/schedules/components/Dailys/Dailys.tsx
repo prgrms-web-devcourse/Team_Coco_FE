@@ -7,6 +7,7 @@ type DailysProps = {
   selectedDateIdx: number;
   setSelectedDateIdx: any;
   dailyPlaces: any;
+  className?: string;
 };
 
 export const Dailys = ({
@@ -14,6 +15,7 @@ export const Dailys = ({
   selectedDateIdx,
   setSelectedDateIdx,
   dailyPlaces,
+  className,
 }: DailysProps) => {
   return (
     <>
@@ -24,6 +26,7 @@ export const Dailys = ({
           focus={selectedDateIdx === i ? true : false}
           dailyPlaces={dailyPlaces}
           onClick={setSelectedDateIdx}
+          className={className}
         />
       ))}
     </>
