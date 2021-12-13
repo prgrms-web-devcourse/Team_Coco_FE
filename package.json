@@ -131,5 +131,6 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix"
-  }
+  },
+  "proxy": "http://13.209.224.77:8080"
 }
