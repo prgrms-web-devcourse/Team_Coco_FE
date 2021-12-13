@@ -1,7 +1,7 @@
 import { Flex, Box, Text, Input } from "@chakra-ui/react";
 
 type PostDetailContentProps = {
-  postId: string | undefined;
+  postId?: string;
 };
 
 export const PostDetailContent = ({ postId }: PostDetailContentProps) => {
