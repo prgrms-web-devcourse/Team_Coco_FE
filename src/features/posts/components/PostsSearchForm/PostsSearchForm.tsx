@@ -11,7 +11,8 @@ import {
   chakra,
   VisuallyHidden,
   CheckboxGroup,
-  Checkbox,
+  RadioGroup,
+  Radio,
   Text,
   Flex,
 } from "@chakra-ui/react";
@@ -53,38 +54,34 @@ export const PostsSearchForm = () => {
             name="theme"
             control={control}
             render={({ field: { ref, ...rest } }) => (
-              <CheckboxGroup
-                colorScheme="cyan"
-                {...rest}
-                defaultValue={["all"]}
-              >
+              <RadioGroup colorScheme="cyan" defaultValue="all" {...rest}>
                 <HStack>
                   <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Checkbox value="all"></Checkbox>
+                    <Radio value="all"></Radio>
                     <Text color="gray.400">전체</Text>
                   </Flex>
                   <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Checkbox value="nature"></Checkbox>
+                    <Radio value="nature"></Radio>
                     <Text color="gray.400">자연</Text>
                   </Flex>
                   <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Checkbox value="art"></Checkbox>
+                    <Radio value="art"></Radio>
                     <Text color="gray.400">예술</Text>
                   </Flex>
                   <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Checkbox value="history"></Checkbox>
+                    <Radio value="history"></Radio>
                     <Text color="gray.400">역사</Text>
                   </Flex>
                   <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Checkbox value="food"></Checkbox>
+                    <Radio value="food"></Radio>
                     <Text color="gray.400">맛집</Text>
                   </Flex>
                   <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Checkbox value="activity"></Checkbox>
+                    <Radio value="activity"></Radio>
                     <Text color="gray.400">액티비티</Text>
                   </Flex>
                 </HStack>
-              </CheckboxGroup>
+              </RadioGroup>
             )}
           />
         </FormControl>

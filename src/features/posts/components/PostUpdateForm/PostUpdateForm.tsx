@@ -1,22 +1,18 @@
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
   Flex,
   Stack,
-  VStack,
-  HStack,
   VisuallyHidden,
   Input,
   Textarea,
   Select,
   Button,
-  Spacer,
   Box,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
