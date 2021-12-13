@@ -20,7 +20,6 @@ import {
   List,
   ListItem,
   VisuallyHidden,
-  LinkBox,
   Link,
 } from "@chakra-ui/react";
 import {

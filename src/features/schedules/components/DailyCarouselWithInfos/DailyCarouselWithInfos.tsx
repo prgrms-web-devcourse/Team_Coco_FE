@@ -4,7 +4,7 @@ import {
   KeenSliderPlugin,
   KeenSliderInstance,
 } from "keen-slider/react";
-import { MutableRefObject, useEffect, useState } from "react";
+import { MutableRefObject, useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import "keen-slider/keen-slider.min.css";
 
@@ -200,10 +200,6 @@ export const DailyCarouselWithInfos = () => {
     },
     [ThumbnailPlugin(instanceRef)]
   );
-
-  useEffect(() => {
-    console.log(currentSlide);
-  }, [currentSlide]);
 
   return (
     <Flex direction="column-reverse">
