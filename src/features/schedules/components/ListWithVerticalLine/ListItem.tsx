@@ -8,12 +8,12 @@ import {
   StackProps,
 } from "@chakra-ui/react";
 
-export interface ListItemProps extends StackProps {
+export type ListItemProps = StackProps & {
   title: string;
   address: string;
   phone?: string;
   isLastItem?: boolean;
-}
+};
 
 export const ListItem = (props: ListItemProps) => {
   const { title, address, phone, isLastItem, children, ...stackProps } = props;

@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { differenceInDays } from "date-fns";
-import { SyntheticEvent, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAdd } from "react-icons/io5";
 
@@ -27,7 +27,6 @@ import { RoundUserAddButton } from "../RoundUserAddButton";
 import { SearchPlace } from "../SearchPlace";
 
 import { CustomizedModal } from "@/components/CustomizedModal";
-import { DatePicker } from "@/components/DatePicker";
 
 type FormValues = {
   title: string;
@@ -46,13 +45,12 @@ type Marker = {
   placeName: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type DailyPlace = Marker & { date: number; order: number };
 
 export const AddScheduleForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register } = useForm<FormValues>();
-  const [dailyPlaces, setDailyPlaces] = useState<any>([]); // <DailyPlace[]>
+  const [dailyPlaces, setDailyPlaces] = useState<DailyPlace[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
 
@@ -88,23 +86,13 @@ export const AddScheduleForm = () => {
           <Stack>
             <FormControl id="start-date" isRequired>
               <FormLabel>출발 날짜</FormLabel>
-              <DatePicker
-                onChange={function (
-                  date: Date | [Date | null, Date | null] | null,
-                  event: SyntheticEvent<any, Event> | undefined
-                ): void {}}
-              />
+              <Input type="date" />
             </FormControl>
           </Stack>
           <Stack>
             <FormControl id="end-date" isRequired>
               <FormLabel>완료 날짜</FormLabel>
-              <DatePicker
-                onChange={function (
-                  date: Date | [Date | null, Date | null] | null,
-                  event: SyntheticEvent<any, Event> | undefined
-                ): void {}}
-              />
+              <Input type="date" />
             </FormControl>
           </Stack>
         </SimpleGrid>

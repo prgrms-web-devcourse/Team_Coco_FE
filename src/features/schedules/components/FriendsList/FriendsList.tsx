@@ -34,7 +34,7 @@ export const FriendsList = ({ showRole, showInvitation }: FriendsListProps) => {
   return (
     <Stack spacing={4}>
       {friends.map((friend, idx) => (
-        <HStack justify="space-between" key={idx}>
+        <HStack justify="space-between" key={`friend-${idx}`}>
           <HStack spacing={4}>
             <Avatar src={friend.src} alt={friend.alt} size="md" />
             <Box>

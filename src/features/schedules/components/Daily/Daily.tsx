@@ -38,11 +38,12 @@ export const Daily = ({
           day{idx + 1}
         </Heading>
         <Stack spacing={2}>
-          {dailyPlaces.map((dailyPlace, _idx) => {
-            if (dailyPlace.date === idx) {
+          {dailyPlaces
+            .filter((dailyPlace) => dailyPlace.date === idx)
+            .map((dailyPlace, _idx) => {
               return (
                 <Box
-                  key={dailyPlace.spotId + _idx}
+                  key={`Daily-${_idx}-${dailyPlace.spotId}`}
                   bg={focus ? "gray.200" : "gray.100"}
                   p={2}
                   textAlign="center"
@@ -52,8 +53,7 @@ export const Daily = ({
                   </Text>
                 </Box>
               );
-            }
-          })}
+            })}
         </Stack>
       </Stack>
     </Box>

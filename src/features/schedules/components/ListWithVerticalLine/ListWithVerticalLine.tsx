@@ -23,6 +23,7 @@ type ListWithVerticalLineProps = {
 
 export const ListWithVerticalLine = (props: ListWithVerticalLineProps) => {
   const { idx, dailyPlaces, className } = props;
+
   return (
     <Box as="section" className={className}>
       <Heading size="sm" mx="2" color="cyan.500">
@@ -30,18 +31,18 @@ export const ListWithVerticalLine = (props: ListWithVerticalLineProps) => {
       </Heading>
       <Box maxW="2xl" mx="auto" p={{ base: "4", md: "8" }}>
         <List spacing="4">
-          {dailyPlaces.map((dailyPlace, _idx) => {
-            if (dailyPlace.date === idx) {
+          {dailyPlaces
+            .filter((dailyPlace) => dailyPlace.date === idx)
+            .map((dailyPlace, _idx) => {
               return (
                 <ListItem
-                  key={_idx}
+                  key={`ListItem-${_idx}`}
                   title={dailyPlace.placeName}
                   address={dailyPlace.addressName}
                   phone={dailyPlace.phone}
                 />
               );
-            }
-          })}
+            })}
         </List>
       </Box>
     </Box>

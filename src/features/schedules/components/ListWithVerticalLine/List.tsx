@@ -1,20 +1,22 @@
 import { Stack, StackProps } from "@chakra-ui/react";
-import * as React from "react";
+import React, { PropsWithChildren, useMemo, cloneElement } from "react";
 
-import { ListItemProps } from "./ListItem";
+import { getValidChildren } from "@/utils/children";
 
-export const List = (props: StackProps) => {
+type ListProps = PropsWithChildren<StackProps>;
+
+export const List = (props: ListProps) => {
   const { children, ...stackProps } = props;
-  const items = React.useMemo(
+  const validChildren = getValidChildren(children);
+
+  const items = useMemo(
     () =>
-      React.Children.toArray(children)
-        .filter<React.ReactElement<ListItemProps>>(React.isValidElement)
-        .map((item, index, array) =>
-          index + 1 === array.length
-            ? React.cloneElement(item, { isLastItem: true })
-            : item
-        ),
-    [children]
+      React.Children.map(validChildren, (item, index) =>
+        index + 1 === validChildren.length
+          ? cloneElement(item, { isLastItem: true })
+          : item
+      ),
+    [validChildren]
   );
   return (
     <Stack as="ul" {...stackProps}>

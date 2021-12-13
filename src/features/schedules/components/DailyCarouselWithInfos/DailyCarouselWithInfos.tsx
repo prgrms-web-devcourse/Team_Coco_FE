@@ -138,22 +138,22 @@ const ThumbnailPlugin = (
   mainRef: MutableRefObject<KeenSliderInstance | null>
 ): KeenSliderPlugin => {
   return (slider) => {
-    function removeActive() {
+    const removeActive = () => {
       slider.slides.forEach((slide) => {
         slide.classList.remove("active");
       });
-    }
-    function addActive(idx: number) {
+    };
+    const addActive = (idx: number) => {
       slider.slides[idx].classList.add("active");
-    }
+    };
 
-    function addClickEvents() {
+    const addClickEvents = () => {
       slider.slides.forEach((slide, idx) => {
         slide.addEventListener("click", () => {
           if (mainRef.current) mainRef.current.moveToIdx(idx);
         });
       });
-    }
+    };
 
     slider.on("created", () => {
       if (!mainRef.current) return;
@@ -249,10 +249,10 @@ export const DailyCarouselWithInfos = () => {
         </IconButton>
 
         {/* Slides */}
-        {Array.from({ length: 5 }, (_, idx) => idx).map((i) => (
+        {Array.from({ length: 5 }, (_, idx) => idx).map((idx) => (
           <ListWithVerticalLine
-            key={i}
-            idx={i}
+            key={`ListWithVerticalLine-${idx}`}
+            idx={idx}
             dailyPlaces={dummy}
             className={"keen-slider__slide"}
           />
