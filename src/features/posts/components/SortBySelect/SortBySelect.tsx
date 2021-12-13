@@ -20,6 +20,7 @@ export const SortBySelect = (props: SelectProps) => {
       aria-label="Sort by"
       defaultValue={sortByOptions.defaultValue}
       focusBorderColor={mode("blue.500", "blue.200")}
+      variant="unstyled"
       {...props}
     >
       {sortByOptions.options.map((option) => (
