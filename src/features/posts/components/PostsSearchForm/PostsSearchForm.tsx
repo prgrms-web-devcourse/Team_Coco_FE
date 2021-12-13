@@ -33,15 +33,6 @@ export const PostsSearchForm = () => {
     <chakra.form onSubmit={onSubmit}>
       <Stack spacing={4}>
         <FormControl id="city">
-          {/* <Grid templateColumns="repeat(12, 1fr)">
-            <GridItem
-              colSpan={2}
-              d="flex"
-              alignItems="center"
-              justifyContent="center"
-            ></GridItem>
-            <GridItem colSpan={10}></GridItem>
-          </Grid> */}
           <FormLabel>도시</FormLabel>
           <Select placeholder="도시를 선택해 주세요" {...register("city")}>
             <option>서울</option>
@@ -57,15 +48,6 @@ export const PostsSearchForm = () => {
         </FormControl>
 
         <FormControl id="theme">
-          {/* <Grid templateColumns="repeat(12, 1fr)">
-            <GridItem
-              colSpan={2}
-              d="flex"
-              alignItems="center"
-              justifyContent="center"
-            ></GridItem>
-            <GridItem colSpan={10} overflow="scroll"></GridItem>
-          </Grid> */}
           <FormLabel>테마</FormLabel>
           <Controller
             name="theme"

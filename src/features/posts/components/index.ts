@@ -5,3 +5,4 @@ export * from "./SortBySelect";
 export * from "./PostDetailContent";
 export * from "./PostDetailHeader";
 export * from "./Comment";
+export * from "./PostUpdateForm";
