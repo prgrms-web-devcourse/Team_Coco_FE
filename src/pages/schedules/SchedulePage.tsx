@@ -4,7 +4,6 @@ import {
   Stack,
   HStack,
   Flex,
-  Button,
   AvatarGroup,
   Avatar,
   useDisclosure,
@@ -21,9 +20,17 @@ import {
   List,
   ListItem,
   VisuallyHidden,
+  LinkBox,
+  Link,
 } from "@chakra-ui/react";
-import { IoEllipsisHorizontal, IoAdd, IoClose } from "react-icons/io5";
+import {
+  IoEllipsisHorizontal,
+  IoAdd,
+  IoClose,
+  IoChevronForward,
+} from "react-icons/io5";
 
+import { ActionsMenu } from "@/components/ActionsMenu";
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { PrivatePageLayout } from "@/components/Layout";
 import { DailyCarouselWithInfos } from "@/features/schedules/components/DailyCarouselWithInfos";
@@ -41,12 +48,14 @@ export const SchedulePage = () => {
     >
       <Stack my="4" spacing={4}>
         <Flex justify="space-between" align="center">
-          <Heading fontSize="xl" color="gray.700">
+          <Heading fontSize="2xl" color="gray.700">
             경주 졸업 여행
           </Heading>
-          <Button variant="ghost">
-            <IoEllipsisHorizontal color="gray.700" />
-          </Button>
+
+          <ActionsMenu icon={<IoEllipsisHorizontal />}>
+            <Box>수정</Box>
+            <Box color="red.600">삭제</Box>
+          </ActionsMenu>
         </Flex>
 
         <Flex justify="space-between" align="center">
@@ -56,7 +65,7 @@ export const SchedulePage = () => {
           </Text>
         </Flex>
 
-        <Heading fontSize="md" color="gray.600">
+        <Heading fontSize="lg" color="gray.700">
           멤버
         </Heading>
         <HStack>
@@ -99,7 +108,7 @@ export const SchedulePage = () => {
                         aria-label="delete-todo"
                         size="xs"
                         icon={<IoClose />}
-                        bg="gray.100"
+                        variant="ghost"
                         mr="3"
                       />
                     </Flex>
@@ -111,7 +120,7 @@ export const SchedulePage = () => {
                         aria-label="delete-todo"
                         size="xs"
                         icon={<IoClose />}
-                        bg="gray.100"
+                        variant="ghost"
                         mr="3"
                       />
                     </Flex>
@@ -158,7 +167,7 @@ export const SchedulePage = () => {
                         aria-label="delete-todo"
                         size="xs"
                         icon={<IoClose />}
-                        bg="gray.100"
+                        variant="ghost"
                         mr="3"
                       />
                     </Flex>
@@ -170,7 +179,7 @@ export const SchedulePage = () => {
                         aria-label="delete-todo"
                         size="xs"
                         icon={<IoClose />}
-                        bg="gray.100"
+                        variant="ghost"
                         mr="3"
                       />
                     </Flex>
@@ -203,6 +212,12 @@ export const SchedulePage = () => {
             </Stack>
           </Stack>
         </Box>
+        <Link position="relative">
+          <HStack my="4" position="absolute" right="0" color="gray.700">
+            <Heading size="md">메모 및 투표</Heading>
+            <IoChevronForward size="22" />
+          </HStack>
+        </Link>
       </Stack>
     </PrivatePageLayout>
   );
