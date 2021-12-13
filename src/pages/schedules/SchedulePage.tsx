@@ -8,8 +8,21 @@ import {
   AvatarGroup,
   Avatar,
   useDisclosure,
+  Box,
+  Checkbox,
+  CheckboxGroup,
+  Divider,
+  FormControl,
+  FormLabel,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  List,
+  ListItem,
+  VisuallyHidden,
 } from "@chakra-ui/react";
-import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
+import { IoEllipsisHorizontal, IoAdd, IoClose } from "react-icons/io5";
 
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { PrivatePageLayout } from "@/components/Layout";
@@ -70,7 +83,126 @@ export const SchedulePage = () => {
 
         <MapContainer setSelectedPlace={() => {}} />
 
-        <DailyCarouselWithInfos />
+        <Box>
+          <DailyCarouselWithInfos />
+          <Stack bg="gray.50" p="8" spacing="4">
+            <Heading size="sm" color="gray.600">
+              이 날의 체크리스트
+            </Heading>
+            <Stack>
+              <List color="gray.600" ml="1">
+                <CheckboxGroup colorScheme="cyan">
+                  <ListItem my="1">
+                    <Flex justify="space-between">
+                      <Checkbox>밥먹기1</Checkbox>
+                      <IconButton
+                        aria-label="delete-todo"
+                        size="xs"
+                        icon={<IoClose />}
+                        bg="gray.100"
+                        mr="3"
+                      />
+                    </Flex>
+                  </ListItem>
+                  <ListItem my="1">
+                    <Flex justify="space-between">
+                      <Checkbox>밥먹기2</Checkbox>
+                      <IconButton
+                        aria-label="delete-todo"
+                        size="xs"
+                        icon={<IoClose />}
+                        bg="gray.100"
+                        mr="3"
+                      />
+                    </Flex>
+                  </ListItem>
+                </CheckboxGroup>
+              </List>
+              <form>
+                <FormControl id="search-term">
+                  <VisuallyHidden>
+                    <FormLabel>입력</FormLabel>
+                  </VisuallyHidden>
+                  <InputGroup size="md">
+                    <Input
+                      type="text"
+                      size="md"
+                      variant="Unstyled"
+                      placeholder="할 일을 입력하세요"
+                    />
+                    <InputRightElement width="3rem">
+                      <IconButton
+                        aria-label="add-todo"
+                        icon={<IoAdd />}
+                        size="xs"
+                      />
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+              </form>
+            </Stack>
+          </Stack>
+          <Divider orientation="horizontal" />
+
+          <Stack bg="gray.50" px="8" py="8" spacing="4" borderBottomRadius="xl">
+            <Heading size="sm" color="gray.600">
+              공통 체크리스트
+            </Heading>
+            <Stack>
+              <List color="gray.600" ml="1">
+                <CheckboxGroup colorScheme="cyan">
+                  <ListItem my="1">
+                    <Flex justify="space-between">
+                      <Checkbox>밥먹기1</Checkbox>
+                      <IconButton
+                        aria-label="delete-todo"
+                        size="xs"
+                        icon={<IoClose />}
+                        bg="gray.100"
+                        mr="3"
+                      />
+                    </Flex>
+                  </ListItem>
+                  <ListItem my="1">
+                    <Flex justify="space-between">
+                      <Checkbox>밥먹기2</Checkbox>
+                      <IconButton
+                        aria-label="delete-todo"
+                        size="xs"
+                        icon={<IoClose />}
+                        bg="gray.100"
+                        mr="3"
+                      />
+                    </Flex>
+                  </ListItem>
+                </CheckboxGroup>
+              </List>
+
+              <form>
+                <FormControl id="search-term">
+                  <VisuallyHidden>
+                    <FormLabel>입력</FormLabel>
+                  </VisuallyHidden>
+                  <InputGroup size="md">
+                    <Input
+                      type="text"
+                      size="md"
+                      variant="Unstyled"
+                      placeholder="할 일을 입력하세요"
+                    />
+                    <InputRightElement width="3rem">
+                      <IconButton
+                        aria-label="add-todo"
+                        icon={<IoAdd />}
+                        size="xs"
+                      />
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+              </form>
+            </Stack>
+          </Stack>
+        </Box>
       </Stack>
     </PrivatePageLayout>
   );
