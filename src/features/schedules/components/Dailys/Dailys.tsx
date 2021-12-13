@@ -7,6 +7,7 @@ type DailysProps = {
   selectedDateIdx: number;
   setSelectedDateIdx: any;
   dailyPlaces: any;
+  className?: string;
 };
 
 export const Dailys = ({
@@ -14,16 +15,18 @@ export const Dailys = ({
   selectedDateIdx,
   setSelectedDateIdx,
   dailyPlaces,
+  className,
 }: DailysProps) => {
   return (
     <>
-      {Array.from({ length: totalDays }, (_, idx) => idx).map((i) => (
+      {Array.from({ length: totalDays }, (_, idx) => idx).map((idx) => (
         <Daily
-          key={i}
-          idx={i}
-          focus={selectedDateIdx === i ? true : false}
+          key={`Daily-${idx}`}
+          idx={idx}
+          focus={selectedDateIdx === idx ? true : false}
           dailyPlaces={dailyPlaces}
           onClick={setSelectedDateIdx}
+          className={className}
         />
       ))}
     </>

@@ -11,9 +11,16 @@ type DailyProps = {
   focus: boolean;
   onClick: (idx: number) => void;
   dailyPlaces: DailyPlace[];
+  className?: string;
 };
 
-export const Daily = ({ idx, focus, onClick, dailyPlaces }: DailyProps) => {
+export const Daily = ({
+  idx,
+  focus,
+  onClick,
+  dailyPlaces,
+  className,
+}: DailyProps) => {
   return (
     <Box
       bg={focus ? "gray.100" : "gray.50"}
@@ -24,17 +31,19 @@ export const Daily = ({ idx, focus, onClick, dailyPlaces }: DailyProps) => {
       onClick={() => {
         onClick(idx);
       }}
+      className={className}
     >
       <Stack spacing={4}>
         <Heading size="sm" px={2} color={focus ? "cyan.500" : "gray.400"}>
           day{idx + 1}
         </Heading>
         <Stack spacing={2}>
-          {dailyPlaces.map((dailyPlace, _idx) => {
-            if (dailyPlace.date === idx) {
+          {dailyPlaces
+            .filter((dailyPlace) => dailyPlace.date === idx)
+            .map((dailyPlace, _idx) => {
               return (
                 <Box
-                  key={dailyPlace.spotId + _idx}
+                  key={`Daily-${_idx}-${dailyPlace.spotId}`}
                   bg={focus ? "gray.200" : "gray.100"}
                   p={2}
                   textAlign="center"
@@ -44,8 +53,7 @@ export const Daily = ({ idx, focus, onClick, dailyPlaces }: DailyProps) => {
                   </Text>
                 </Box>
               );
-            }
-          })}
+            })}
         </Stack>
       </Stack>
     </Box>

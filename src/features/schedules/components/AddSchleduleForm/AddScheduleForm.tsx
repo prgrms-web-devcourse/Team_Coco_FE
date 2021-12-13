@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAdd } from "react-icons/io5";
 
+import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
 import { FriendsList } from "../FriendsList";
 import { RoundAddButton } from "../RoundAddButton";
@@ -26,7 +27,6 @@ import { RoundUserAddButton } from "../RoundUserAddButton";
 import { SearchPlace } from "../SearchPlace";
 
 import { CustomizedModal } from "@/components/CustomizedModal";
-import { DatePicker } from "@/components/DatePicker";
 
 type FormValues = {
   title: string;
@@ -45,13 +45,12 @@ type Marker = {
   placeName: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type DailyPlace = Marker & { date: number; order: number };
 
 export const AddScheduleForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register } = useForm<FormValues>();
-  const [dailyPlaces, setDailyPlaces] = useState<any>([]); // <DailyPlace[]>
+  const [dailyPlaces, setDailyPlaces] = useState<DailyPlace[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
 
@@ -87,13 +86,13 @@ export const AddScheduleForm = () => {
           <Stack>
             <FormControl id="start-date" isRequired>
               <FormLabel>출발 날짜</FormLabel>
-              <DatePicker selected={tempStartDate} onChange={console.log} />
+              <Input type="date" />
             </FormControl>
           </Stack>
           <Stack>
             <FormControl id="end-date" isRequired>
               <FormLabel>완료 날짜</FormLabel>
-              <DatePicker selected={tempEndDate} onChange={console.log} />
+              <Input type="date" />
             </FormControl>
           </Stack>
         </SimpleGrid>
@@ -154,14 +153,14 @@ export const AddScheduleForm = () => {
           </HStack>
         </FormControl>
 
-        <HStack spacing={4} overflow="scroll" align="stretch">
+        <Carousel perViewInfo={{ base: 3, sm: 4 }}>
           <Dailys
             totalDays={totalDays}
             selectedDateIdx={selectedDateIdx}
             setSelectedDateIdx={setSelectedDateIdx}
             dailyPlaces={dailyPlaces}
           />
-        </HStack>
+        </Carousel>
       </Stack>
 
       <Button
