@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import { IoAdd } from "react-icons/io5";
 
 import { Carousel } from "../Carousel";
-import { Daily } from "../Daily";
+import { Dailys } from "../Dailys";
 import { FriendsList } from "../FriendsList";
 import { RoundAddButton } from "../RoundAddButton";
 import { RoundUserAddButton } from "../RoundUserAddButton";
@@ -166,15 +166,12 @@ export const AddScheduleForm = () => {
         </FormControl>
 
         <Carousel perViewInfo={{ base: 3, sm: 4 }}>
-          {Array.from({ length: totalDays }, (_, idx) => idx).map((i) => (
-            <Daily
-              key={i}
-              idx={i}
-              focus={selectedDateIdx === i}
-              dailyPlaces={dailyPlaces}
-              onClick={setSelectedDateIdx}
-            />
-          ))}
+          <Dailys
+            totalDays={totalDays}
+            selectedDateIdx={selectedDateIdx}
+            setSelectedDateIdx={setSelectedDateIdx}
+            dailyPlaces={dailyPlaces}
+          />
         </Carousel>
       </Stack>
 
