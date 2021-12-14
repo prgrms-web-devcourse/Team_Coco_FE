@@ -2,11 +2,11 @@ import { IconButton } from "@chakra-ui/react";
 import { IoPencilSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-type AddNewButtonProps = {
+type GoToUpdateButtonProps = {
   target: string;
 };
 
-export const AddNewButton = ({ target }: AddNewButtonProps) => {
+export const GoToUpdateButton = ({ target }: GoToUpdateButtonProps) => {
   return (
     <IconButton
       as={Link}

@@ -10,8 +10,8 @@ import {
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { AddNewButton } from "@/components/AddNewButton/BottomNavigation";
 import { GoToBackButton } from "@/components/GoToBackButton";
+import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { ThumbnailGrid } from "@/features/note/components";
 
@@ -61,7 +61,7 @@ export const NotePage = () => {
           </TabPanels>
         </Tabs>
         <Box position="absolute" right={5} top={600}>
-          <AddNewButton target={tabs[tabIndex]} />
+          <GoToUpdateButton target={tabs[tabIndex]} />
         </Box>
       </Box>
     </PrivatePageLayout>
