@@ -21,7 +21,6 @@ import {
   ListItem,
   VisuallyHidden,
   LinkOverlay,
-  // Link,
 } from "@chakra-ui/react";
 import React from "react";
 import {
