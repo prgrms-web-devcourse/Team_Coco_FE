@@ -19,7 +19,7 @@ export const MemoPage = () => {
         </>
       }
     >
-      <MemoHeader />
+      <MemoHeader memoId={memoId} />
       <MemoContent memoId={memoId} />
     </PrivatePageLayout>
   );

@@ -32,7 +32,7 @@ export const VotePage = () => {
         </>
       }
     >
-      <VoteHeader />
+      <VoteHeader voteId={voteId} />
       <Flex direction="column" height="550px">
         <VoteTitle title={dummy.title} />
         {isJoined ? (

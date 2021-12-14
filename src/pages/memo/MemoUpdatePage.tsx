@@ -19,7 +19,7 @@ export const MemoUpdatePage = () => {
         </>
       }
     >
-      <MemoHeader />
+      <MemoHeader memoId={memoId} />
       <MemoUpdateForm memoId={memoId} />
     </PrivatePageLayout>
   );
