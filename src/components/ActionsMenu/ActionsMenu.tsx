@@ -26,7 +26,7 @@ export const ActionsMenu = ({ icon, children }: ActionsMenuProps) => {
       />
       <MenuList>
         {React.Children.map(validChildren, (child) => {
-          return <MenuItem>{child}</MenuItem>;
+          return <MenuItem justifyContent="center">{child}</MenuItem>;
         })}
       </MenuList>
     </Menu>
