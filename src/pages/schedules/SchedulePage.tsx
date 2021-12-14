@@ -20,7 +20,7 @@ import {
   List,
   ListItem,
   VisuallyHidden,
-  LinkOverlay,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import React from "react";
 import {
@@ -221,14 +221,14 @@ export const SchedulePage = () => {
           </Stack>
         </Box>
         <Flex justifyContent="flex-end">
-          <LinkOverlay as={Link} to={"/note"} state={scheduleId}>
+          <ChakraLink as={Link} to={"/note"} state={scheduleId}>
             <HStack>
               <Text fontSize="lg" color="gray.700">
                 메모 및 투표
               </Text>
               <IoChevronForward size="22" color="#2D3748" />
             </HStack>
-          </LinkOverlay>
+          </ChakraLink>
         </Flex>
       </Stack>
     </PrivatePageLayout>
