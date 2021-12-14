@@ -1,13 +1,22 @@
-import { Box, Flex, Spacer } from "@chakra-ui/react";
-import { IoEllipsisHorizontalOutline } from "react-icons/io5";
+import { Box, Flex, Spacer, IconButton } from "@chakra-ui/react";
+import { IoEllipsisHorizontalSharp } from "react-icons/io5";
+
+import { User } from "@/components/User";
 
 export const VoteHeader = () => {
   return (
     <Box padding={1} height="100px">
       <Flex height="100px" alignItems="center">
-        <Box>작성자 상세정보 공통컴포넌트</Box>
+        <User size="md" />
         <Spacer />
-        <IoEllipsisHorizontalOutline color="#718096" />
+        <IconButton
+          aria-label="action-button"
+          display="flex"
+          justidyContent="center"
+          size="lg"
+          variant="unstyled"
+          icon={<IoEllipsisHorizontalSharp color="#718096" />}
+        />
       </Flex>
     </Box>
   );
