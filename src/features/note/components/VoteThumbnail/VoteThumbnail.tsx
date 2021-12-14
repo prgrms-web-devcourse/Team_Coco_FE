@@ -5,11 +5,10 @@ import { TextWithIcon } from "@/components/TextWithIcon";
 
 type VoteThumbnailProps = {
   title?: string;
+  memberCount?: number;
 };
 
-export const VoteThumbnail = (props: VoteThumbnailProps) => {
-  const { title } = props;
-
+export const VoteThumbnail = ({ title, memberCount }: VoteThumbnailProps) => {
   return (
     <Flex direction="column" height="full">
       <Text fontSize="md" color="gray.600" isTruncated>
@@ -17,7 +16,7 @@ export const VoteThumbnail = (props: VoteThumbnailProps) => {
       </Text>
       <Spacer flexGrow={1} />
       <TextWithIcon justifyContent="flex-end" icon={<IoPersonSharp />}>
-        n명 참여
+        {memberCount}명 참여
       </TextWithIcon>
     </Flex>
   );
