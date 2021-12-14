@@ -21,7 +21,7 @@ export const BodyBeforeVote = (props: BodyBeforeVoteProps) => {
 
   return (
     <VStack height="full" spacing={4}>
-      <Stack marginTop={4} spacing={4} w="full">
+      <Stack marginTop={4} spacing={2} w="full">
         {option.map((value, index) => (
           <HStack key={index} spacing={4} flex={1}>
             <Checkbox size="lg" colorScheme="cyan" value={index} />
