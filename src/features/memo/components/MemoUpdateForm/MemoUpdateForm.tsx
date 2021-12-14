@@ -1,17 +1,15 @@
 import {
   Stack,
-  Box,
   FormControl,
   VisuallyHidden,
   FormLabel,
   Input,
   Textarea,
   Button,
-  HStack,
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import * as yup from "yup";
 
@@ -21,8 +19,7 @@ const dummy = [
     id: 1,
     title:
       "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-    content:
-      "quia et suscipit\nsuscipit recusandae consequuntur expedita et dummy\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
+    content: "ㅇㄹ\n\nㅇㄹㅇㄹ",
   },
   {
     userId: 1,
@@ -73,11 +70,6 @@ const schema = yup.object().shape({
   content: yup.string().min(1).max(255).required(),
 });
 
-const defaultValues: FormValues = {
-  title: "",
-  content: "",
-};
-
 type FormValues = {
   title: string;
   content: string;
@@ -89,8 +81,12 @@ type MemoUpdateFormProps = {
 
 export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
   const { memoId } = props;
-
   const memo = dummy.find((data) => data.id === Number(memoId));
+
+  const defaultValues: FormValues = {
+    title: memo ? memo.title : "",
+    content: memo ? memo.content : "",
+  };
 
   const {
     handleSubmit,
@@ -121,9 +117,9 @@ export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
             <FormLabel>제목</FormLabel>
           </VisuallyHidden>
           <Input
-            placeholder="제목을 입력하세요"
+            px={4}
             variant="flushed"
-            value={memo?.title}
+            placeholder="제목을 입력하세요"
             {...register("title")}
           />
           <FormErrorMessage>
@@ -143,14 +139,12 @@ export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
             minH="350px"
             maxH="350px"
             placeholder="내용을 입력하세요"
-            value={memo?.content}
             {...register("content")}
           />
           <FormErrorMessage>
             {errors.content && "내용은 1자 이상 255자 이하이어야 합니다."}
           </FormErrorMessage>
         </FormControl>
-        {/* <HStack w="full" spacing={4}> */}
         <Button
           type="submit"
           size="lg"
@@ -160,7 +154,6 @@ export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
         >
           메모 {memoId ? "수정하기" : "생성하기"}
         </Button>
-        {/* </HStack> */}
       </Stack>
     </form>
   );

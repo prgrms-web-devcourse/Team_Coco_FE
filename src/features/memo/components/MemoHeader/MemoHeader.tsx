@@ -1,5 +1,6 @@
 import { Box, Flex, Spacer } from "@chakra-ui/react";
 import { IoEllipsisHorizontalSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { User } from "@/components/User";
@@ -40,7 +41,9 @@ export const MemoHeader = ({ memoId }: MemoHeaderProps) => {
           <Box onClick={() => console.log("삭제")} color="red">
             삭제
           </Box>
-          <Box onClick={() => console.log("수정")}>수정</Box>
+          <Box as={Link} to={`/memo/update/${memoId}`}>
+            수정
+          </Box>
           <Box color="gray.500">취소</Box>
         </ActionsMenu>
       </Flex>
