@@ -47,7 +47,7 @@ const dummy = [
 ];
 
 type MemoContentProps = {
-  memoId: string | undefined;
+  memoId?: string;
 };
 
 export const MemoContent = (props: MemoContentProps) => {

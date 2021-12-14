@@ -20,17 +20,21 @@ import {
   List,
   ListItem,
   VisuallyHidden,
-  Link,
+  LinkOverlay,
+  // Link,
 } from "@chakra-ui/react";
+import React from "react";
 import {
   IoEllipsisHorizontal,
   IoAdd,
   IoClose,
   IoChevronForward,
 } from "react-icons/io5";
+import { Link, useParams } from "react-router-dom";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { CustomizedModal } from "@/components/CustomizedModal";
+import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { DailyCarouselWithInfos } from "@/features/schedules/components/DailyCarouselWithInfos";
 import { FriendsList } from "@/features/schedules/components/FriendsList";
@@ -39,11 +43,17 @@ import { RoundUserAddButton } from "@/features/schedules/components/RoundUserAdd
 
 export const SchedulePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const scheduleId = useParams();
 
   return (
     <PrivatePageLayout
       title="id"
-      header={<Heading size="lg">스케줄 보기</Heading>}
+      header={
+        <>
+          <GoToBackButton />
+          <Heading size="lg">스케줄 보기</Heading>
+        </>
+      }
     >
       <Stack my="4" spacing={4}>
         <Flex justify="space-between" align="center">
@@ -211,12 +221,16 @@ export const SchedulePage = () => {
             </Stack>
           </Stack>
         </Box>
-        <Link position="relative">
-          <HStack my="4" position="absolute" right="0" color="gray.700">
-            <Heading size="md">메모 및 투표</Heading>
-            <IoChevronForward size="22" />
-          </HStack>
-        </Link>
+        <Flex justifyContent="flex-end">
+          <LinkOverlay as={Link} to={"/note"} state={scheduleId}>
+            <HStack>
+              <Text fontSize="lg" color="gray.700">
+                메모 및 투표
+              </Text>
+              <IoChevronForward size="22" color="#2D3748" />
+            </HStack>
+          </LinkOverlay>
+        </Flex>
       </Stack>
     </PrivatePageLayout>
   );
