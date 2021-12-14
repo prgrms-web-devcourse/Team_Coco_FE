@@ -10,14 +10,23 @@ import {
   HStack,
   AvatarGroup,
   Avatar,
-  CheckboxGroup,
-  Checkbox,
+  FormErrorMessage,
+  RadioGroup,
+  Radio,
+  VisuallyHidden,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
-import { differenceInDays } from "date-fns";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { format, differenceInDays, isEqual } from "date-fns";
+import React, { useState, ReactElement } from "react";
+import {
+  SubmitHandler,
+  useForm,
+  Controller,
+  useFieldArray,
+} from "react-hook-form";
 import { IoAdd } from "react-icons/io5";
+import * as yup from "yup";
 
 import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
@@ -27,155 +36,260 @@ import { RoundUserAddButton } from "../RoundUserAddButton";
 import { SearchPlace } from "../SearchPlace";
 
 import { CustomizedModal } from "@/components/CustomizedModal";
-
-type FormValues = {
-  title: string;
-  startDate: string;
-  endDate: string;
-  themeList: [];
-  dailySchedulePlaces: [];
-};
+import { DatePicker } from "@/components/DatePicker";
 
 type Marker = {
-  spotId: string;
   addressName: string;
-  roadAddressName: string;
   phone: string;
-  position: { lat: number; lng: number };
   placeName: string;
+  roadAddressName: string;
+  spotId: string;
+  position: { lat: number; lng: number };
 };
 
 type DailyPlace = Marker & { date: number; order: number };
 
+type ControlledValue = {
+  title: string;
+  theme: RadioNames;
+  startDate: Date;
+  endDate: Date;
+  dailySchedulePlaces: DailyPlace[];
+};
+
+const defaultValues: ControlledValue = {
+  title: "",
+  theme: "FOOD",
+  startDate: new Date(),
+  endDate: new Date(),
+  dailySchedulePlaces: [],
+};
+
+type RadioNames = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
+const radioArray = ["FOOD", "ART", "ACTIVITY", "HISTORY", "NATURE"];
+
+const schema = yup.object().shape({
+  title: yup
+    .string()
+    .required("여행 제목을 입력해주세요.")
+    .max(16, "여행 제목은 16글자 이하여야 합니다.")
+    .min(1, "여행 제목은 1글자 이상이어야 합니다."),
+  theme: yup.string().required("테마를 선택해주세요."),
+  startDate: yup.date().required(),
+  endDate: yup
+    .date()
+    .required()
+    .min(yup.ref("startDate"), "출발 날짜 이후여야 합니다."),
+  dailySchedulePlaces: yup
+    .array()
+    .of(
+      yup.object().shape({
+        addressName: yup.string(),
+        phone: yup.string(),
+        placeName: yup.string(),
+        roadAddressName: yup.string(),
+        spotId: yup.string(),
+      })
+    )
+    .min(1, "최소 하나의 여행 장소를 추가해 주세요"),
+});
+
 export const AddScheduleForm = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { register } = useForm<FormValues>();
-  const [dailyPlaces, setDailyPlaces] = useState<DailyPlace[]>([]);
+  const {
+    handleSubmit,
+    register,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<ControlledValue>({
+    defaultValues,
+    resolver: yupResolver(schema),
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "dailySchedulePlaces",
+  });
+
   const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const tempStartDate = watch("startDate");
+  const tempEndDate = watch("endDate");
+  let totalDays = differenceInDays(tempEndDate, tempStartDate) + 1;
+  !isEqual(tempEndDate, tempStartDate) && totalDays++;
 
-  const tempStartDate = new Date("2021-12-09");
-  const tempEndDate = new Date("2021-12-13");
-  const totalDays = differenceInDays(tempEndDate, tempStartDate) + 1;
-
-  const handleAddPlaceClick = () => {
-    setDailyPlaces((prev: any) => [
-      ...prev,
-      { date: selectedDateIdx, order: 1, ...selectedPlace },
-    ]);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
-    e.preventDefault();
-    console.log("submit!");
+  const onSubmit: SubmitHandler<ControlledValue> = (data) => {
+    const formattedData = {
+      ...data,
+      startDate: format(data.startDate, "yyyy-MM-dd"),
+      endDate: format(data.endDate, "yyyy-MM-dd"),
+    };
+    alert(JSON.stringify(formattedData));
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack spacing={8}>
-        <FormControl id="title" isRequired>
-          <FormLabel>여행 제목</FormLabel>
-          <Input
-            type="text"
-            placeholder="여행 제목을 입력해 주세요"
-            {...register("title")}
-          />
-        </FormControl>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={8}>
+          <FormControl id="title" isInvalid={Boolean(errors.title)}>
+            <FormLabel>여행 제목</FormLabel>
+            <Input
+              type="text"
+              placeholder="여행 제목을 입력해 주세요"
+              maxLength={16}
+              {...register("title")}
+            />
+            <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+          </FormControl>
 
-        <SimpleGrid columns={2} spacing={2}>
-          <Stack>
-            <FormControl id="start-date" isRequired>
-              <FormLabel>출발 날짜</FormLabel>
-              <Input type="date" />
-            </FormControl>
-          </Stack>
-          <Stack>
-            <FormControl id="end-date" isRequired>
-              <FormLabel>완료 날짜</FormLabel>
-              <Input type="date" />
-            </FormControl>
-          </Stack>
-        </SimpleGrid>
-
-        <FormControl id="member" isRequired>
-          <FormLabel>멤버</FormLabel>
-          <HStack>
-            <AvatarGroup size="md" max={5}>
-              <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-              <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
-              <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-              <Avatar
-                name="Prosper Otemuyiwa"
-                src="https://bit.ly/prosper-baba"
-              />
-              <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
-            </AvatarGroup>
-            <IoAdd color="718096" />
-            <RoundUserAddButton onClick={onOpen} />
-            <CustomizedModal
-              head="멤버 초대하기"
-              isOpen={isOpen}
-              onClose={onClose}
-            >
-              <FriendsList showRole={true} showInvitation={true} />
-            </CustomizedModal>
-          </HStack>
-        </FormControl>
-
-        <FormControl id="theme" isRequired>
-          <FormLabel>테마</FormLabel>
-          <CheckboxGroup>
-            <HStack>
-              <Checkbox value="naruto">Naruto</Checkbox>
-              <Checkbox value="sasuke">Sasuke</Checkbox>
-              <Checkbox value="kakashi">kakashi</Checkbox>
-            </HStack>
-          </CheckboxGroup>
-        </FormControl>
-
-        <FormControl id="search-place">
-          <SearchPlace setSelectedPlace={setSelectedPlace} />
-          <HStack
-            p="4"
-            h="90"
-            bg="gray.50"
-            align="center"
-            justify="space-between"
-            borderBottomRadius="md"
-          >
+          <SimpleGrid columns={2} spacing={2}>
             <Stack>
-              <Heading size="sm">{selectedPlace?.placeName}</Heading>
-              <Text size="sm" color="gray.500">
-                {selectedPlace?.addressName}
-              </Text>
+              <FormControl id="startDate">
+                <FormLabel>출발 날짜</FormLabel>
+                <Controller
+                  control={control}
+                  name="startDate"
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker onChange={onChange} selected={value} />
+                  )}
+                />
+              </FormControl>
             </Stack>
-            <RoundAddButton onClick={handleAddPlaceClick} />
-          </HStack>
-        </FormControl>
 
-        <Carousel perViewInfo={{ base: 3, sm: 4 }}>
-          <Dailys
-            totalDays={totalDays}
-            selectedDateIdx={selectedDateIdx}
-            setSelectedDateIdx={setSelectedDateIdx}
-            dailyPlaces={dailyPlaces}
-          />
-        </Carousel>
-      </Stack>
+            <Stack>
+              <FormControl id="endDate" isInvalid={Boolean(errors.endDate)}>
+                <FormLabel>완료 날짜</FormLabel>
+                <Controller
+                  control={control}
+                  name="endDate"
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker onChange={onChange} selected={value} />
+                  )}
+                />
+                <FormErrorMessage>{errors.endDate?.message}</FormErrorMessage>
+              </FormControl>
+            </Stack>
+          </SimpleGrid>
 
-      <Button
-        type="submit"
-        size="lg"
-        width="100%"
-        colorScheme="cyan"
-        color="gray.50"
-        variant="solid"
-        mt={12}
-        mb={4}
-        onClick={handleSubmit}
-      >
-        플랜 완성하기
-      </Button>
-    </form>
+          <FormControl id="member">
+            <FormLabel>멤버</FormLabel>
+            <HStack>
+              <AvatarGroup size="md" max={5}>
+                <Avatar
+                  name="Ryan Florence"
+                  src="https://bit.ly/ryan-florence"
+                />
+                <Avatar
+                  name="Segun Adebayo"
+                  src="https://bit.ly/sage-adebayo"
+                />
+                <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
+              </AvatarGroup>
+              <IoAdd color="718096" />
+              <RoundUserAddButton onClick={onOpen} />
+              <CustomizedModal
+                head="멤버 초대하기"
+                isOpen={isOpen}
+                onClose={onClose}
+              >
+                <FriendsList showRole={true} showInvitation={true} />
+              </CustomizedModal>
+            </HStack>
+          </FormControl>
+
+          <FormControl id="theme">
+            <FormLabel>테마</FormLabel>
+            <Controller
+              name={"theme"}
+              control={control}
+              render={({ field }) => {
+                return (
+                  <RadioGroup {...field}>
+                    <Stack direction="row" spacing={2}>
+                      {radioArray.map((item, idx): ReactElement => {
+                        return (
+                          <Radio key={`radio-${idx}`} value={item} size="sm">
+                            {item}
+                          </Radio>
+                        );
+                      })}
+                    </Stack>
+                  </RadioGroup>
+                );
+              }}
+            />
+          </FormControl>
+
+          <FormControl
+            id="dailySchedulePlaces"
+            isInvalid={Boolean(errors.dailySchedulePlaces)}
+          >
+            <VisuallyHidden>
+              <FormLabel>여행 장소 일정</FormLabel>
+            </VisuallyHidden>
+
+            <SearchPlace setSelectedPlace={setSelectedPlace} />
+            <HStack
+              p="4"
+              h="90"
+              bg="gray.50"
+              mb="8"
+              align="center"
+              justify="space-between"
+              borderBottomRadius="md"
+            >
+              <Stack>
+                <Heading size="sm">{selectedPlace?.placeName}</Heading>
+                <Text size="sm" color="gray.500">
+                  {selectedPlace?.addressName}
+                </Text>
+              </Stack>
+              <RoundAddButton
+                onClick={() => {
+                  selectedPlace &&
+                    append({
+                      ...selectedPlace,
+                      date: selectedDateIdx,
+                      order: fields.filter(
+                        (dailyPlace: any) => dailyPlace.date === selectedDateIdx
+                      ).length,
+                    });
+                }}
+              />
+            </HStack>
+
+            <Carousel perViewInfo={{ base: 3 }}>
+              <Dailys
+                totalDays={totalDays}
+                selectedDateIdx={selectedDateIdx}
+                setSelectedDateIdx={setSelectedDateIdx}
+                dailyPlaces={fields}
+                className="keen-slider__slide"
+                onDelete={remove}
+              />
+            </Carousel>
+
+            <FormErrorMessage>
+              {/* {errors.dailySchedulePlaces.message} */}
+            </FormErrorMessage>
+          </FormControl>
+
+          <Button
+            type="submit"
+            size="lg"
+            width="100%"
+            colorScheme="cyan"
+            color="gray.50"
+            variant="solid"
+            mt={12}
+            mb={4}
+            onClick={handleSubmit(onSubmit)}
+          >
+            플랜 완성하기
+          </Button>
+        </Stack>
+      </form>
+    </>
   );
 };
