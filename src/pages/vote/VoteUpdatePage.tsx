@@ -1,9 +1,10 @@
-import { Heading } from "@chakra-ui/react";
+import { Heading, Flex } from "@chakra-ui/react";
 import React from "react";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
-import { VoteUpdateForm, VoteHeader } from "@/features/vote/components";
+import { User } from "@/components/User";
+import { VoteUpdateForm } from "@/features/vote/components";
 
 export const VoteUpdatePage = () => {
   return (
@@ -16,7 +17,9 @@ export const VoteUpdatePage = () => {
         </>
       }
     >
-      <VoteHeader />
+      <Flex h={100}>
+        <User size="md" />
+      </Flex>
       <VoteUpdateForm />
     </PrivatePageLayout>
   );
