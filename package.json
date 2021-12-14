@@ -48,6 +48,21 @@
       "plugin:jsx-a11y/recommended",
       "plugin:prettier/recommended"
     ],
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ],
+          "paths": [
+            "src"
+          ]
+        }
+      }
+    },
     "plugins": [
       "@emotion",
       "jsx-a11y"
@@ -121,6 +136,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "husky": ">=6",
     "lint-staged": ">=10",
+    "msw": "^0.36.3",
     "prettier": "^2.5.0",
     "storybook-preset-craco": "^0.0.6",
     "stylelint": "^14.1.0",
@@ -134,5 +150,8 @@
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix"
   },
-  "proxy": "http://13.209.224.77:8080"
+  "proxy": "http://13.209.224.77:8080",
+  "msw": {
+    "workerDirectory": "public"
+  }
 }
