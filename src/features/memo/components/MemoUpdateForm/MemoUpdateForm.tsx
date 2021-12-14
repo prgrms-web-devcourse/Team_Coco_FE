@@ -1,12 +1,19 @@
 import {
-  VStack,
+  Stack,
+  Box,
   FormControl,
+  VisuallyHidden,
+  FormLabel,
   Input,
   Textarea,
   Button,
   HStack,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import * as yup from "yup";
 
 const dummy = [
   {
@@ -14,45 +21,67 @@ const dummy = [
     id: 1,
     title:
       "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-    body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et dummy\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
+    content:
+      "quia et suscipit\nsuscipit recusandae consequuntur expedita et dummy\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
   },
   {
     userId: 1,
     id: 2,
     title: "qui est esse",
-    body: "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla",
+    content:
+      "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla",
   },
   {
     userId: 1,
     id: 3,
     title: "ea molestias quasi exercitationem repellat qui ipsa sit aut",
-    body: "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut",
+    content:
+      "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut",
   },
   {
     userId: 1,
     id: 4,
     title: "eum et est occaecati",
-    body: "ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit",
+    content:
+      "ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit",
   },
   {
     userId: 1,
     id: 5,
     title: "nesciunt quas odio",
-    body: "repudiandae veniam quaerat sunt sed\nalias aut fugiat sit autem sed est\nvoluptatem omnis possimus esse voluptatibus quis\nest aut tenetur dolor neque",
+    content:
+      "repudiandae veniam quaerat sunt sed\nalias aut fugiat sit autem sed est\nvoluptatem omnis possimus esse voluptatibus quis\nest aut tenetur dolor neque",
   },
   {
     userId: 1,
     id: 6,
     title: "dolorem eum magni eos aperiam quia",
-    body: "ut aspernatur corporis harum nihil quis provident sequi\nmollitia nobis aliquid molestiae\nperspiciatis et ea nemo ab reprehenderit accusantium quas\nvoluptate dolores velit et doloremque molestiae",
+    content:
+      "ut aspernatur corporis harum nihil quis provident sequi\nmollitia nobis aliquid molestiae\nperspiciatis et ea nemo ab reprehenderit accusantium quas\nvoluptate dolores velit et doloremque molestiae",
   },
   {
     userId: 1,
     id: 7,
     title: "magnam facilis autem",
-    body: "dolore placeat quibusdam ea quo vitae\nmagni quis enim qui quis quo nemo aut saepe\nquidem repellat excepturi ut quia\nsunt ut sequi eos ea sed quas",
+    content:
+      "dolore placeat quibusdam ea quo vitae\nmagni quis enim qui quis quo nemo aut saepe\nquidem repellat excepturi ut quia\nsunt ut sequi eos ea sed quas",
   },
 ];
+
+const schema = yup.object().shape({
+  title: yup.string().min(1).max(16).required(),
+  content: yup.string().min(1).max(255).required(),
+});
+
+const defaultValues: FormValues = {
+  title: "",
+  content: "",
+};
+
+type FormValues = {
+  title: string;
+  content: string;
+};
 
 type MemoUpdateFormProps = {
   memoId?: string;
@@ -63,38 +92,76 @@ export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
 
   const memo = dummy.find((data) => data.id === Number(memoId));
 
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+    watch,
+    control,
+  } = useForm<FormValues>({
+    defaultValues,
+    resolver: yupResolver(schema),
+  });
+
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    await sleep(1000);
+    alert(JSON.stringify(data));
+  };
+
+  console.log(watch());
+
   return (
-    <form>
-      <VStack marginTop={4} spacing={4} height="550px">
-        <FormControl id="title" isRequired>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack marginTop={4} spacing={4} height="550px">
+        <FormControl id="title" isInvalid={Boolean(errors.title)}>
+          <VisuallyHidden>
+            <FormLabel>제목</FormLabel>
+          </VisuallyHidden>
           <Input
             placeholder="제목을 입력하세요"
-            value={memo?.title}
-            onChange={() => {}}
             variant="flushed"
+            value={memo?.title}
+            {...register("title")}
           />
+          <FormErrorMessage>
+            {errors.title && "제목은 1자 이상 16자 이하이어야 합니다."}
+          </FormErrorMessage>
         </FormControl>
-        <FormControl id="body" flexGrow={1} isRequired>
+        <FormControl
+          id="content"
+          flexGrow={1}
+          isInvalid={Boolean(errors.content)}
+        >
+          <VisuallyHidden>
+            <FormLabel>본문</FormLabel>
+          </VisuallyHidden>
           <Textarea
-            height="100%"
-            placeholder="내용을 입력하세요"
-            value={memo?.body}
-            onChange={() => {}}
-            variant="unstyled"
-          />
-        </FormControl>
-        <HStack w="full" spacing={4}>
-          <Button
-            type="submit"
-            size="lg"
             flexGrow={1}
-            color="white"
-            bg="cyan.600"
-          >
-            메모 {memoId ? "수정하기" : "생성하기"}
-          </Button>
-        </HStack>
-      </VStack>
+            minH="350px"
+            maxH="350px"
+            placeholder="내용을 입력하세요"
+            value={memo?.content}
+            {...register("content")}
+          />
+          <FormErrorMessage>
+            {errors.content && "내용은 1자 이상 255자 이하이어야 합니다."}
+          </FormErrorMessage>
+        </FormControl>
+        {/* <HStack w="full" spacing={4}> */}
+        <Button
+          type="submit"
+          size="lg"
+          color="white"
+          bg="cyan.600"
+          isLoading={isSubmitting}
+        >
+          메모 {memoId ? "수정하기" : "생성하기"}
+        </Button>
+        {/* </HStack> */}
+      </Stack>
     </form>
   );
 };

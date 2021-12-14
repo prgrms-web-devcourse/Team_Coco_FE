@@ -37,9 +37,11 @@ export const MemoHeader = ({ memoId }: MemoHeaderProps) => {
         <User size="md" />
         <Spacer />
         <ActionsMenu icon={<IoEllipsisHorizontalSharp />}>
-          <Box onClick={() => console.log("삭제")}>삭제</Box>
+          <Box onClick={() => console.log("삭제")} color="red">
+            삭제
+          </Box>
           <Box onClick={() => console.log("수정")}>수정</Box>
-          <Box>취소</Box>
+          <Box color="gray.500">취소</Box>
         </ActionsMenu>
       </Flex>
     </Box>
