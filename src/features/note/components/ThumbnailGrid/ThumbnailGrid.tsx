@@ -70,8 +70,7 @@ type ThumbnailGridProps = {
   scheduleId: string;
 };
 
-export const ThumbnailGrid = (props: ThumbnailGridProps) => {
-  const { tab } = props;
+export const ThumbnailGrid = ({ tab, scheduleId }: ThumbnailGridProps) => {
   const [items, setItems] = useState<ItemType[]>(dummy);
 
   /** dummy 데이터로 교체했습니다.
@@ -91,7 +90,12 @@ export const ThumbnailGrid = (props: ThumbnailGridProps) => {
   return (
     <SimpleGrid columns={2} spacing={4}>
       {items.map((item) => (
-        <ChakraLink as={Link} to={`/${tab}/${item.id}`} key={item.id}>
+        <ChakraLink
+          as={Link}
+          to={`/${tab}/${item.id}`}
+          state={scheduleId}
+          key={item.id}
+        >
           <Box
             padding={4}
             height={tab === "memo" ? "230px" : "100px"}

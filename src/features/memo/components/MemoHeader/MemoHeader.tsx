@@ -17,9 +17,10 @@ type dataType = {
 
 type MemoHeaderProps = {
   memoId?: string;
+  scheduleId?: string;
 };
 
-export const MemoHeader = ({ memoId }: MemoHeaderProps) => {
+export const MemoHeader = ({ memoId, scheduleId }: MemoHeaderProps) => {
   const data = {
     content: "mycontent",
     id: 0,
@@ -41,7 +42,7 @@ export const MemoHeader = ({ memoId }: MemoHeaderProps) => {
           <Box onClick={() => console.log("삭제")} color="red">
             삭제
           </Box>
-          <Box as={Link} to={`/memo/update/${memoId}`}>
+          <Box as={Link} to={`/memo/update/${memoId}`} state={scheduleId}>
             수정
           </Box>
           <Box color="gray.500">취소</Box>

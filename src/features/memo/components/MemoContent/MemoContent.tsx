@@ -55,10 +55,10 @@ const dummy = [
 
 type MemoContentProps = {
   memoId?: string;
+  scheduleId?: string;
 };
 
-export const MemoContent = (props: MemoContentProps) => {
-  const { memoId } = props;
+export const MemoContent = ({ memoId, scheduleId }: MemoContentProps) => {
   const memo = dummy.find((data) => data.id === Number(memoId));
 
   return (

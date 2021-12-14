@@ -77,10 +77,10 @@ type FormValues = {
 
 type MemoUpdateFormProps = {
   memoId?: string;
+  scheduleId?: string;
 };
 
-export const MemoUpdateForm = (props: MemoUpdateFormProps) => {
-  const { memoId } = props;
+export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
   const memo = dummy.find((data) => data.id === Number(memoId));
 
   const defaultValues: FormValues = {
