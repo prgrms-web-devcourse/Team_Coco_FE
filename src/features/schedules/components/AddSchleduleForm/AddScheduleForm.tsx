@@ -14,11 +14,12 @@ import {
   RadioGroup,
   Radio,
   VisuallyHidden,
+  VStack,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { format, differenceInDays, isEqual } from "date-fns";
-import React, { useState, ReactElement } from "react";
+import { useState, ReactElement } from "react";
 import {
   SubmitHandler,
   useForm,
@@ -49,15 +50,15 @@ type Marker = {
 
 type DailyPlace = Marker & { date: number; order: number };
 
-type ControlledValue = {
+type FormValues = {
   title: string;
-  theme: RadioNames;
+  theme: ThemeNames;
   startDate: Date;
   endDate: Date;
   dailySchedulePlaces: DailyPlace[];
 };
 
-const defaultValues: ControlledValue = {
+const defaultValues: FormValues = {
   title: "",
   theme: "FOOD",
   startDate: new Date(),
@@ -65,8 +66,8 @@ const defaultValues: ControlledValue = {
   dailySchedulePlaces: [],
 };
 
-type RadioNames = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
-const radioArray = ["FOOD", "ART", "ACTIVITY", "HISTORY", "NATURE"];
+type ThemeNames = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
+const themeArray = ["FOOD", "ART", "ACTIVITY", "HISTORY", "NATURE"];
 
 const schema = yup.object().shape({
   title: yup
@@ -101,7 +102,7 @@ export const AddScheduleForm = () => {
     control,
     watch,
     formState: { errors },
-  } = useForm<ControlledValue>({
+  } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),
   });
@@ -119,9 +120,10 @@ export const AddScheduleForm = () => {
   let totalDays = differenceInDays(tempEndDate, tempStartDate) + 1;
   !isEqual(tempEndDate, tempStartDate) && totalDays++;
 
-  const onSubmit: SubmitHandler<ControlledValue> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     const formattedData = {
       ...data,
+      theme: [data.theme], // 전달 시 array로 mapping
       startDate: format(data.startDate, "yyyy-MM-dd"),
       endDate: format(data.endDate, "yyyy-MM-dd"),
     };
@@ -129,167 +131,165 @@ export const AddScheduleForm = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={8}>
-          <FormControl id="title" isInvalid={Boolean(errors.title)}>
-            <FormLabel>여행 제목</FormLabel>
-            <Input
-              type="text"
-              placeholder="여행 제목을 입력해 주세요"
-              maxLength={16}
-              {...register("title")}
-            />
-            <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
-          </FormControl>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack spacing={8}>
+        <FormControl id="title" isInvalid={Boolean(errors.title)}>
+          <FormLabel>여행 제목</FormLabel>
+          <Input
+            type="text"
+            placeholder="여행 제목을 입력해 주세요"
+            maxLength={16}
+            {...register("title")}
+          />
+          <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+        </FormControl>
 
-          <SimpleGrid columns={2} spacing={2}>
+        <SimpleGrid columns={2} spacing={2}>
+          <Stack>
+            <FormControl id="startDate">
+              <FormLabel>출발 날짜</FormLabel>
+              <Controller
+                control={control}
+                name="startDate"
+                render={({ field: { onChange, value } }) => (
+                  <DatePicker onChange={onChange} selected={value} />
+                )}
+              />
+            </FormControl>
+          </Stack>
+
+          <Stack>
+            <FormControl id="endDate" isInvalid={Boolean(errors.endDate)}>
+              <FormLabel>완료 날짜</FormLabel>
+              <Controller
+                control={control}
+                name="endDate"
+                render={({ field: { onChange, value } }) => (
+                  <DatePicker onChange={onChange} selected={value} />
+                )}
+              />
+              <FormErrorMessage>{errors.endDate?.message}</FormErrorMessage>
+            </FormControl>
+          </Stack>
+        </SimpleGrid>
+
+        <FormControl id="member">
+          <FormLabel>멤버</FormLabel>
+          <HStack>
+            <AvatarGroup size="md" max={5}>
+              <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
+              <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
+              <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
+            </AvatarGroup>
+            <IoAdd color="718096" />
+            <RoundUserAddButton onClick={onOpen} />
+            <CustomizedModal
+              head="멤버 초대하기"
+              isOpen={isOpen}
+              onClose={onClose}
+            >
+              <FriendsList showRole={true} showInvitation={true} />
+            </CustomizedModal>
+          </HStack>
+        </FormControl>
+
+        <FormControl id="theme">
+          <FormLabel>테마</FormLabel>
+          <Controller
+            name={"theme"}
+            control={control}
+            render={({ field }) => {
+              return (
+                <RadioGroup {...field}>
+                  <Stack direction="row" spacing={2} justify="space-between">
+                    {themeArray.map((item, idx): ReactElement => {
+                      return (
+                        <VStack as="label" key={`radio-${idx}`}>
+                          <Radio
+                            id={`radio-${idx}`}
+                            value={item}
+                            size="md"
+                            colorScheme="cyan"
+                          />
+                          <Text fontSize="sm">{item}</Text>
+                        </VStack>
+                      );
+                    })}
+                  </Stack>
+                </RadioGroup>
+              );
+            }}
+          />
+        </FormControl>
+
+        <FormControl
+          id="dailySchedulePlaces"
+          isInvalid={Boolean(errors.dailySchedulePlaces)}
+        >
+          <VisuallyHidden>
+            <FormLabel>여행 장소 일정</FormLabel>
+          </VisuallyHidden>
+
+          <SearchPlace setSelectedPlace={setSelectedPlace} />
+          <HStack
+            p="4"
+            h="90"
+            bg="gray.50"
+            mb="8"
+            align="center"
+            justify="space-between"
+            borderBottomRadius="md"
+          >
             <Stack>
-              <FormControl id="startDate">
-                <FormLabel>출발 날짜</FormLabel>
-                <Controller
-                  control={control}
-                  name="startDate"
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker onChange={onChange} selected={value} />
-                  )}
-                />
-              </FormControl>
+              <Heading size="sm">{selectedPlace?.placeName}</Heading>
+              <Text size="sm" color="gray.500">
+                {selectedPlace?.addressName}
+              </Text>
             </Stack>
-
-            <Stack>
-              <FormControl id="endDate" isInvalid={Boolean(errors.endDate)}>
-                <FormLabel>완료 날짜</FormLabel>
-                <Controller
-                  control={control}
-                  name="endDate"
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker onChange={onChange} selected={value} />
-                  )}
-                />
-                <FormErrorMessage>{errors.endDate?.message}</FormErrorMessage>
-              </FormControl>
-            </Stack>
-          </SimpleGrid>
-
-          <FormControl id="member">
-            <FormLabel>멤버</FormLabel>
-            <HStack>
-              <AvatarGroup size="md" max={5}>
-                <Avatar
-                  name="Ryan Florence"
-                  src="https://bit.ly/ryan-florence"
-                />
-                <Avatar
-                  name="Segun Adebayo"
-                  src="https://bit.ly/sage-adebayo"
-                />
-                <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-              </AvatarGroup>
-              <IoAdd color="718096" />
-              <RoundUserAddButton onClick={onOpen} />
-              <CustomizedModal
-                head="멤버 초대하기"
-                isOpen={isOpen}
-                onClose={onClose}
-              >
-                <FriendsList showRole={true} showInvitation={true} />
-              </CustomizedModal>
-            </HStack>
-          </FormControl>
-
-          <FormControl id="theme">
-            <FormLabel>테마</FormLabel>
-            <Controller
-              name={"theme"}
-              control={control}
-              render={({ field }) => {
-                return (
-                  <RadioGroup {...field}>
-                    <Stack direction="row" spacing={2}>
-                      {radioArray.map((item, idx): ReactElement => {
-                        return (
-                          <Radio key={`radio-${idx}`} value={item} size="sm">
-                            {item}
-                          </Radio>
-                        );
-                      })}
-                    </Stack>
-                  </RadioGroup>
-                );
+            <RoundAddButton
+              onClick={() => {
+                selectedPlace &&
+                  append({
+                    ...selectedPlace,
+                    date: selectedDateIdx,
+                    order: fields.filter(
+                      (dailyPlace: any) => dailyPlace.date === selectedDateIdx
+                    ).length,
+                  });
               }}
             />
-          </FormControl>
+          </HStack>
 
-          <FormControl
-            id="dailySchedulePlaces"
-            isInvalid={Boolean(errors.dailySchedulePlaces)}
-          >
-            <VisuallyHidden>
-              <FormLabel>여행 장소 일정</FormLabel>
-            </VisuallyHidden>
+          <Carousel perViewInfo={{ base: 2 }}>
+            <Dailys
+              totalDays={totalDays}
+              selectedDateIdx={selectedDateIdx}
+              setSelectedDateIdx={setSelectedDateIdx}
+              dailyPlaces={fields}
+              className="keen-slider__slide"
+              onDelete={remove}
+            />
+          </Carousel>
 
-            <SearchPlace setSelectedPlace={setSelectedPlace} />
-            <HStack
-              p="4"
-              h="90"
-              bg="gray.50"
-              mb="8"
-              align="center"
-              justify="space-between"
-              borderBottomRadius="md"
-            >
-              <Stack>
-                <Heading size="sm">{selectedPlace?.placeName}</Heading>
-                <Text size="sm" color="gray.500">
-                  {selectedPlace?.addressName}
-                </Text>
-              </Stack>
-              <RoundAddButton
-                onClick={() => {
-                  selectedPlace &&
-                    append({
-                      ...selectedPlace,
-                      date: selectedDateIdx,
-                      order: fields.filter(
-                        (dailyPlace: any) => dailyPlace.date === selectedDateIdx
-                      ).length,
-                    });
-                }}
-              />
-            </HStack>
+          <FormErrorMessage>
+            {errors.dailySchedulePlaces && ""}
+          </FormErrorMessage>
+        </FormControl>
 
-            <Carousel perViewInfo={{ base: 3 }}>
-              <Dailys
-                totalDays={totalDays}
-                selectedDateIdx={selectedDateIdx}
-                setSelectedDateIdx={setSelectedDateIdx}
-                dailyPlaces={fields}
-                className="keen-slider__slide"
-                onDelete={remove}
-              />
-            </Carousel>
-
-            <FormErrorMessage>
-              {/* {errors.dailySchedulePlaces.message} */}
-            </FormErrorMessage>
-          </FormControl>
-
-          <Button
-            type="submit"
-            size="lg"
-            width="100%"
-            colorScheme="cyan"
-            color="gray.50"
-            variant="solid"
-            mt={12}
-            mb={4}
-            onClick={handleSubmit(onSubmit)}
-          >
-            플랜 완성하기
-          </Button>
-        </Stack>
-      </form>
-    </>
+        <Button
+          type="submit"
+          size="lg"
+          width="100%"
+          colorScheme="cyan"
+          color="gray.50"
+          variant="solid"
+          mt={12}
+          mb={4}
+          onClick={handleSubmit(onSubmit)}
+        >
+          플랜 완성하기
+        </Button>
+      </Stack>
+    </form>
   );
 };
