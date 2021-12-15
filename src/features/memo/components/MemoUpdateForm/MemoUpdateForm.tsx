@@ -9,8 +9,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
 const dummy = [
@@ -93,7 +92,6 @@ export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
     register,
     formState: { errors, isSubmitting },
     watch,
-    control,
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),

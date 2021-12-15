@@ -6,7 +6,6 @@ import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import {
   VoteHeader,
-  VoteTitle,
   BodyAfterVote,
   BodyBeforeVote,
 } from "@/features/vote/components";
