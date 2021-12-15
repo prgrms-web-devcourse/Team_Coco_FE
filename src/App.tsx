@@ -4,7 +4,6 @@ import { PropsWithChildren, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { BrowserRouter as Router } from "react-router-dom";
 
 import { queryClient } from "@/lib/react-query";
 import { AppRoutes } from "@/routes";
@@ -27,7 +26,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
           {process.env.NODE_ENV !== "production" && <ReactQueryDevtools />}
           <ChakraProvider resetCSS={true} theme={theme}>
             <Global styles={fontsStyle} />
-            <Router>{children}</Router>
+            {children}
           </ChakraProvider>
         </QueryClientProvider>
       </HelmetProvider>
