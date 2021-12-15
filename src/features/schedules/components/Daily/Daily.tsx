@@ -10,7 +10,7 @@ import {
 import { IoClose } from "react-icons/io5";
 
 type DailyPlace = {
-  date: number;
+  dateIdx: number;
   placeName: string;
   spotId: string;
 };
@@ -37,7 +37,7 @@ export const Daily = (props: DailyProps) => {
       pb={8}
       borderRadius="md"
       onClick={() => {
-        onClick && onClick(idx);
+        onClick?.(idx);
       }}
       className={className}
     >
@@ -46,11 +46,11 @@ export const Daily = (props: DailyProps) => {
           day{idx + 1}
         </Heading>
         <Stack spacing={2}>
-          {dailyPlaces.map((dailyPlace, _idx, array) => {
-            if (dailyPlace.date === idx) {
+          {dailyPlaces.map((dailyPlace, dailyPlaceIdx) => {
+            if (dailyPlace.dateIdx === idx) {
               return (
                 <HStack
-                  key={`Daily-${_idx}-${dailyPlace.spotId}`}
+                  key={`Daily-${dailyPlaceIdx}-${dailyPlace.spotId}`}
                   bg={focus ? "gray.200" : "gray.100"}
                   p={2}
                   justify={onDelete ? "space-between" : "center"}
@@ -66,7 +66,7 @@ export const Daily = (props: DailyProps) => {
                       variant="ghost"
                       mr="3"
                       color={focus ? "gray.500" : "gray.400"}
-                      onClick={() => onDelete(_idx)}
+                      onClick={() => onDelete(dailyPlaceIdx)}
                     />
                   )}
                 </HStack>

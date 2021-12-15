@@ -18,8 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { format, differenceInDays, isEqual, addDays } from "date-fns";
-import { useState, ReactElement } from "react";
+import { format, addDays } from "date-fns";
+import { useState } from "react";
 import {
   SubmitHandler,
   useForm,
@@ -38,6 +38,7 @@ import { SearchPlace } from "../SearchPlace";
 
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { DatePicker } from "@/components/DatePicker";
+import { getTotalDays } from "@/utils/date";
 
 type Marker = {
   addressName: string;
@@ -48,11 +49,11 @@ type Marker = {
   position: { lat: number; lng: number };
 };
 
-type DailyPlace = Marker & { date: number; order: number };
+type DailyPlace = Marker & { dateIdx: number; order: number };
 
 type FormValues = {
   title: string;
-  theme: ThemeNames;
+  theme: Theme;
   startDate: Date;
   endDate: Date;
   dailySchedulePlaces: DailyPlace[];
@@ -66,8 +67,8 @@ const defaultValues: FormValues = {
   dailySchedulePlaces: [],
 };
 
-type ThemeNames = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
-const themeArray = ["FOOD", "ART", "ACTIVITY", "HISTORY", "NATURE"];
+type Theme = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
+const themes: Theme[] = ["FOOD", "ART", "ACTIVITY", "HISTORY", "NATURE"];
 
 const schema = yup.object().shape({
   title: yup
@@ -130,13 +131,12 @@ export const AddScheduleForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const tempStartDate = watch("startDate");
   const tempEndDate = watch("endDate");
-  let totalDays = differenceInDays(tempEndDate, tempStartDate) + 1;
-  !isEqual(tempEndDate, tempStartDate) && totalDays++;
+  const totalDays = getTotalDays(tempEndDate, tempStartDate);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const formattedData = {
       ...data,
-      theme: [data.theme], // 전달 시 array로 mapping
+      theme: Array.isArray(data.theme) ? data.theme : [data.theme], // 전달 시 array로 mapping
       startDate: format(data.startDate, "yyyy-MM-dd"),
       endDate: format(data.endDate, "yyyy-MM-dd"),
     };
@@ -215,7 +215,7 @@ export const AddScheduleForm = () => {
               return (
                 <RadioGroup {...field}>
                   <Stack direction="row" spacing={2} justify="space-between">
-                    {themeArray.map((item, idx): ReactElement => {
+                    {themes.map((item, idx) => {
                       return (
                         <VStack as="label" key={`radio-${idx}`}>
                           <Radio
@@ -261,14 +261,14 @@ export const AddScheduleForm = () => {
             </Stack>
             <RoundAddButton
               onClick={() => {
-                selectedPlace &&
-                  append({
-                    ...selectedPlace,
-                    date: selectedDateIdx,
-                    order: fields.filter(
-                      (dailyPlace: any) => dailyPlace.date === selectedDateIdx
-                    ).length,
-                  });
+                if (!selectedPlace) return;
+                append({
+                  ...selectedPlace,
+                  dateIdx: selectedDateIdx,
+                  order: fields.filter(
+                    (dailyPlace: any) => dailyPlace.date === selectedDateIdx
+                  ).length,
+                });
               }}
             />
           </HStack>
@@ -285,7 +285,8 @@ export const AddScheduleForm = () => {
           </Carousel>
 
           <FormErrorMessage>
-            {errors.dailySchedulePlaces && ""}
+            {errors.dailySchedulePlaces &&
+              "최소 하나의 여행 장소를 추가해 주세요"}
           </FormErrorMessage>
         </FormControl>
 
