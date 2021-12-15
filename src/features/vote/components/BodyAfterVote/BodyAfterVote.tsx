@@ -11,10 +11,11 @@ const dummy = {
 };
 
 type BodyAfterVoteProps = {
-  voteId: string | undefined;
+  voteId?: string;
+  scheduleId?: string;
 };
 
-export const BodyAfterVote = (props: BodyAfterVoteProps) => {
+export const BodyAfterVote = ({ voteId, scheduleId }: BodyAfterVoteProps) => {
   const { option, participate, total } = dummy;
   const counts = Object.values(total);
   const maxCount = Math.max(...counts);

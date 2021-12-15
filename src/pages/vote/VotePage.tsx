@@ -1,6 +1,6 @@
 import { Heading, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
@@ -11,16 +11,22 @@ import {
   BodyBeforeVote,
 } from "@/features/vote/components";
 
-const dummy = {
-  id: 0,
-  title: "",
-  body: { 1: false, 2: false, 3: true, 4: true },
-  participants: ["nick1", "nick2", "nick3"],
-};
-
 export const VotePage = () => {
   const { voteId } = useParams();
-  const [isJoined, setIsJoined] = useState(false);
+  const { state } = useLocation(); // location={state: 일정id}
+
+  /*🔴🟠🟢
+  - 페이지 단에서 참여 여부를 확인하지 않고, VoteContent 컴포넌트로 넘기기
+  - VoteContent 에서 api 호출
+  - VoteContent 에서 참여 여부 확인하고 before/after 조건부 렌더링
+  <VoteContent>
+    <title>{title}</title>
+    {isJoined ? <ContentAfterVote> : <ContentBeforeVote>}
+  </VoteContent>
+  🔴🟠🟢
+  */
+
+  const [isJoined, setIsJoined] = useState();
 
   return (
     <PrivatePageLayout
@@ -32,13 +38,12 @@ export const VotePage = () => {
         </>
       }
     >
-      <VoteHeader voteId={voteId} />
+      <VoteHeader voteId={voteId} scheduleId={state} />
       <Flex direction="column" height="550px">
-        <VoteTitle title={dummy.title} />
         {isJoined ? (
-          <BodyAfterVote voteId={voteId} />
+          <BodyAfterVote voteId={voteId} scheduleId={state} />
         ) : (
-          <BodyBeforeVote voteId={voteId} />
+          <BodyBeforeVote voteId={voteId} scheduleId={state} />
         )}
       </Flex>
     </PrivatePageLayout>
