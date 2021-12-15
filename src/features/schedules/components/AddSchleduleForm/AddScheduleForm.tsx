@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { format, differenceInDays, isEqual } from "date-fns";
+import { format, differenceInDays, isEqual, addDays } from "date-fns";
 import { useState, ReactElement } from "react";
 import {
   SubmitHandler,
@@ -80,7 +80,20 @@ const schema = yup.object().shape({
   endDate: yup
     .date()
     .required()
-    .min(yup.ref("startDate"), "출발 날짜 이후여야 합니다."),
+    .min(yup.ref("startDate"), "출발 날짜 이후여야 합니다.")
+    .when(
+      "startDate",
+      (startDate, schema) =>
+        startDate &&
+        schema.max(
+          addDays(startDate, 6),
+          `완료날짜는 ${format(
+            addDays(startDate, 6),
+            "yyyy-MM-dd"
+          )}이전이여야 합니다`
+        )
+    ),
+
   dailySchedulePlaces: yup
     .array()
     .of(
