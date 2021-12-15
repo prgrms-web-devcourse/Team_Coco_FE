@@ -1,13 +1,47 @@
-import { HStack, Spacer, Box, Text, Stack } from "@chakra-ui/react";
+import { HStack, Spacer, Box, Text, Stack, Input } from "@chakra-ui/react";
 import { IoCheckmarkSharp } from "react-icons/io5";
 
 const dummy = {
-  // 옵션 리스트
-  option: ["한식", "중식", "양식", "일식", "괴식"],
-  // 내가 선택한 옵션
-  participate: [true, false, false, true],
-  // 옵션별 합계
-  total: [4, 1, 0, 2],
+  id: 2,
+  multipleFlag: false,
+  title: "투표 제목입니다",
+  numOfTotalParticipants: 0,
+  ownerAge: 22,
+  ownerGender: "남성",
+  ownerId: 0,
+  ownerNickname: "mynick",
+  votingContentResponses: [
+    {
+      content: "한식",
+      id: 0,
+      numOfParticipants: 1,
+      participantFlag: true,
+    },
+    {
+      content: "중식",
+      id: 0,
+      numOfParticipants: 0,
+      participantFlag: false,
+    },
+    {
+      content: "양식",
+      id: 0,
+      numOfParticipants: 4,
+      participantFlag: true,
+    },
+    {
+      content: "일식",
+      id: 0,
+      numOfParticipants: 0,
+      participantFlag: false,
+    },
+    {
+      content: "괴식",
+      id: 0,
+      numOfParticipants: 2,
+      participantFlag: false,
+    },
+  ],
 };
 
 type BodyAfterVoteProps = {
@@ -16,15 +50,29 @@ type BodyAfterVoteProps = {
 };
 
 export const BodyAfterVote = ({ voteId, scheduleId }: BodyAfterVoteProps) => {
-  const { option, participate, total } = dummy;
-  const counts = Object.values(total);
+  const { title, votingContentResponses } = dummy;
+  const counts: number[] = [];
+
+  votingContentResponses.forEach((option) =>
+    counts.push(option.numOfParticipants)
+  );
+
   const maxCount = Math.max(...counts);
 
   return (
-    <Stack marginTop={4} spacing={4} w="full">
-      {option.map((value, index) => (
+    <Stack spacing={4}>
+      <Input
+        minHeight="40px"
+        fontSize="md"
+        color="gray.600"
+        fontWeight="bold"
+        variant="flushed"
+        value={title}
+        disabled
+      />
+      {votingContentResponses.map((option, index) => (
         <HStack key={index} spacing={4} flex={1}>
-          {participate[index] ? (
+          {option.participantFlag ? (
             <Box width={8} aria-hidden>
               <IoCheckmarkSharp width={4} size={24} color="#00A3C4" />
             </Box>
@@ -42,7 +90,7 @@ export const BodyAfterVote = ({ voteId, scheduleId }: BodyAfterVoteProps) => {
           >
             <Box
               position="absolute"
-              width={`${(total[index] / maxCount) * 100}%`}
+              width={`${(option.numOfParticipants / maxCount) * 100}%`}
               height="100%"
               left="0"
               bg="gray.300"
@@ -50,11 +98,11 @@ export const BodyAfterVote = ({ voteId, scheduleId }: BodyAfterVoteProps) => {
               zIndex="50"
             />
             <Text position="absolute" left={0} zIndex="100">
-              {value}
+              {option.content}
             </Text>
             <Spacer />
             <Text position="absolute" right={4} zIndex="100">
-              {total[index]}명
+              {option.numOfParticipants}명
             </Text>
           </HStack>
         </HStack>
