@@ -124,5 +124,6 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix"
-  }
+  },
+  "proxy": "http://teruteru.ddns.net:39999"
 }

@@ -1,1 +1,4 @@
-export const API_URL = "http://13.209.224.77:8080";
+export const API_URL =
+  process.env.NODE_ENV === "development"
+    ? ""
+    : "http://teruteru.ddns.net:39999";
