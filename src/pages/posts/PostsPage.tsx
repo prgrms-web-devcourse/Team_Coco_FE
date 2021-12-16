@@ -1,5 +1,6 @@
 import { Box, Flex, HStack, Heading } from "@chakra-ui/react";
 
+import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import {
   Posts,
@@ -24,6 +25,7 @@ export const PostsPage = () => {
       <Box my={4}>
         <Posts />
       </Box>
+      <GoToUpdateButton target="posts" />
     </PrivatePageLayout>
   );
 };
