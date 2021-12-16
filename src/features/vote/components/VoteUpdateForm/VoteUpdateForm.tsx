@@ -30,11 +30,8 @@ const schema = yup.object().shape({
     .string()
     .min(1, "제목은 최소 1자 이상이어야 합니다.")
     .max(16, "제목은 최대 16자 이하이어야 합니다.")
-    .required("제목을 입력해주세요"),
-  contents: yup
-    .array()
-    .min(2, "항목은 최소 2개 이상이어야 합니다.")
-    .of(yup.string().required()),
+    .required("제목을 입력해주세요."),
+  contents: yup.array().of(yup.string().required("항목을 입력해주세요.")),
 });
 
 type FormValues = {
@@ -96,7 +93,7 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
           <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl id="contents" isInvalid={Boolean(errors.contents)}>
+        <FormControl id="contents">
           <VisuallyHidden>
             <FormLabel>중복투표</FormLabel>
           </VisuallyHidden>
@@ -109,7 +106,7 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
         </FormControl>
 
         <Box flexGrow={1}>
-          <FormControl id="option">
+          <FormControl id="option" isInvalid={Boolean(errors.contents)}>
             <Stack spcaing={2}>
               {fields.map((item, index) => (
                 <div key={item.id}>
@@ -134,7 +131,9 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
                 </div>
               ))}
             </Stack>
-            {/* <FormErrorMessage>{errors.contents?.message}</FormErrorMessage> */}
+            <FormErrorMessage>
+              {errors.contents && "항목을 입력해주세요"}
+            </FormErrorMessage>
           </FormControl>
 
           <TextWithIcon
