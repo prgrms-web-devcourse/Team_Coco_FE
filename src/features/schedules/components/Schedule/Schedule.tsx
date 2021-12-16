@@ -1,7 +1,16 @@
-import { Box, Heading, Text, LinkBox, Stack, HStack } from "@chakra-ui/layout";
+import {
+  Box,
+  Heading,
+  Text,
+  LinkBox,
+  Stack,
+  HStack,
+  LinkOverlay,
+} from "@chakra-ui/layout";
 import { isBefore } from "date-fns";
 import { useMemo } from "react";
 import { IoCalendarSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 import { TextWithIcon } from "@/components/TextWithIcon";
 
@@ -48,7 +57,9 @@ export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
         <Box bg={dynamicStyles[scheduleStatus]?.bgColor} h={"106px"} p={4}>
           <Stack spacing={4}>
             <Heading color="gray.50" fontSize="xl" fontFamily={"body"}>
-              {title}
+              <LinkOverlay as={Link} to="id">
+                {title}
+              </LinkOverlay>
             </Heading>
             <Text fontSize="md">🍽 🏛 ⛷ 🏕 🏯</Text>
           </Stack>

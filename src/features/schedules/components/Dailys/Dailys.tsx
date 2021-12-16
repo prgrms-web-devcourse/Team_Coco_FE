@@ -4,26 +4,34 @@ import { Daily } from "../Daily";
 
 type DailysProps = {
   totalDays: number;
-  selectedDateIdx: number;
-  setSelectedDateIdx: any;
   dailyPlaces: any;
+  selectedDateIdx?: number;
+  setSelectedDateIdx?: any;
+  className?: string;
+  onDelete?: (idx: number) => void;
 };
 
-export const Dailys = ({
-  totalDays,
-  selectedDateIdx,
-  setSelectedDateIdx,
-  dailyPlaces,
-}: DailysProps) => {
+export const Dailys = (props: DailysProps) => {
+  const {
+    totalDays,
+    selectedDateIdx,
+    setSelectedDateIdx,
+    dailyPlaces,
+    className,
+    onDelete,
+  } = props;
+
   return (
     <>
-      {Array.from({ length: totalDays }, (_, idx) => idx).map((i) => (
+      {Array.from({ length: totalDays }, (_, idx) => idx).map((idx) => (
         <Daily
-          key={i}
-          idx={i}
-          focus={selectedDateIdx === i ? true : false}
+          key={`Daily-${idx}`}
+          idx={idx}
+          focus={selectedDateIdx === idx ? true : false}
           dailyPlaces={dailyPlaces}
           onClick={setSelectedDateIdx}
+          className={className}
+          onDelete={onDelete}
         />
       ))}
     </>

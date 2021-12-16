@@ -1,9 +1,11 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { Center, ChakraProvider, Spinner } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
 import { PropsWithChildren, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
-import { BrowserRouter as Router } from "react-router-dom";
+import { QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
+import { queryClient } from "@/lib/react-query";
 import { AppRoutes } from "@/routes";
 import theme from "@/theme";
 import { fontsStyle } from "@/theme/foundations/typography";
@@ -12,12 +14,21 @@ type AppProviderProps = PropsWithChildren<{}>;
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <Suspense fallback={<div>Loading or Splash</div>}>
+    <Suspense
+      fallback={
+        <Center h="100vh">
+          <Spinner />
+        </Center>
+      }
+    >
       <HelmetProvider>
-        <ChakraProvider resetCSS={true} theme={theme}>
-          <Global styles={fontsStyle} />
-          <Router>{children}</Router>
-        </ChakraProvider>
+        <QueryClientProvider client={queryClient}>
+          {process.env.NODE_ENV !== "production" && <ReactQueryDevtools />}
+          <ChakraProvider resetCSS={true} theme={theme}>
+            <Global styles={fontsStyle} />
+            {children}
+          </ChakraProvider>
+        </QueryClientProvider>
       </HelmetProvider>
     </Suspense>
   );

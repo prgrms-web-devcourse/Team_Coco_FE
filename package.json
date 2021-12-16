@@ -8,14 +8,12 @@
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
     "@hookform/resolvers": "^2.8.4",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "axios": "^0.24.0",
     "framer-motion": "^4",
+    "keen-slider": "^6.3.5",
     "react": "^17.0.2",
     "react-datepicker": "^4.5.0",
     "react-dom": "^17.0.2",
@@ -23,6 +21,7 @@
     "react-hook-form": "^7.20.5",
     "react-icons": "^4.3.1",
     "react-kakao-maps-sdk": "^1.0.4",
+    "react-query": "^3.34.2",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "typescript": "^4.1.2",
@@ -34,8 +33,6 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
     "prepare": "husky install"
   },
   "eslintConfig": {
@@ -45,6 +42,21 @@
       "plugin:jsx-a11y/recommended",
       "plugin:prettier/recommended"
     ],
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ],
+          "paths": [
+            "src"
+          ]
+        }
+      }
+    },
     "plugins": [
       "@emotion",
       "jsx-a11y"
@@ -76,17 +88,7 @@
           "endOfLine": "auto"
         }
       ]
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/*.stories.*"
-        ],
-        "rules": {
-          "import/no-anonymous-default-export": "off"
-        }
-      }
-    ]
+    }
   },
   "browserslist": {
     "production": [
@@ -105,13 +107,6 @@
     "@commitlint/config-conventional": "^15.0.0",
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "@emotion/eslint-plugin": "^11.7.0",
-    "@storybook/addon-a11y": "^6.4.1",
-    "@storybook/addon-actions": "^6.4.1",
-    "@storybook/addon-essentials": "^6.4.1",
-    "@storybook/addon-links": "^6.4.1",
-    "@storybook/node-logger": "^6.4.1",
-    "@storybook/preset-create-react-app": "^3.2.0",
-    "@storybook/react": "^6.4.1",
     "@types/react-datepicker": "^4.3.2",
     "craco-alias": "^3.0.1",
     "eslint-config-prettier": "^8.3.0",
@@ -119,7 +114,6 @@
     "husky": ">=6",
     "lint-staged": ">=10",
     "prettier": "^2.5.0",
-    "storybook-preset-craco": "^0.0.6",
     "stylelint": "^14.1.0",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-recess-order": "^3.0.0",
@@ -130,5 +124,6 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix"
-  }
+  },
+  "proxy": "http://teruteru.ddns.net:39999"
 }

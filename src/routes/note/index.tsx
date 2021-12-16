@@ -1,13 +1,14 @@
 import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 
 import { NotePage } from "@/pages";
+import { PrivateRoutes } from "@/routes";
 
 export const NoteRoutes = () => {
   return (
-    <Routes>
+    <PrivateRoutes>
       <Route index element={<NotePage />} />
       <Route path="*" element={<Navigate to="." />} />
-    </Routes>
+    </PrivateRoutes>
   );
 };

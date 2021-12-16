@@ -17,7 +17,7 @@ type Marker = {
 };
 
 type MapContainerProps = {
-  searchPlace: string;
+  searchPlace?: string;
   setSelectedPlace: (value?: Marker) => void;
 };
 
