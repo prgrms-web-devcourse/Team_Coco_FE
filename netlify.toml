@@ -1,0 +1,11 @@
+[[redirects]]
+  from = "/api/*"
+  to = "http://teruteru.ddns.net:39999/:splat"
+  status = 200
+  force = true
+
+# The following redirect is intended for use with most SPAs that handle routing internally.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
