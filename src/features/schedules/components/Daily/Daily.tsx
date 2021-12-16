@@ -1,35 +1,43 @@
-import { Box, Heading, Stack, Text } from "@chakra-ui/react";
+/* eslint-disable array-callback-return */
+import {
+  Box,
+  Heading,
+  Stack,
+  Text,
+  IconButton,
+  HStack,
+} from "@chakra-ui/react";
+import { IoClose } from "react-icons/io5";
 
 type DailyPlace = {
-  date: number;
+  dateIdx: number;
   placeName: string;
   spotId: string;
 };
 
 type DailyProps = {
   idx: number;
-  focus: boolean;
-  onClick: (idx: number) => void;
   dailyPlaces: DailyPlace[];
+  focus?: boolean;
+  onClick?: (idx: number) => void;
   className?: string;
+  onDelete?: (idx: number) => void;
+  setSelectedPlaceIdx?: (idx: number) => void;
 };
 
-export const Daily = ({
-  idx,
-  focus,
-  onClick,
-  dailyPlaces,
-  className,
-}: DailyProps) => {
+export const Daily = (props: DailyProps) => {
+  const { idx, focus, onClick, dailyPlaces, className, onDelete } = props;
+
   return (
     <Box
       bg={focus ? "gray.100" : "gray.50"}
       minW="108"
       minH="160"
       py={4}
+      pb={8}
       borderRadius="md"
       onClick={() => {
-        onClick(idx);
+        onClick?.(idx);
       }}
       className={className}
     >
@@ -38,22 +46,33 @@ export const Daily = ({
           day{idx + 1}
         </Heading>
         <Stack spacing={2}>
-          {dailyPlaces
-            .filter((dailyPlace) => dailyPlace.date === idx)
-            .map((dailyPlace, _idx) => {
+          {dailyPlaces.map((dailyPlace, dailyPlaceIdx) => {
+            if (dailyPlace.dateIdx === idx) {
               return (
-                <Box
-                  key={`Daily-${_idx}-${dailyPlace.spotId}`}
+                <HStack
+                  key={`Daily-${dailyPlaceIdx}-${dailyPlace.spotId}`}
                   bg={focus ? "gray.200" : "gray.100"}
                   p={2}
-                  textAlign="center"
+                  justify={onDelete ? "space-between" : "center"}
                 >
                   <Text fontSize="sm" color={focus ? "gray.900" : "gray.500"}>
                     {dailyPlace.placeName}
                   </Text>
-                </Box>
+                  {onDelete && (
+                    <IconButton
+                      aria-label="delete-place"
+                      size="xs"
+                      icon={<IoClose />}
+                      variant="ghost"
+                      mr="3"
+                      color={focus ? "gray.500" : "gray.400"}
+                      onClick={() => onDelete(dailyPlaceIdx)}
+                    />
+                  )}
+                </HStack>
               );
-            })}
+            }
+          })}
         </Stack>
       </Stack>
     </Box>

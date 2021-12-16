@@ -1,14 +1,21 @@
 import { Spinner, Center } from "@chakra-ui/react";
-import { Suspense } from "react";
+import { createBrowserHistory, BrowserHistory } from "history";
+import React, {
+  Suspense,
+  useState,
+  useLayoutEffect,
+  PropsWithChildren,
+} from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
+import { Router, Routes, Route, RoutesProps } from "react-router-dom";
 
 import { AppLayout } from "@/components/Layout";
 import { lazyImport } from "@/utils/lazyImport";
+import { storage } from "@/utils/storage";
 
-const { ProfilePage } = lazyImport(
-  () => import("@/pages/profile"),
-  "ProfilePage"
+const { ProfileRoutes } = lazyImport(
+  () => import("@/routes/profile"),
+  "ProfileRoutes"
 );
 
 const { PostsRoutes } = lazyImport(
@@ -53,19 +60,53 @@ const App = () => {
 
 export const AppRoutes = () => {
   return (
-    <Routes>
-      <Route path="/" element={<App />}>
-        <Route index element={<LandingPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="posts/*" element={<PostsRoutes />} />
-        <Route path="schedules/*" element={<SchedulesRoutes />} />
-        <Route path="note/*" element={<NoteRoutes />} />
-        <Route path="vote/*" element={<VoteRoutes />} />
-        <Route path="memo/*" element={<MemoRoutes />} />
-        <Route path="*" element={<Navigate to="." />} />
-      </Route>
-    </Routes>
+    <CustomRouter history={history}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<LandingPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="profile/*" element={<ProfileRoutes />} />
+          <Route path="posts/*" element={<PostsRoutes />} />
+          <Route path="schedules/*" element={<SchedulesRoutes />} />
+          <Route path="note/*" element={<NoteRoutes />} />
+          <Route path="vote/*" element={<VoteRoutes />} />
+          <Route path="memo/*" element={<MemoRoutes />} />
+          <Route path="*" element={<Navigate to="." />} />
+        </Route>
+      </Routes>
+    </CustomRouter>
+  );
+};
+
+export const history = createBrowserHistory();
+
+export const CustomRouter = ({
+  history,
+  children,
+}: PropsWithChildren<{ history: BrowserHistory }>) => {
+  const [state, setState] = useState({
+    action: history.action,
+    location: history.location,
+  });
+
+  useLayoutEffect(() => history.listen(setState), [history]);
+
+  return (
+    <Router
+      location={state.location}
+      navigationType={state.action}
+      navigator={history}
+      children={children}
+    />
+  );
+};
+
+export const PrivateRoutes = ({ children, ...rest }: RoutesProps) => {
+  const token = storage.getToken();
+  return token ? (
+    <Routes {...rest}>{children}</Routes>
+  ) : (
+    <Navigate to="/login" />
   );
 };
