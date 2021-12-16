@@ -30,7 +30,7 @@ import { IoAdd } from "react-icons/io5";
 import * as yup from "yup";
 
 import { useCreateScheduleData } from "../../hooks";
-import type { DailyScheduleSpotCreationRequest, Position } from "../../types";
+import type { Position } from "../../types";
 import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
 import { FriendsList } from "../FriendsList";
@@ -78,7 +78,7 @@ const schema = yup.object().shape({
     .required("여행 제목을 입력해주세요.")
     .max(16, "여행 제목은 16글자 이하여야 합니다.")
     .min(1, "여행 제목은 1글자 이상이어야 합니다."),
-  theme: yup.string().required("테마를 선택해주세요."),
+  themes: yup.string().required("테마를 선택해주세요."),
   startDate: yup.date().required(),
   endDate: yup
     .date()
@@ -122,6 +122,8 @@ export const AddScheduleForm = () => {
     defaultValues,
     resolver: yupResolver(schema),
   });
+
+  console.log(watch(), errors);
 
   const { fields, append, remove } = useFieldArray({
     control,
