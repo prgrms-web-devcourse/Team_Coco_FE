@@ -60,9 +60,7 @@ export const NotePage = () => {
             </TabPanel>
           </TabPanels>
         </Tabs>
-        <Box position="absolute" right={5} top={600}>
-          <GoToUpdateButton target={tabs[tabIndex]} />
-        </Box>
+        <GoToUpdateButton target={tabs[tabIndex]} />
       </Box>
     </PrivatePageLayout>
   );
