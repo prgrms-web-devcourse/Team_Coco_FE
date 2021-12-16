@@ -5,7 +5,7 @@ export type ScheduleSimpleResponse = {
   title: string;
   startDate: string;
   endDate: string;
-  thema: string[];
+  themes: string[];
 };
 
 export type ScheduleDetailResponse = {
@@ -17,7 +17,7 @@ export type ScheduleDetailResponse = {
 
 export type ScheduleSpotResponse = {
   id: number;
-  date: string;
+  date: number;
   order: number;
   spotResponse: SpotResponse;
 };
@@ -25,10 +25,9 @@ export type ScheduleSpotResponse = {
 export type SpotResponse = {
   id: number;
   addressName: string;
-  latitude: number;
-  longitude: number;
   phone: string;
   placeName: string;
+  position: Position;
   roadAddressName: string;
 };
 
@@ -41,7 +40,7 @@ export type ScheduleCreationRequest = {
   dailyScheduleSpotCreationRequests: DailyScheduleSpotCreationRequest[];
   startDate: string;
   endDate: string;
-  themeList: string[];
+  themes: string[];
   title: string;
 };
 
@@ -54,7 +53,7 @@ export type ChecklistResponse = {
   id: number;
   checked: boolean;
   content: string;
-  date: string;
+  day: number;
 };
 
 export type DailyScheduleSpotResponse = {
@@ -65,7 +64,7 @@ export type DailyScheduleSpotResponse = {
 
 export type DailyScheduleSpotCreationRequest = {
   addressName: string;
-  date: string;
+  date: number;
   order: number;
   phone: string;
   placeName: string;
