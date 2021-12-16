@@ -70,7 +70,14 @@ const defaultValues: FormValues = {
 };
 
 type Theme = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
-const themes: Theme[] = ["FOOD", "ART", "ACTIVITY", "HISTORY", "NATURE"];
+type Themes = Record<Theme, string>;
+const themes: Themes = {
+  FOOD: "맛집",
+  ART: "예술",
+  ACTIVITY: "액티비티",
+  HISTORY: "역사",
+  NATURE: "자연",
+};
 
 const schema = yup.object().shape({
   title: yup
@@ -122,8 +129,6 @@ export const AddScheduleForm = () => {
     defaultValues,
     resolver: yupResolver(schema),
   });
-
-  console.log(watch(), errors);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -227,18 +232,20 @@ export const AddScheduleForm = () => {
             control={control}
             render={({ field }) => {
               return (
-                <RadioGroup {...field}>
+                <RadioGroup {...field} px={2} pt={2}>
                   <Stack direction="row" spacing={2} justify="space-between">
-                    {themes.map((item, idx) => {
+                    {Object.keys(themes).map((item, idx) => {
                       return (
                         <VStack as="label" key={`radio-${idx}`}>
                           <Radio
                             id={`radio-${idx}`}
                             value={item}
-                            size="md"
+                            size="lg"
                             colorScheme="cyan"
                           />
-                          <Text fontSize="sm">{item}</Text>
+                          <Text fontSize="md" color="gray.400">
+                            {themes[item as Theme]}
+                          </Text>
                         </VStack>
                       );
                     })}

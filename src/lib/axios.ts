@@ -16,7 +16,7 @@ axios.interceptors.request.use((config: AxiosRequestConfig) => {
   if (token) {
     config.headers = {
       ...config.headers,
-      token: `${token}`,
+      Authorization: `${token}`,
     };
   }
   return config;
