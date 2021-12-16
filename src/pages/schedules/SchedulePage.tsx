@@ -27,7 +27,7 @@ import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { ScheduleDetail } from "@/features/schedules/components/ScheduleDetail";
 export const SchedulePage = () => {
-  const scheduleId = useParams();
+  const { _, scheduleId } = useParams();
 
   return (
     <PrivatePageLayout
@@ -40,7 +40,7 @@ export const SchedulePage = () => {
       }
     >
       <Stack my="4">
-        <ScheduleDetail />
+        <ScheduleDetail scheduleId={scheduleId} />
 
         <Box>
           <Stack bg="gray.50" p="8" spacing="4">

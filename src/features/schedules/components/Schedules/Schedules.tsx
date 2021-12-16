@@ -19,6 +19,7 @@ export const Schedules = () => {
         return (
           <Schedule
             key={`Schedule-${schedule.id}-${idx}`}
+            id={schedule.id}
             title={schedule.title}
             startedDate={schedule.startDate}
             endedDate={schedule.endDate}

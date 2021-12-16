@@ -27,7 +27,7 @@ type DailyProps = {
 
 export const Daily = (props: DailyProps) => {
   const { idx, focus, onClick, dailyPlaces, className, onDelete } = props;
-  console.log(dailyPlaces);
+
   return (
     <Box
       bg={focus ? "gray.100" : "gray.50"}

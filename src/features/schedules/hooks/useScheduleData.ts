@@ -25,7 +25,9 @@ export type GetScheduleDTO = {
 export const getSchedule = ({
   scheduleId,
 }: GetScheduleDTO): Promise<ScheduleSimpleResponse[]> => {
-  return axios.get(`/schedules/${scheduleId}`);
+  return axios
+    .get(`/schedules/${scheduleId}`)
+    .then((response) => response.data);
 };
 
 export type UseScheduleDataProps = GetScheduleDTO;

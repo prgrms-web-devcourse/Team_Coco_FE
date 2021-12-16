@@ -11,16 +11,24 @@ import {
 } from "@chakra-ui/react";
 import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
 
+import { useScheduleData } from "../../hooks";
+
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { DailyCarouselWithInfos } from "@/features/schedules/components/DailyCarouselWithInfos";
 import { FriendsList } from "@/features/schedules/components/FriendsList";
 import { RoundUserAddButton } from "@/features/schedules/components/RoundUserAddButton";
 
-export const ScheduleDetail = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+type ScheduleDetailProps = {
+  scheduleId?: string;
+};
 
-  const schedule = {
+export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
+  const number = parseInt(scheduleId || "0", 10);
+  const { data: schedule } = useScheduleData({ scheduleId: number });
+  console.log(schedule);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const dummySchedule = {
     id: 0,
     memberSimpleResponses: [
       {
@@ -172,8 +180,8 @@ export const ScheduleDetail = () => {
     ],
   };
   const formattedSchedule = {
-    ...schedule,
-    spotResponseList: schedule.spotResponseList.map(
+    ...dummySchedule,
+    spotResponseList: dummySchedule.spotResponseList.map(
       ({ date: dateIdx, ...rest }) => ({ dateIdx, ...rest })
     ),
   };

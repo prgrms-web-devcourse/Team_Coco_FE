@@ -18,6 +18,7 @@ type ScheduleProps = {
   title: string;
   startedDate: string;
   endedDate: string;
+  id: number;
 };
 
 type DynamicStyles = Record<
@@ -40,7 +41,8 @@ const dynamicStyles: DynamicStyles = {
   },
 };
 
-export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
+export const Schedule = (props: ScheduleProps) => {
+  const { title, startedDate, endedDate, id } = props;
   const scheduleStatus = useMemo(() => {
     const today = Date.now();
     const formattedStartedDate = new Date(startedDate);
@@ -57,7 +59,7 @@ export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
         <Box bg={dynamicStyles[scheduleStatus]?.bgColor} h={"106px"} p={4}>
           <Stack spacing={4}>
             <Heading color="gray.50" fontSize="xl" fontFamily={"body"}>
-              <LinkOverlay as={Link} to="id">
+              <LinkOverlay as={Link} to={id.toString()}>
                 {title}
               </LinkOverlay>
             </Heading>
