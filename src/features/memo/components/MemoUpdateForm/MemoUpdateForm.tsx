@@ -65,8 +65,16 @@ const dummy = [
 ];
 
 const schema = yup.object().shape({
-  title: yup.string().min(1).max(16).required(),
-  content: yup.string().min(1).max(255).required(),
+  title: yup
+    .string()
+    .min(1, "제목은 최소 1자 이상이어야 합니다.")
+    .max(16, "제목은 최대 16자 이하이어야 합니다.")
+    .required(),
+  content: yup
+    .string()
+    .min(1, "본문은 최소 1자 이상이어야 합니다.")
+    .max(255, "본문은 최대 225자 이하이어야 합니다.")
+    .required(),
 });
 
 type FormValues = {
@@ -83,8 +91,8 @@ export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
   const memo = dummy.find((data) => data.id === Number(memoId));
 
   const defaultValues: FormValues = {
-    title: memo ? memo.title : "",
-    content: memo ? memo.content : "",
+    title: memo?.title || "",
+    content: memo?.content || "",
   };
 
   const {
@@ -120,9 +128,7 @@ export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
             placeholder="제목을 입력하세요"
             {...register("title")}
           />
-          <FormErrorMessage>
-            {errors.title && "제목은 1자 이상 16자 이하이어야 합니다."}
-          </FormErrorMessage>
+          <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
         </FormControl>
         <FormControl
           id="content"
@@ -139,9 +145,7 @@ export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
             placeholder="내용을 입력하세요"
             {...register("content")}
           />
-          <FormErrorMessage>
-            {errors.content && "내용은 1자 이상 255자 이하이어야 합니다."}
-          </FormErrorMessage>
+          <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
         </FormControl>
         <Button
           type="submit"
