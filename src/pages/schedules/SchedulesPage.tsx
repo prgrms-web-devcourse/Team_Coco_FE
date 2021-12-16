@@ -1,4 +1,4 @@
-import { Heading, Box } from "@chakra-ui/react";
+import { Heading, Box, Button, Link } from "@chakra-ui/react";
 
 import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
@@ -37,9 +37,7 @@ export const SchedulesPage = () => {
       <Box my={4}>
         <Schedules />
       </Box>
-      <Box position="fixed" right={5} top={600}>
-        <GoToUpdateButton target={"schedules"} />
-      </Box>
+      <GoToUpdateButton target="schedules" />
     </PrivatePageLayout>
   );
 };

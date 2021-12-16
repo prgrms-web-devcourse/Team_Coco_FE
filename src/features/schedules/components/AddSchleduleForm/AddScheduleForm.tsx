@@ -285,7 +285,7 @@ export const AddScheduleForm = () => {
                 if (!selectedPlace) return;
                 append({
                   ...selectedPlace,
-                  dateIdx: selectedDateIdx,
+                  dateIdx: selectedDateIdx + 1,
                   order: fields.filter(
                     (dailyPlace: any) => dailyPlace.date === selectedDateIdx
                   ).length,

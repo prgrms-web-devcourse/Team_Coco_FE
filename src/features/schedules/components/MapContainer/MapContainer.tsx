@@ -65,7 +65,7 @@ export const MapContainer = (props: MapContainerProps) => {
             // @ts-ignore
             bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
           }
-          console.log(markers, info);
+
           setMarkers(markers);
           map.setBounds(bounds);
         }

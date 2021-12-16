@@ -1,4 +1,4 @@
-import { Stack } from "@chakra-ui/layout";
+import { Box, Center, Heading, Stack, Text } from "@chakra-ui/layout";
 
 import { useSchedulesData } from "../../hooks";
 import { Schedule } from "../Schedule";
@@ -8,36 +8,23 @@ export const Schedules = () => {
 
   return (
     <Stack spacing={4}>
-      <Schedule
-        title={"1"}
-        startedDate={"2022-02-29"}
-        endedDate={"2022-02-30"}
-      />
-      <Schedule
-        title={"2"}
-        startedDate={"2022-02-29"}
-        endedDate={"2022-02-30"}
-      />
-      <Schedule
-        title={"3"}
-        startedDate={"2021-12-05"}
-        endedDate={"2021-12-20"}
-      />
-      <Schedule
-        title={"4"}
-        startedDate={"2021-12-05"}
-        endedDate={"2021-12-20"}
-      />
-      <Schedule
-        title={"5"}
-        startedDate={"2020-12-29"}
-        endedDate={"2020-12-30"}
-      />
-      <Schedule
-        title={"6"}
-        startedDate={"2020-12-29"}
-        endedDate={"2020-12-30"}
-      />
+      {!schedules.length && (
+        <Center borderRadius="xl" overflow="hidden" h="70vh">
+          <Text fontSize="2xl" color="gray.400">
+            새로운 플랜을 만들어 보세요
+          </Text>
+        </Center>
+      )}
+      {schedules.map((schedule, idx) => {
+        return (
+          <Schedule
+            key={`Schedule-${schedule.id}-${idx}`}
+            title={schedule.title}
+            startedDate={schedule.startDate}
+            endedDate={schedule.endDate}
+          />
+        );
+      })}
     </Stack>
   );
 };
