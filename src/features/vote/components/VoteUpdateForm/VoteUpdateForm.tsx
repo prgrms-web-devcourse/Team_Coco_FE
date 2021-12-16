@@ -14,7 +14,6 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
 import {
   useForm,
   SubmitHandler,
@@ -32,22 +31,16 @@ const schema = yup.object().shape({
     .min(1, "제목은 최소 1자 이상이어야 합니다.")
     .max(16, "제목은 최대 16자 이하이어야 합니다.")
     .required("제목을 입력해주세요"),
-  content: yup
+  contents: yup
     .array()
     .min(2, "항목은 최소 2개 이상이어야 합니다.")
-    .of(
-      yup
-        .string()
-        .min(1, "제목은 최소 1자 이상이어야 합니다.")
-        .max(255, "제목은 최대 255자 이하이어야 합니다.")
-        .required("항목을 입력해주세요.")
-    ),
+    .of(yup.string().required()),
 });
 
 type FormValues = {
   title: string;
   multipleFlag: boolean;
-  contents: any[];
+  contents: Array<object>;
 };
 
 type VoteUpdateFormProps = {
@@ -55,12 +48,10 @@ type VoteUpdateFormProps = {
 };
 
 export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
-  // const [contents, setContents] = useState(new Array(3).fill(undefined));
-
   const defaultValues: FormValues = {
     title: "",
     multipleFlag: false,
-    contents: ["", "", ""],
+    contents: [{ value: "" }, { value: "" }, { value: "" }],
   };
 
   const {
@@ -120,30 +111,22 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
         <Box flexGrow={1}>
           <FormControl id="option">
             <Stack spcaing={2}>
-              {/* {contents.map((content, idx) => (
-                <InputGroup key={idx}>
-                  <Input
-                    placeholder="항목을 입력하세요"
-                    color="#71809"
-                    {...register("contents")}
-                  />
-                  <InputRightElement
-                    children={<IoCloseSharp color="#757575" />}
-                    onClick={(e) => {}}
-                  />
-                </InputGroup>
-              ))} */}
               {fields.map((item, index) => (
-                <div key={index}>
+                <div key={item.id}>
                   <Controller
                     control={control}
-                    name="contents"
+                    name={`contents.${index}`}
                     render={({ field }) => (
                       <InputGroup key={index}>
-                        <Input placeholder="항목을 입력하세요" color="#71809" />
+                        <Input
+                          placeholder="항목을 입력하세요"
+                          color="#71809"
+                          {...register(`contents.${index}`)}
+                          {...field.value}
+                        />
                         <InputRightElement
                           children={<IoCloseSharp color="#757575" />}
-                          onClick={(e) => {}}
+                          onClick={() => remove(index)}
                         />
                       </InputGroup>
                     )}
@@ -151,30 +134,8 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
                 </div>
               ))}
             </Stack>
+            {/* <FormErrorMessage>{errors.contents?.message}</FormErrorMessage> */}
           </FormControl>
-
-          {/* <Controller
-            name={"contents"}
-            control={control}
-            render={({ field }) =>
-               (<Stack {...field} >
-                 {contents.map((content, idx) => (
-                    <InputGroup >
-                      <Input
-                    placeholder="항목을 입력하세요"
-                    color="#71809"
-                    {...register("contents")}
-                  />
-                  <InputRightElement
-                    children={<IoCloseSharp color="#757575" />}
-                    onClick={(e) => {}}
-                  />
-                  </InputGroup>
-                  ))}
-                  </Stack>
-              );
-            }
-          /> */}
 
           <TextWithIcon
             w="full"

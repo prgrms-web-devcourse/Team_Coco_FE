@@ -72,13 +72,11 @@ export const BodyAfterVote = ({ voteId, scheduleId }: BodyAfterVoteProps) => {
       />
       {votingContentResponses.map((option, index) => (
         <HStack key={index} spacing={4} flex={1}>
-          {option.participantFlag ? (
-            <Box width={8} aria-hidden>
+          <Box width={8} aria-hidden>
+            {option.participantFlag && (
               <IoCheckmarkSharp width={4} size={24} color="#00A3C4" />
-            </Box>
-          ) : (
-            <Box width={8} />
-          )}
+            )}
+          </Box>
           <HStack
             position="relative"
             w="100%"
