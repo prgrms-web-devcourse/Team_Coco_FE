@@ -29,6 +29,8 @@ import {
 import { IoAdd } from "react-icons/io5";
 import * as yup from "yup";
 
+import { useCreateScheduleData } from "../../hooks";
+import type { DailyScheduleSpotCreationRequest, Position } from "../../types";
 import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
 import { FriendsList } from "../FriendsList";
@@ -45,15 +47,15 @@ type Marker = {
   phone: string;
   placeName: string;
   roadAddressName: string;
-  spotId: string;
-  position: { lat: number; lng: number };
+  spotId: number;
+  position: Position;
 };
 
 type DailyPlace = Marker & { dateIdx: number; order: number };
 
 type FormValues = {
   title: string;
-  theme: Theme;
+  themes: Theme;
   startDate: Date;
   endDate: Date;
   dailySchedulePlaces: DailyPlace[];
@@ -61,7 +63,7 @@ type FormValues = {
 
 const defaultValues: FormValues = {
   title: "",
-  theme: "FOOD",
+  themes: "FOOD",
   startDate: new Date(),
   endDate: new Date(),
   dailySchedulePlaces: [],
@@ -132,15 +134,25 @@ export const AddScheduleForm = () => {
   const tempStartDate = watch("startDate");
   const tempEndDate = watch("endDate");
   const totalDays = getTotalDays(tempEndDate, tempStartDate);
+  const { mutate: createSchedule } = useCreateScheduleData();
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const formattedData = {
       ...data,
-      theme: Array.isArray(data.theme) ? data.theme : [data.theme], // 전달 시 array로 mapping
+      themes: Array.isArray(data.themes) ? data.themes : [data.themes],
       startDate: format(data.startDate, "yyyy-MM-dd"),
       endDate: format(data.endDate, "yyyy-MM-dd"),
+      dailyScheduleSpotCreationRequests: data.dailySchedulePlaces.map(
+        (dailySchedulePlace) => {
+          return {
+            ...dailySchedulePlace,
+            date: dailySchedulePlace.dateIdx,
+          };
+        }
+      ),
     };
-    alert(JSON.stringify(formattedData));
+
+    createSchedule({ data: formattedData });
   };
 
   return (
@@ -206,10 +218,10 @@ export const AddScheduleForm = () => {
           </HStack>
         </FormControl>
 
-        <FormControl id="theme">
+        <FormControl id="themes">
           <FormLabel>테마</FormLabel>
           <Controller
-            name={"theme"}
+            name={"themes"}
             control={control}
             render={({ field }) => {
               return (

@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { MapContainer } from "../MapContainer";
 
 type Marker = {
-  spotId: string;
+  spotId: number;
   addressName: string;
   roadAddressName: string;
   phone: string;

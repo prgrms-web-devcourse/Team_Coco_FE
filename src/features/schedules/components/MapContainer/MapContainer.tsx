@@ -8,7 +8,7 @@ declare global {
 }
 
 type Marker = {
-  spotId: string;
+  spotId: number;
   addressName: string;
   roadAddressName: string;
   phone: string;
@@ -50,10 +50,10 @@ export const MapContainer = ({
             // @ts-ignore
             markers.push({
               position: {
-                lat: data[i].y,
-                lng: data[i].x,
+                lat: parseFloat(data[i].y),
+                lng: parseFloat(data[i].x),
               },
-              spotId: data[i].id,
+              spotId: parseInt(data[i].id, 10),
               placeName: data[i].place_name,
               phone: data[i].phone,
               addressName: data[i].address_name,
@@ -62,6 +62,7 @@ export const MapContainer = ({
             // @ts-ignore
             bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
           }
+          console.log(markers, info);
           setMarkers(markers);
           map.setBounds(bounds);
         }
