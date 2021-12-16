@@ -15,6 +15,13 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 
+import { useLoginData } from "@/features/auth/hooks";
+
+type FormValues = {
+  email: string;
+  password: string;
+};
+
 const schema = yup
   .object()
   .shape({
@@ -23,9 +30,9 @@ const schema = yup
   })
   .required();
 
-type FormValues = {
-  email: string;
-  password: string;
+const defaultValues: FormValues = {
+  email: "",
+  password: "",
 };
 
 export const LoginForm = () => {
@@ -34,19 +41,14 @@ export const LoginForm = () => {
     register,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const { mutateAsync: login } = useLoginData();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await sleep(1000);
-    alert(JSON.stringify(data));
+    await login({ data });
   };
 
   return (

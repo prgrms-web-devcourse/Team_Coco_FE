@@ -1,41 +1,45 @@
-import { useMutation, useQueryClient } from "react-query";
+import { AxiosResponse } from "axios";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 
-import type { LoginRequest } from "../types";
+import type { LoginRequest, SignUpRequest } from "../types";
 
 import { axios } from "@/lib/axios";
+import { storage } from "@/utils/storage";
 
 export type LoginDTO = {
   data: LoginRequest;
 };
 
-export const login = ({ data }: LoginDTO): Promise<unknown> => {
+export const login = ({ data }: LoginDTO): Promise<AxiosResponse> => {
   return axios.post(`/login`, data);
 };
 
 export const useLoginData = () => {
-  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation(login, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["login"]);
+    onSuccess: ({ headers: { token } }) => {
+      storage.setToken(token);
+      navigate("/schedules");
     },
   });
 };
 
-export type RegisterDTO = {
-  data: any;
+export type SignUpDTO = {
+  data: SignUpRequest;
 };
 
-export const register = ({ data }: RegisterDTO): Promise<unknown> => {
-  return axios.post(`/users`, data);
+export const signUp = ({ data }: SignUpDTO): Promise<AxiosResponse> => {
+  return axios.post(`/register`, data);
 };
 
-export const useRegisterData = () => {
-  const queryClient = useQueryClient();
+export const useSignUpData = () => {
+  const navigate = useNavigate();
 
-  return useMutation(register, {
+  return useMutation(signUp, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["users"]);
+      navigate("/login");
     },
   });
 };
@@ -45,11 +49,5 @@ export const logout = (): Promise<unknown> => {
 };
 
 export const useLogoutData = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(logout, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["users"]);
-    },
-  });
+  return useMutation(logout);
 };

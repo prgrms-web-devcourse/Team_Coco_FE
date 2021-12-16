@@ -12,16 +12,19 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { format } from "date-fns";
 import React from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 
 import { DatePicker } from "@/components/DatePicker";
+import { useSignUpData } from "@/features/auth/hooks";
+import { omit } from "@/utils/object";
 
 const schema = yup.object().shape({
   name: yup.string().min(2).max(255).required(),
-  gender: yup.string().oneOf(["man", "female"]).required(),
+  gender: yup.string().oneOf(["남성", "여성"]).required(),
   birthDate: yup.date().required(),
   nickname: yup.string().min(2).max(255).required(),
   email: yup.string().email().required(),
@@ -34,7 +37,7 @@ const schema = yup.object().shape({
 
 const defaultValues: FormValues = {
   name: "",
-  gender: "man",
+  gender: "남성",
   birthDate: new Date(),
   nickname: "",
   email: "",
@@ -44,7 +47,7 @@ const defaultValues: FormValues = {
 
 type FormValues = {
   name: string;
-  gender: string;
+  gender: "남성" | "여성";
   birthDate: Date;
   nickname: string;
   email: string;
@@ -57,23 +60,26 @@ export const RegisterForm = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    watch,
     control,
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const { mutate: signUp } = useSignUpData();
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await sleep(1000);
-    alert(JSON.stringify(data));
+  const onSubmit: SubmitHandler<FormValues> = async ({
+    birthDate,
+    ...rest
+  }) => {
+    await signUp({
+      data: {
+        birth: format(birthDate, "yyyy-MM-dd"),
+        ...omit(rest, ["confirmPassword"]),
+        phoneNumber: "01000000000",
+      },
+    });
   };
-
-  // 현재 Form에 입력된 데이터를 조회하기 위한 코드
-  console.log(watch());
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -94,8 +100,8 @@ export const RegisterForm = () => {
             <FormControl id="gender" isInvalid={Boolean(errors.gender)}>
               <FormLabel>성별</FormLabel>
               <Select {...register("gender")}>
-                <option value="male">남성</option>
-                <option value="female">여성</option>
+                <option value="남성">남성</option>
+                <option value="여성">여성</option>
               </Select>
               <FormErrorMessage>
                 {errors.gender && "성별은 남성/여성 중 하나여야 합니다."}
