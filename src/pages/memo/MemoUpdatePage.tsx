@@ -1,13 +1,15 @@
-import { Heading } from "@chakra-ui/react";
+import { Heading, Flex } from "@chakra-ui/react";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
-import { MemoUpdateForm, MemoHeader } from "@/features/memo/components";
+import { User } from "@/components/User";
+import { MemoUpdateForm } from "@/features/memo/components";
 
 export const MemoUpdatePage = () => {
   const { memoId } = useParams();
+  const { state } = useLocation(); // location={state: id}
 
   return (
     <PrivatePageLayout
@@ -19,8 +21,10 @@ export const MemoUpdatePage = () => {
         </>
       }
     >
-      <MemoHeader />
-      <MemoUpdateForm memoId={memoId} />
+      <Flex h={100}>
+        <User size="md" />
+      </Flex>
+      <MemoUpdateForm memoId={memoId} scheduleId={state} />
     </PrivatePageLayout>
   );
 };
