@@ -1,8 +1,11 @@
 import { Stack } from "@chakra-ui/layout";
 
+import { useSchedulesData } from "../../hooks";
 import { Schedule } from "../Schedule";
 
 export const Schedules = () => {
+  const { data: schedules } = useSchedulesData();
+
   return (
     <Stack spacing={4}>
       <Schedule

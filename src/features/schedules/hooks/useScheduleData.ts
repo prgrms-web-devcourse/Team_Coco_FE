@@ -10,7 +10,7 @@ import type {
 import { axios } from "@/lib/axios";
 
 export const getSchedules = (): Promise<ScheduleSimpleResponse[]> => {
-  return axios.get(`/schedules`);
+  return axios.get(`/schedules`).then((response) => response.data);
 };
 
 export const useSchedulesData = () => {
@@ -91,7 +91,7 @@ export type CreateScheduleDTO = {
 export const createSchedule = ({
   data,
 }: CreateScheduleDTO): Promise<number> => {
-  return axios.post(`/schedules`, data);
+  return axios.post(`/schedules`, data).then((response) => response.data);
 };
 
 export const useCreateScheduleData = () => {

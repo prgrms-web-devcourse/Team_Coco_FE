@@ -4,9 +4,6 @@ import {
   Stack,
   HStack,
   Flex,
-  AvatarGroup,
-  Avatar,
-  useDisclosure,
   Box,
   Checkbox,
   CheckboxGroup,
@@ -23,25 +20,13 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import React from "react";
-import {
-  IoEllipsisHorizontal,
-  IoAdd,
-  IoClose,
-  IoChevronForward,
-} from "react-icons/io5";
+import { IoAdd, IoClose, IoChevronForward } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
 
-import { ActionsMenu } from "@/components/ActionsMenu";
-import { CustomizedModal } from "@/components/CustomizedModal";
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
-import { DailyCarouselWithInfos } from "@/features/schedules/components/DailyCarouselWithInfos";
-import { FriendsList } from "@/features/schedules/components/FriendsList";
-import { MapContainer } from "@/features/schedules/components/MapContainer";
-import { RoundUserAddButton } from "@/features/schedules/components/RoundUserAddButton";
-
+import { ScheduleDetail } from "@/features/schedules/components/ScheduleDetail";
 export const SchedulePage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const scheduleId = useParams();
 
   return (
@@ -54,54 +39,10 @@ export const SchedulePage = () => {
         </>
       }
     >
-      <Stack my="4" spacing={4}>
-        <Flex justify="space-between" align="center">
-          <Heading fontSize="2xl" color="gray.700">
-            경주 졸업 여행
-          </Heading>
-
-          <ActionsMenu icon={<IoEllipsisHorizontal />}>
-            <Box>수정</Box>
-            <Box color="red.600">삭제</Box>
-          </ActionsMenu>
-        </Flex>
-
-        <Flex justify="space-between" align="center">
-          <Text fontSize="lg">🍽 🏛 🏯</Text>
-          <Text fontSize="md" color="gray.500">
-            {"2021-11-02"} ~ {"2021-11-06"}
-          </Text>
-        </Flex>
-
-        <Heading fontSize="lg" color="gray.700">
-          멤버
-        </Heading>
-        <HStack>
-          <AvatarGroup size="md" max={5}>
-            <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-            <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
-            <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-            <Avatar
-              name="Prosper Otemuyiwa"
-              src="https://bit.ly/prosper-baba"
-            />
-            <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
-          </AvatarGroup>
-          <IoAdd color="718096" />
-          <RoundUserAddButton onClick={onOpen} />
-          <CustomizedModal
-            head="멤버 초대하기"
-            isOpen={isOpen}
-            onClose={onClose}
-          >
-            <FriendsList showRole={true} showInvitation={true} />
-          </CustomizedModal>
-        </HStack>
-
-        <MapContainer setSelectedPlace={() => {}} />
+      <Stack my="4">
+        <ScheduleDetail />
 
         <Box>
-          <DailyCarouselWithInfos />
           <Stack bg="gray.50" p="8" spacing="4">
             <Heading size="sm" color="gray.600">
               이 날의 체크리스트

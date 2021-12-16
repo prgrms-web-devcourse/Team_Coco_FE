@@ -15,15 +15,14 @@ export type ScheduleDetailResponse = {
   spotResponseList: ScheduleSpotResponse[];
 };
 
-export type ScheduleSpotResponse = {
+export type ScheduleSpotResponse = SpotResponse & {
   id: number;
   date: number;
   order: number;
-  spotResponse: SpotResponse;
 };
 
 export type SpotResponse = {
-  id: number;
+  spotId: number;
   addressName: string;
   phone: string;
   placeName: string;

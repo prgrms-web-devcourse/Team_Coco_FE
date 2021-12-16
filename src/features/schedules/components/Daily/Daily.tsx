@@ -47,7 +47,7 @@ export const Daily = (props: DailyProps) => {
         </Heading>
         <Stack spacing={2}>
           {dailyPlaces.map((dailyPlace, dailyPlaceIdx) => {
-            if (dailyPlace.dateIdx === idx) {
+            if (dailyPlace.dateIdx === idx + 1) {
               return (
                 <HStack
                   key={`Daily-${dailyPlaceIdx}-${dailyPlace.spotId}`}

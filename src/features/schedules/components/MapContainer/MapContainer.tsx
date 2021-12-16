@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
+import { ScheduleSpotResponse } from "../../types";
+
 declare global {
   interface Window {
     kakao: any;
@@ -16,21 +18,22 @@ type Marker = {
   placeName: string;
 };
 
+type DailyPlace = Marker & { dateIdx: number; order: number };
+
 type MapContainerProps = {
   searchPlace?: string;
-  setSelectedPlace: (value?: Marker) => void;
+  setSelectedPlace?: (value?: Marker) => void;
+  dailyPlaces?: DailyPlace[];
 };
 
-export const MapContainer = ({
-  searchPlace,
-  setSelectedPlace,
-}: MapContainerProps) => {
+export const MapContainer = (props: MapContainerProps) => {
+  const { searchPlace, setSelectedPlace, dailyPlaces } = props;
   const [info, setInfo] = useState<Marker>();
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [map, setMap] = useState<kakao.maps.Map>();
 
   useEffect(() => {
-    setSelectedPlace(info);
+    setSelectedPlace?.(info);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [info]);
 
@@ -70,6 +73,20 @@ export const MapContainer = ({
     );
   }, [searchPlace, map]);
 
+  useEffect(() => {
+    if (!map || !dailyPlaces) return;
+
+    const bounds = new window.kakao.maps.LatLngBounds();
+    bounds.extend(
+      new window.kakao.maps.LatLng(
+        dailyPlaces[0].position.lat,
+        dailyPlaces[0].position.lng
+      )
+    );
+    setMarkers(dailyPlaces);
+    map.setBounds(bounds);
+  }, [dailyPlaces, map]);
+
   return (
     <Map
       center={{
@@ -84,9 +101,9 @@ export const MapContainer = ({
       level={3}
       onCreate={setMap}
     >
-      {markers.map((marker) => (
+      {markers.map((marker, idx) => (
         <MapMarker
-          key={`marker-${marker.placeName}-${marker.position.lat},${marker.position.lng}`}
+          key={`marker-${marker.placeName}-${marker.position.lat},${marker.position.lng}-${idx}`}
           position={marker.position}
           onClick={() => setInfo(marker)}
         >

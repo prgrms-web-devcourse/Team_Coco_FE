@@ -5,15 +5,16 @@ import { List } from "./List";
 import { ListItem } from "./ListItem";
 
 type Marker = {
-  spotId: string;
+  spotId?: number;
+  id?: number;
   addressName: string;
   roadAddressName: string;
   phone: string;
-  position: { lat: string; lng: string };
+  position: { lat: number; lng: number };
   placeName: string;
 };
 
-type DailyPlace = Marker & { date: number; order: number };
+type DailyPlace = Marker & { dateIdx: number; order: number };
 
 type ListWithVerticalLineProps = {
   idx: number;
@@ -32,7 +33,7 @@ export const ListWithVerticalLine = (props: ListWithVerticalLineProps) => {
       <Box maxW="2xl" mx="auto" p={{ base: "4", md: "8" }}>
         <List spacing="4">
           {dailyPlaces
-            .filter((dailyPlace) => dailyPlace.date === idx)
+            .filter((dailyPlace) => dailyPlace.dateIdx === idx + 1)
             .map((dailyPlace, _idx) => {
               return (
                 <ListItem
