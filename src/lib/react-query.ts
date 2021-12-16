@@ -12,6 +12,7 @@ const queryErrorHandler = (error: unknown) => {
     title,
     status: "error",
     variant: "subtle",
+    position: "top",
     isClosable: true,
   });
 };
@@ -21,6 +22,12 @@ const defaultOptions: DefaultOptions = {
     retry: false,
     onError: queryErrorHandler,
   },
+  mutations: {
+    retry: false,
+    onError: queryErrorHandler,
+  },
 };
 
-export const queryClient = new QueryClient({ defaultOptions });
+export const queryClient = new QueryClient({
+  defaultOptions,
+});
