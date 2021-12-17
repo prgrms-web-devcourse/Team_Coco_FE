@@ -15,23 +15,25 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
+import { useCreatePostData } from "@/features/posts/hooks";
+
 const schema = yup.object().shape({
   title: yup.string().min(1).max(16).required(),
-  body: yup.string().min(1).required(),
+  content: yup.string().min(1).required(),
 });
 
 const defaultValues: FormValues = {
-  city: "all",
-  plan: "",
+  city: "123",
+  content: "",
   title: "",
-  body: "",
+  scheduleId: 1,
 };
 
 type FormValues = {
   city: string;
-  plan: string;
+  content: string;
+  scheduleId: number;
   title: string;
-  body: string;
 };
 
 type PostUpdateFormProps = {
@@ -48,12 +50,10 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
     resolver: yupResolver(schema),
   });
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const { mutateAsync: createPost } = useCreatePostData();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await sleep(1000);
-    alert(JSON.stringify(data));
+    await createPost({ data });
   };
 
   return (
@@ -73,13 +73,13 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             </Select>
           </FormControl>
           <Box flexShrink={0} ml={4}>
-            <FormControl id="plan">
+            <FormControl id="schedule">
               <VisuallyHidden>
                 <FormLabel>일정</FormLabel>
               </VisuallyHidden>
               <Select
                 placeholder="자랑할 여행을 선택해 주세요"
-                {...register("plan")}
+                {...register("scheduleId")}
               >
                 <option>경주졸업여행</option>
                 <option>4박5일 댕댕이와 제주 여행</option>
@@ -103,7 +103,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             variant="flushed"
           />
         </FormControl>
-        <FormControl id="body" isInvalid={Boolean(errors.body)}>
+        <FormControl id="body" isInvalid={Boolean(errors.content)}>
           <VisuallyHidden>
             <FormLabel>본문</FormLabel>
           </VisuallyHidden>
@@ -112,7 +112,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             maxHeight={220}
             variant="unstyled"
             placeholder="내용을 입력해주세요."
-            {...register("body")}
+            {...register("content")}
           />
         </FormControl>
       </Stack>
