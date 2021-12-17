@@ -76,7 +76,6 @@ export const RegisterForm = () => {
       data: {
         birth: format(birthDate, "yyyy-MM-dd"),
         ...omit(rest, ["confirmPassword"]),
-        phoneNumber: "01000000000",
       },
     });
   };
