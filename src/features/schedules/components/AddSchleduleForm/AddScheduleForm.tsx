@@ -29,6 +29,8 @@ import {
 import { IoAdd } from "react-icons/io5";
 import * as yup from "yup";
 
+import { useCreateScheduleData } from "../../hooks";
+import type { DailyPlaceTemp, SpotResponse, Theme } from "../../types";
 import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
 import { FriendsList } from "../FriendsList";
@@ -40,35 +42,30 @@ import { CustomizedModal } from "@/components/CustomizedModal";
 import { DatePicker } from "@/components/DatePicker";
 import { getTotalDays } from "@/utils/date";
 
-type Marker = {
-  addressName: string;
-  phone: string;
-  placeName: string;
-  roadAddressName: string;
-  spotId: string;
-  position: { lat: number; lng: number };
-};
-
-type DailyPlace = Marker & { dateIdx: number; order: number };
-
 type FormValues = {
   title: string;
-  theme: Theme;
+  themes: Theme;
   startDate: Date;
   endDate: Date;
-  dailySchedulePlaces: DailyPlace[];
+  dailySchedulePlaces: DailyPlaceTemp[];
 };
 
 const defaultValues: FormValues = {
   title: "",
-  theme: "FOOD",
+  themes: "FOOD",
   startDate: new Date(),
   endDate: new Date(),
   dailySchedulePlaces: [],
 };
 
-type Theme = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
-const themes: Theme[] = ["FOOD", "ART", "ACTIVITY", "HISTORY", "NATURE"];
+type Themes = Record<Theme, string>;
+const themes: Themes = {
+  FOOD: "맛집",
+  ART: "예술",
+  ACTIVITY: "액티비티",
+  HISTORY: "역사",
+  NATURE: "자연",
+};
 
 const schema = yup.object().shape({
   title: yup
@@ -76,7 +73,7 @@ const schema = yup.object().shape({
     .required("여행 제목을 입력해주세요.")
     .max(16, "여행 제목은 16글자 이하여야 합니다.")
     .min(1, "여행 제목은 1글자 이상이어야 합니다."),
-  theme: yup.string().required("테마를 선택해주세요."),
+  themes: yup.string().required("테마를 선택해주세요."),
   startDate: yup.date().required(),
   endDate: yup
     .date()
@@ -115,7 +112,7 @@ export const AddScheduleForm = () => {
     register,
     control,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),
@@ -126,21 +123,26 @@ export const AddScheduleForm = () => {
     name: "dailySchedulePlaces",
   });
 
-  const [selectedPlace, setSelectedPlace] = useState<Marker>();
+  const [selectedPlace, setSelectedPlace] = useState<SpotResponse>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const tempStartDate = watch("startDate");
   const tempEndDate = watch("endDate");
   const totalDays = getTotalDays(tempEndDate, tempStartDate);
+  const { mutateAsync: createSchedule } = useCreateScheduleData();
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formattedData = {
-      ...data,
-      theme: Array.isArray(data.theme) ? data.theme : [data.theme], // 전달 시 array로 mapping
+      title: data.title,
+      themes: Array.isArray(data.themes) ? data.themes : [data.themes],
       startDate: format(data.startDate, "yyyy-MM-dd"),
       endDate: format(data.endDate, "yyyy-MM-dd"),
+      dailyScheduleSpotCreationRequests: data.dailySchedulePlaces.map(
+        ({ order: spotOrder, ...rest }) => ({ spotOrder, ...rest }) // 추후에 백엔드 측에서 GET-schedule-detail 내 order속성 명이 spotOrder로 바뀌면 컴포넌트 단에서 spotOrder로 통일할 예정
+      ),
     };
-    alert(JSON.stringify(formattedData));
+
+    await createSchedule({ data: formattedData });
   };
 
   return (
@@ -206,25 +208,27 @@ export const AddScheduleForm = () => {
           </HStack>
         </FormControl>
 
-        <FormControl id="theme">
+        <FormControl id="themes">
           <FormLabel>테마</FormLabel>
           <Controller
-            name={"theme"}
+            name={"themes"}
             control={control}
             render={({ field }) => {
               return (
-                <RadioGroup {...field}>
+                <RadioGroup {...field} px={2} pt={2}>
                   <Stack direction="row" spacing={2} justify="space-between">
-                    {themes.map((item, idx) => {
+                    {Object.keys(themes).map((item, idx) => {
                       return (
                         <VStack as="label" key={`radio-${idx}`}>
                           <Radio
                             id={`radio-${idx}`}
                             value={item}
-                            size="md"
+                            size="lg"
                             colorScheme="cyan"
                           />
-                          <Text fontSize="sm">{item}</Text>
+                          <Text fontSize="md" color="gray.400">
+                            {themes[item as Theme]}
+                          </Text>
                         </VStack>
                       );
                     })}
@@ -264,7 +268,7 @@ export const AddScheduleForm = () => {
                 if (!selectedPlace) return;
                 append({
                   ...selectedPlace,
-                  dateIdx: selectedDateIdx,
+                  dateOrder: selectedDateIdx + 1,
                   order: fields.filter(
                     (dailyPlace: any) => dailyPlace.date === selectedDateIdx
                   ).length,
@@ -300,6 +304,7 @@ export const AddScheduleForm = () => {
           mt={12}
           mb={4}
           onClick={handleSubmit(onSubmit)}
+          isLoading={isSubmitting}
         >
           플랜 완성하기
         </Button>

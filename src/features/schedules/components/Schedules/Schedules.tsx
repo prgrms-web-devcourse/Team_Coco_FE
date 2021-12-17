@@ -1,40 +1,37 @@
-import { Stack } from "@chakra-ui/layout";
+import { Center, Stack, Text } from "@chakra-ui/layout";
+import { Spinner } from "@chakra-ui/react";
 
+import { useSchedulesData } from "../../hooks";
 import { Schedule } from "../Schedule";
 
 export const Schedules = () => {
+  const { data: schedules, isLoading } = useSchedulesData();
+
   return (
     <Stack spacing={4}>
-      <Schedule
-        title={"1"}
-        startedDate={"2022-02-29"}
-        endedDate={"2022-02-30"}
-      />
-      <Schedule
-        title={"2"}
-        startedDate={"2022-02-29"}
-        endedDate={"2022-02-30"}
-      />
-      <Schedule
-        title={"3"}
-        startedDate={"2021-12-05"}
-        endedDate={"2021-12-20"}
-      />
-      <Schedule
-        title={"4"}
-        startedDate={"2021-12-05"}
-        endedDate={"2021-12-20"}
-      />
-      <Schedule
-        title={"5"}
-        startedDate={"2020-12-29"}
-        endedDate={"2020-12-30"}
-      />
-      <Schedule
-        title={"6"}
-        startedDate={"2020-12-29"}
-        endedDate={"2020-12-30"}
-      />
+      {!schedules.length && !isLoading && (
+        <Center h="70vh">
+          <Text fontSize="2xl" color="gray.400">
+            새로운 플랜을 만들어 보세요
+          </Text>
+        </Center>
+      )}
+      {schedules.map((schedule, idx) => {
+        return (
+          <Schedule
+            key={`Schedule-${schedule.id}-${idx}`}
+            id={schedule.id}
+            title={schedule.title}
+            startedDate={schedule.startDate}
+            endedDate={schedule.endDate}
+          />
+        );
+      })}
+      {isLoading && (
+        <Center py="8">
+          <Spinner color="cyan.500" />
+        </Center>
+      )}
     </Stack>
   );
 };
