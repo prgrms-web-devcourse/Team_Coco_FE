@@ -1,11 +1,13 @@
 import { MemberSimpleResponse } from "@/features/memo/types";
 
+export type Theme = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
+
 export type ScheduleSimpleResponse = {
   id: number;
   title: string;
   startDate: string;
   endDate: string;
-  thema: string[];
+  themes: Theme[];
 };
 
 export type ScheduleDetailResponse = {
@@ -15,20 +17,32 @@ export type ScheduleDetailResponse = {
   spotResponseList: ScheduleSpotResponse[];
 };
 
-export type ScheduleSpotResponse = {
+export type DetailSpotResponse = DailyScheduleSpotCreationRequest & {
   id: number;
-  date: string;
+}; // API 속성 명이 date => dateOrder, order => spotOder로 모두 업데이트 시 아래 type과 동일
+
+export type ScheduleSpotResponse = SpotResponse & {
+  id: number;
+  date: number;
   order: number;
-  spotResponse: SpotResponse;
+};
+
+export type DailyPlaceTemp = SpotResponse & {
+  dateOrder: number;
+  order: number;
+}; // API 속성 명모두 업데이트 시 아래 type과 동일
+
+export type DailyPlace = SpotResponse & {
+  dateOrder: number;
+  spotOrder: number;
 };
 
 export type SpotResponse = {
-  id: number;
+  spotId: number;
   addressName: string;
-  latitude: number;
-  longitude: number;
   phone: string;
   placeName: string;
+  position: Position;
   roadAddressName: string;
 };
 
@@ -41,7 +55,7 @@ export type ScheduleCreationRequest = {
   dailyScheduleSpotCreationRequests: DailyScheduleSpotCreationRequest[];
   startDate: string;
   endDate: string;
-  themeList: string[];
+  themes: Theme[];
   title: string;
 };
 
@@ -54,7 +68,7 @@ export type ChecklistResponse = {
   id: number;
   checked: boolean;
   content: string;
-  date: string;
+  day: number;
 };
 
 export type DailyScheduleSpotResponse = {
@@ -65,8 +79,8 @@ export type DailyScheduleSpotResponse = {
 
 export type DailyScheduleSpotCreationRequest = {
   addressName: string;
-  date: string;
-  order: number;
+  dateOrder: number;
+  spotOrder: number;
   phone: string;
   placeName: string;
   position: Position;
@@ -76,6 +90,6 @@ export type DailyScheduleSpotCreationRequest = {
 
 export type ScheduleModificationRequest = {
   title: string;
-  themes: string[];
+  themes: Theme[];
   dailyScheduleSpotCreationRequest: {}[];
 };
