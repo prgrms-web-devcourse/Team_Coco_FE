@@ -9,22 +9,22 @@ import type {
 
 import { axios } from "@/lib/axios";
 
-export type GetMemosDTO = {
-  scheduleId: number;
-};
+// export type GetMemosDTO = {
+//   scheduleId: number;
+// };
 
-export type UseMemosDataProps = GetMemosDTO;
+// export type UseMemosDataProps = GetMemosDTO;
 
-const getMemos = ({ scheduleId }: GetMemosDTO) => {
-  return axios.get(`/schedules/${scheduleId}/memos`);
-};
+// const getMemos = ({ scheduleId }: GetMemosDTO) => {
+//   return axios.get(`/schedules/${scheduleId}/memos`);
+// };
 
-export const useMemosData = ({ scheduleId }: UseMemosDataProps) => {
-  const { data = [], ...rest } = useQuery(["memos", scheduleId], () =>
-    getMemos({ scheduleId })
-  );
-  return { data, ...rest };
-};
+// export const useMemosData = ({ scheduleId }: UseMemosDataProps) => {
+//   const { data = [], ...rest } = useQuery(["memos", scheduleId], () =>
+//     getMemos({ scheduleId })
+//   );
+//   return { data, ...rest };
+// };
 /////////////////////////////////////////////////////
 export type GetMemoDTO = {
   memoId: number;
@@ -35,14 +35,17 @@ export const getMemo = ({
   memoId,
   scheduleId,
 }: GetMemoDTO): Promise<MemoDetailResponse> => {
-  return axios.get(`/schedules/${scheduleId}/memos/${memoId}`);
+  return axios
+    .get(`/schedules/${scheduleId}/memos/${memoId}`)
+    .then((response) => response.data);
 };
 
 export type UseMemoDataProps = GetMemoDTO;
 
 export const useMemoData = ({ memoId, scheduleId }: UseMemoDataProps) => {
-  const { data = {}, ...rest } = useQuery(["memos", memoId, scheduleId], () =>
-    getMemo({ memoId, scheduleId })
+  const { data = {} as MemoDetailResponse, ...rest } = useQuery(
+    ["memos", memoId, scheduleId],
+    () => getMemo({ memoId, scheduleId })
   );
   return { data, ...rest };
 };
@@ -109,13 +112,11 @@ export const deleteMemo = ({
 };
 
 export const useDeleteMemo = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation(deleteMemo, {
     onSuccess: () => {
       queryClient.invalidateQueries(["memos"]);
-      navigate(`/note`);
     },
   });
 };

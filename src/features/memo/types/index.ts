@@ -1,15 +1,17 @@
 export type MemberSimpleResponse = {
   id: number;
+  imageUrl: string;
   nickname: string;
 };
 
 export type MemoDetailResponse = {
-  id: number;
   content: string;
-  ownerAge: number;
-  ownerGender: string;
-  ownerId: number;
-  ownerNickname: string;
+  id: number;
+  memberSimpleResponse: MemberSimpleResponse;
+  // ownerAge: number;
+  // ownerGender: string;
+  // ownerId: number;
+  // ownerNickname: string;
   title: string;
 };
 
