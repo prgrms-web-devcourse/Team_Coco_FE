@@ -14,7 +14,7 @@ type Marker = {
   placeName: string;
 };
 
-type DailyPlace = Marker & { dateIdx: number; order: number };
+type DailyPlace = Marker & { dateOrder: number; spotOrder: number };
 
 type ListWithVerticalLineProps = {
   idx: number;
@@ -33,7 +33,7 @@ export const ListWithVerticalLine = (props: ListWithVerticalLineProps) => {
       <Box maxW="2xl" mx="auto" p={{ base: "4", md: "8" }}>
         <List spacing="4">
           {dailyPlaces
-            .filter((dailyPlace) => dailyPlace.dateIdx === idx + 1)
+            .filter((dailyPlace) => dailyPlace.dateOrder === idx + 1)
             .map((dailyPlace, _idx) => {
               return (
                 <ListItem

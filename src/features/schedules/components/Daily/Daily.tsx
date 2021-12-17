@@ -10,7 +10,7 @@ import {
 import { IoClose } from "react-icons/io5";
 
 type DailyPlace = {
-  dateIdx: number;
+  dateOrder: number;
   placeName: string;
   spotId: string;
 };
@@ -47,7 +47,7 @@ export const Daily = (props: DailyProps) => {
         </Heading>
         <Stack spacing={2}>
           {dailyPlaces.map((dailyPlace, dailyPlaceIdx) => {
-            if (dailyPlace.dateIdx === idx + 1) {
+            if (dailyPlace.dateOrder === idx + 1) {
               return (
                 <HStack
                   key={`Daily-${dailyPlaceIdx}-${dailyPlace.spotId}`}

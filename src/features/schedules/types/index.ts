@@ -63,8 +63,8 @@ export type DailyScheduleSpotResponse = {
 
 export type DailyScheduleSpotCreationRequest = {
   addressName: string;
-  date: number;
-  order: number;
+  dateOrder: number;
+  spotOrder: number;
   phone: string;
   placeName: string;
   position: Position;

@@ -5,6 +5,7 @@ import type {
   ScheduleSimpleResponse,
   ScheduleModificationRequest,
   ScheduleCreationRequest,
+  ScheduleDetailResponse,
 } from "../types";
 
 import { axios } from "@/lib/axios";
@@ -24,7 +25,7 @@ export type GetScheduleDTO = {
 
 export const getSchedule = ({
   scheduleId,
-}: GetScheduleDTO): Promise<ScheduleSimpleResponse[]> => {
+}: GetScheduleDTO): Promise<ScheduleDetailResponse> => {
   return axios
     .get(`/schedules/${scheduleId}`)
     .then((response) => response.data);
@@ -33,8 +34,9 @@ export const getSchedule = ({
 export type UseScheduleDataProps = GetScheduleDTO;
 
 export const useScheduleData = ({ scheduleId }: UseScheduleDataProps) => {
-  const { data = [], ...rest } = useQuery(["schedules", scheduleId], () =>
-    getSchedule({ scheduleId })
+  const { data = {} as ScheduleDetailResponse, ...rest } = useQuery(
+    ["schedules", scheduleId],
+    () => getSchedule({ scheduleId })
   );
 
   return { data, ...rest };

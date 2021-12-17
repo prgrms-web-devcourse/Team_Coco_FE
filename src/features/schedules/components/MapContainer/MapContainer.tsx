@@ -18,7 +18,7 @@ type Marker = {
   placeName: string;
 };
 
-type DailyPlace = Marker & { dateIdx: number; order: number };
+type DailyPlace = Marker & { dateOrder: number; spotOrder: number };
 
 type MapContainerProps = {
   searchPlace?: string;
@@ -74,7 +74,7 @@ export const MapContainer = (props: MapContainerProps) => {
   }, [searchPlace, map]);
 
   useEffect(() => {
-    if (!map || !dailyPlaces) return;
+    if (!map || !dailyPlaces?.length) return;
 
     const bounds = new window.kakao.maps.LatLngBounds();
     bounds.extend(

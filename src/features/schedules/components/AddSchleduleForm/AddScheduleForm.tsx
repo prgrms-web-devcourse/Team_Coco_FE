@@ -51,7 +51,7 @@ type Marker = {
   position: Position;
 };
 
-type DailyPlace = Marker & { dateIdx: number; order: number };
+type DailyPlace = Marker & { dateOrder: number; order: number };
 
 type FormValues = {
   title: string;
@@ -124,7 +124,7 @@ export const AddScheduleForm = () => {
     register,
     control,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),
@@ -141,25 +141,20 @@ export const AddScheduleForm = () => {
   const tempStartDate = watch("startDate");
   const tempEndDate = watch("endDate");
   const totalDays = getTotalDays(tempEndDate, tempStartDate);
-  const { mutate: createSchedule } = useCreateScheduleData();
+  const { mutateAsync: createSchedule } = useCreateScheduleData();
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formattedData = {
-      ...data,
+      title: data.title,
       themes: Array.isArray(data.themes) ? data.themes : [data.themes],
       startDate: format(data.startDate, "yyyy-MM-dd"),
       endDate: format(data.endDate, "yyyy-MM-dd"),
       dailyScheduleSpotCreationRequests: data.dailySchedulePlaces.map(
-        (dailySchedulePlace) => {
-          return {
-            ...dailySchedulePlace,
-            date: dailySchedulePlace.dateIdx,
-          };
-        }
+        ({ order: spotOrder, ...rest }) => ({ spotOrder, ...rest }) // 추후에 백엔드 측에서 GET-schedule-detail 내 order속성 명이 spotOrder로 바뀌면 컴포넌트 단에서 spotOrder로 통일할 예정
       ),
     };
 
-    createSchedule({ data: formattedData });
+    await createSchedule({ data: formattedData });
   };
 
   return (
@@ -285,7 +280,7 @@ export const AddScheduleForm = () => {
                 if (!selectedPlace) return;
                 append({
                   ...selectedPlace,
-                  dateIdx: selectedDateIdx + 1,
+                  dateOrder: selectedDateIdx + 1,
                   order: fields.filter(
                     (dailyPlace: any) => dailyPlace.date === selectedDateIdx
                   ).length,
@@ -321,6 +316,7 @@ export const AddScheduleForm = () => {
           mt={12}
           mb={4}
           onClick={handleSubmit(onSubmit)}
+          isLoading={isSubmitting}
         >
           플랜 완성하기
         </Button>

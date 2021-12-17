@@ -58,16 +58,18 @@ type SpotResponse = {
   position: Position;
   roadAddressName: string;
   id: number;
-  dateIdx: number;
-  order: number;
+  dateOrder: number;
+  spotOrder: number;
 };
 
 type DailyCarouselWithInfosProps = {
   spotResponseList: SpotResponse[];
+  totalDays: number;
 };
 
 export const DailyCarouselWithInfos = ({
   spotResponseList,
+  totalDays,
 }: DailyCarouselWithInfosProps) => {
   const perView = useBreakpointValue({
     xs: 2,
@@ -102,7 +104,7 @@ export const DailyCarouselWithInfos = ({
     <>
       <MapContainer
         dailyPlaces={spotResponseList.filter(
-          (spotResponseList) => spotResponseList.dateIdx === currentSlide + 1
+          (spotResponseList) => spotResponseList.dateOrder === currentSlide + 1
         )}
       />
 
@@ -153,7 +155,7 @@ export const DailyCarouselWithInfos = ({
           </IconButton>
 
           {/* Slides */}
-          {Array.from({ length: 5 }, (_, idx) => idx).map((idx) => (
+          {Array.from({ length: totalDays }, (_, idx) => idx).map((idx) => (
             <ListWithVerticalLine
               key={`ListWithVerticalLine-${idx}`}
               idx={idx}
@@ -166,7 +168,7 @@ export const DailyCarouselWithInfos = ({
         {/*Thumbnails */}
         <Box ref={thumbnailRef} className="keen-slider thumbnail" mb="4">
           <Dailys
-            totalDays={5}
+            totalDays={totalDays}
             selectedDateIdx={currentSlide}
             setSelectedDateIdx={() => {}}
             dailyPlaces={spotResponseList}
