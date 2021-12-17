@@ -56,17 +56,23 @@ export const createMemo = ({
   data,
   scheduleId,
 }: CreateMemoDTO): Promise<number> => {
-  return axios.post(`/schedules/${scheduleId}/memos`, data);
+  return axios
+    .post(`/schedules/${scheduleId}/memos`)
+    .then((response) => response.data);
 };
+
+// return axios.post(`/schedules/${scheduleId}/memos`, data)
 
 export const useCreateMemo = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation(createMemo, {
+    // { id: 0 }
     onSuccess: (data) => {
       queryClient.invalidateQueries(["memos"]);
-      navigate(`/memos/${data}`);
+      console.log(data);
+      // navigate(`/memos/${data}`);
     },
   });
 };
@@ -108,11 +114,13 @@ export const deleteMemo = ({
 };
 
 export const useDeleteMemo = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation(deleteMemo, {
     onSuccess: () => {
       queryClient.invalidateQueries(["memos"]);
+      navigate(`/note`);
     },
   });
 };

@@ -106,9 +106,11 @@ export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
     resolver: yupResolver(schema),
   });
 
-  const { mutate: createMemo } = useCreateMemo();
+  const { mutateAsync: createMemo } = useCreateMemo();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    console.log(data);
+
     await createMemo({
       data,
       scheduleId: Number(scheduleId),

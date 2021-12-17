@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { User } from "@/components/User";
+import { useDeleteMemo } from "@/features/memo/hooks";
 
 type dataType = {
   content: "string";
@@ -33,13 +34,22 @@ export const MemoHeader = ({ memoId, scheduleId }: MemoHeaderProps) => {
 
   const { ownerNickname, ownerAge, ownerGender, ownerId } = data;
 
+  const { mutateAsync: deleteMemo } = useDeleteMemo();
+
+  const onDelete = async () => {
+    await deleteMemo({
+      memoId: Number(memoId),
+      scheduleId: Number(scheduleId),
+    });
+  };
+
   return (
     <Box padding={1} height="100px">
       <Flex height="100px" alignItems="center">
         <User size="md" />
         <Spacer />
         <ActionsMenu icon={<IoEllipsisHorizontalSharp />}>
-          <Box onClick={() => console.log("삭제")} color="red">
+          <Box onClick={() => onDelete()} color="red">
             삭제
           </Box>
           <Box as={Link} to={`/memo/update/${memoId}`} state={scheduleId}>

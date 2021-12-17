@@ -17,6 +17,7 @@ import { ThumbnailGrid } from "@/features/note/components";
 
 export const NotePage = () => {
   const { state } = useLocation();
+  console.log("state", state);
   const scheduleId = state.scheduleId;
 
   const tabs = ["memo", "vote"];
