@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 import { useCreateMemo } from "@/features/memo/hooks";
@@ -91,6 +91,7 @@ type MemoUpdateFormProps = {
 
 export const MemoUpdateForm = ({ memoId }: MemoUpdateFormProps) => {
   const { state: scheduleId } = useLocation();
+  const navigate = useNavigate();
   console.log("memoupdateform", scheduleId);
 
   const memo = dummy.find((data) => data.id === Number(memoId));
@@ -112,12 +113,12 @@ export const MemoUpdateForm = ({ memoId }: MemoUpdateFormProps) => {
   const { mutateAsync: createMemo } = useCreateMemo();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log(data);
-
     await createMemo({
       data,
       scheduleId: Number(scheduleId),
     });
+
+    navigate("/note", { state: scheduleId });
   };
 
   return (

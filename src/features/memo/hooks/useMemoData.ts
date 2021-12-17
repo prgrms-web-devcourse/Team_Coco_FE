@@ -62,14 +62,12 @@ export const createMemo = ({
 };
 
 export const useCreateMemo = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation(createMemo, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["memos"]);
       console.log(data);
-      // navigate(`/memos/${data}`);
     },
   });
 };

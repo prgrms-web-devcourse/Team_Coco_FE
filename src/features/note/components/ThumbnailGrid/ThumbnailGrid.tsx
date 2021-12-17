@@ -1,9 +1,11 @@
 import { SimpleGrid, Box, Link as ChakraLink } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { MemoThumbnail } from "../MemoThumbnail";
 import { VoteThumbnail } from "../VoteThumbnail";
+
+import { useMemosData } from "@/features/note/hooks";
 
 const dummy = [
   {
@@ -58,7 +60,7 @@ const dummy = [
   },
 ];
 
-type ItemType = {
+type MemoType = {
   id: number;
   title: string;
   content?: string;
@@ -70,8 +72,16 @@ type ThumbnailGridProps = {
   scheduleId: string;
 };
 
-export const ThumbnailGrid = ({ tab, scheduleId }: ThumbnailGridProps) => {
-  const [items, setItems] = useState<ItemType[]>(dummy);
+export const ThumbnailGrid = ({ tab, scheduleId: id }: ThumbnailGridProps) => {
+  console.log("notepage", id);
+
+  // const [memosData, setItems] = useState<ItemType[]>(dummy);
+
+  const { data: memosData } = useMemosData({
+    scheduleId: parseInt(id, 10),
+  });
+
+  console.log(memosData);
 
   /** dummy 데이터로 교체했습니다.
   const [items, setItems] = useState<dummyType[]>([]);
@@ -89,12 +99,12 @@ export const ThumbnailGrid = ({ tab, scheduleId }: ThumbnailGridProps) => {
 
   return (
     <SimpleGrid columns={2} spacing={4}>
-      {items.map((item) => (
+      {memosData.map((memo: MemoType) => (
         <ChakraLink
           as={Link}
-          to={`/${tab}/${item.id}`}
-          state={scheduleId}
-          key={item.id}
+          to={`/${tab}/${memo.id}`}
+          state={id}
+          key={memo.id}
         >
           <Box
             padding={4}
@@ -103,11 +113,11 @@ export const ThumbnailGrid = ({ tab, scheduleId }: ThumbnailGridProps) => {
             borderRadius={6}
           >
             {tab === "memo" ? (
-              <MemoThumbnail title={item.title} content={item.content} />
+              <MemoThumbnail title={memo.title} content={memo.content} />
             ) : (
               <VoteThumbnail
-                title={item.title}
-                memberCount={item.memberCount}
+                title={memo.title}
+                memberCount={memo.memberCount}
               />
             )}
           </Box>
