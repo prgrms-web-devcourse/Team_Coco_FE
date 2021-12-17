@@ -4,7 +4,7 @@ import {
   KeenSliderPlugin,
   KeenSliderInstance,
 } from "keen-slider/react";
-import { MutableRefObject, useState } from "react";
+import React, { MutableRefObject, useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import "keen-slider/keen-slider.min.css";
 

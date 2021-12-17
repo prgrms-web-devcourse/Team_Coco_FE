@@ -26,7 +26,6 @@ import {
   useModifyChecklistData,
 } from "../../hooks";
 import { ChecklistResponse } from "../../types";
-import { ChecklistItem } from "../ChecklistItem";
 
 type ChecklistProps = {
   scheduleId: number;
@@ -34,40 +33,58 @@ type ChecklistProps = {
 };
 
 export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
-  const { data: checklistsData } = useChecklistsData({ scheduleId });
+  const { data: checklistsData, isSuccess } = useChecklistsData({ scheduleId });
   const { mutateAsync: createChecklist } = useCreateChecklistData();
   const { mutateAsync: deleteChecklist } = useDeleteChecklistData();
   const { mutateAsync: modifyChecklist } = useModifyChecklistData();
-  const [checklists, setChecklists] = useState<ChecklistResponse[]>([]);
-  const [checklistText, setChecklistText] = useState("");
+  const [specificChecklists, setSpecificChecklists] = useState<
+    ChecklistResponse[]
+  >([]);
+  const [specificChecklistText, setSpecificChecklistText] = useState("");
+  const [commonChecklists, setCommonChecklists] = useState<ChecklistResponse[]>(
+    []
+  );
+  const [commonChecklistText, setCommonChecklistText] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChecklistText(e.target.value);
+    const isSpecific = (e.target as HTMLInputElement).form?.id === "specific";
+    isSpecific
+      ? setSpecificChecklistText(e.target.value)
+      : setCommonChecklistText(e.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = { day: selectedDateIdx + 1, title: checklistText };
+    const isSpecific = (e.target as Element).id === "specific";
+    const day = isSpecific ? selectedDateIdx + 1 : 0;
+
+    const data = { day, title: specificChecklistText };
     const checklistId = await createChecklist({ scheduleId, data });
     const checklist = {
-      day: selectedDateIdx + 1,
-      content: checklistText,
+      day,
+      content: isSpecific ? specificChecklistText : commonChecklistText,
       id: checklistId,
       checked: false,
     };
-    setChecklists((prevChecklists) => [...prevChecklists, checklist]);
-    setChecklistText("");
+
+    if (isSpecific) {
+      setSpecificChecklists((prevChecklists) => [...prevChecklists, checklist]);
+      setSpecificChecklistText("");
+    } else {
+      setCommonChecklists((prevChecklists) => [...prevChecklists, checklist]);
+      setCommonChecklistText("");
+    }
   };
 
   const onDelete = async (checklistId: number) => {
-    setChecklists((prevChecklists) =>
+    setSpecificChecklists((prevChecklists) =>
       prevChecklists.filter((checklist) => checklist.id !== checklistId)
     );
     await deleteChecklist({ checklistId, scheduleId });
   };
 
   const onCheck = async (checklistId: number, isChecked: boolean) => {
-    setChecklists((prevChecklists) =>
+    setSpecificChecklists((prevChecklists) =>
       prevChecklists.map((checklist) => {
         if (checklist.id === checklistId) {
           return { ...checklist, checked: !checklist.checked };
@@ -80,16 +97,20 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
   };
 
   useEffect(() => {
-    setChecklists(checklistsData);
-  }, [checklistsData]);
-
-  useEffect(() => {
-    setChecklists(
+    setSpecificChecklists(
       checklistsData.filter(
         (checklist) => checklist.day === selectedDateIdx + 1
       )
     );
-  }, [selectedDateIdx, checklistsData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, selectedDateIdx]);
+
+  useEffect(() => {
+    setCommonChecklists(
+      checklistsData.filter((checklist) => checklist.day === 0)
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   return (
     <Box>
@@ -100,7 +121,7 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
         <Stack>
           <List color="gray.600" ml="1">
             <CheckboxGroup colorScheme="cyan">
-              {checklists.map((checklist, idx) => (
+              {specificChecklists.map((checklist, idx) => (
                 <ListItem my="1" key={`CheckListItem-${idx}-${checklist.id}`}>
                   <Flex justify="space-between">
                     <Checkbox
@@ -127,8 +148,8 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
             </CheckboxGroup>
           </List>
 
-          <form onSubmit={handleSubmit}>
-            <FormControl id="title">
+          <form onSubmit={handleSubmit} id="specific">
+            <FormControl>
               <VisuallyHidden>
                 <FormLabel>입력</FormLabel>
               </VisuallyHidden>
@@ -138,7 +159,7 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
                   size="md"
                   variant="Unstyled"
                   placeholder="할 일을 입력하세요"
-                  value={checklistText}
+                  value={specificChecklistText}
                   onChange={handleInputChange}
                 />
                 <InputRightElement width="3rem">
@@ -164,19 +185,37 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
         <Stack>
           <List color="gray.600" ml="1">
             <CheckboxGroup colorScheme="cyan">
-              {checklists
+              {commonChecklists
                 .filter((checklist) => checklist.day === 0)
-                .map((checklist) => (
-                  <ChecklistItem
-                    content={checklist.content}
-                    checked={checklist.checked}
-                  />
+                .map((checklist, idx) => (
+                  <ListItem my="1" key={`CheckListItem-${idx}-${checklist.id}`}>
+                    <Flex justify="space-between">
+                      <Checkbox
+                        defaultChecked={checklist.checked}
+                        onChange={() => {
+                          onCheck(checklist.id, checklist.checked);
+                        }}
+                      >
+                        {checklist.content}
+                      </Checkbox>
+                      <IconButton
+                        aria-label="delete-todo"
+                        size="xs"
+                        icon={<IoClose />}
+                        variant="ghost"
+                        mr="3"
+                        onClick={() => {
+                          onDelete(checklist.id);
+                        }}
+                      />
+                    </Flex>
+                  </ListItem>
                 ))}
             </CheckboxGroup>
           </List>
 
-          <form>
-            <FormControl id="title">
+          <form onSubmit={handleSubmit} id="common">
+            <FormControl>
               <VisuallyHidden>
                 <FormLabel>입력</FormLabel>
               </VisuallyHidden>
@@ -186,6 +225,8 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
                   size="md"
                   variant="Unstyled"
                   placeholder="할 일을 입력하세요"
+                  value={commonChecklistText}
+                  onChange={handleInputChange}
                 />
                 <InputRightElement width="3rem">
                   <IconButton

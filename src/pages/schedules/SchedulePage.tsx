@@ -6,6 +6,7 @@ import {
   Flex,
   Link as ChakraLink,
 } from "@chakra-ui/react";
+import React from "react";
 import { IoChevronForward } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
 
