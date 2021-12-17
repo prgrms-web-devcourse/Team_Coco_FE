@@ -21,14 +21,12 @@ import { RoundUserAddButton } from "@/features/schedules/components/RoundUserAdd
 import { getTotalDays } from "@/utils/date";
 
 type ScheduleDetailProps = {
-  scheduleId?: string;
+  scheduleId: number;
 };
 
 export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
-  const number = parseInt(scheduleId || "0", 10);
-  const { data: schedule } = useScheduleData({ scheduleId: number });
+  const { data: schedule } = useScheduleData({ scheduleId });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(schedule);
 
   if (Object.keys(schedule).length === 0) return <div></div>;
   const formattedSchedule = {
@@ -87,6 +85,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       <DailyCarouselWithInfos
         spotResponseList={formattedSchedule.spotResponseList}
         totalDays={totalDays}
+        scheduleId={scheduleId}
       />
     </Stack>
   );

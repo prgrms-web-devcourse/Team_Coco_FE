@@ -11,7 +11,9 @@ export type GetChecklistsDTO = {
 export const getChecklists = ({
   scheduleId,
 }: GetChecklistsDTO): Promise<ChecklistResponse[]> => {
-  return axios.get(`/schedules/${scheduleId}/checklists`);
+  return axios
+    .get(`/schedules/${scheduleId}/checklists`)
+    .then((response) => response.data);
 };
 
 export type UseChecklistsDataProps = GetChecklistsDTO;

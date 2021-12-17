@@ -4,11 +4,12 @@ import {
   KeenSliderPlugin,
   KeenSliderInstance,
 } from "keen-slider/react";
-import React, { MutableRefObject, useState } from "react";
+import { MutableRefObject, useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import "keen-slider/keen-slider.min.css";
 
 import { DetailSpotResponse } from "../../types";
+import { Checklist } from "../Checklist";
 import { Dailys } from "../Dailys";
 import { ListWithVerticalLine } from "../ListWithVerticalLine";
 import { MapContainer } from "../MapContainer";
@@ -53,13 +54,11 @@ const ThumbnailPlugin = (
 type DailyCarouselWithInfosProps = {
   spotResponseList: DetailSpotResponse[];
   totalDays: number;
+  scheduleId: number;
 };
 
-export const DailyCarouselWithInfos = ({
-  spotResponseList,
-  totalDays,
-}: DailyCarouselWithInfosProps) => {
-  console.log(spotResponseList);
+export const DailyCarouselWithInfos = (props: DailyCarouselWithInfosProps) => {
+  const { spotResponseList, totalDays, scheduleId } = props;
   const perView = useBreakpointValue({
     xs: 2,
     base: 3,
@@ -78,6 +77,7 @@ export const DailyCarouselWithInfos = ({
       setCurrentSlide(slider.track.details.rel);
     },
   });
+
   const [thumbnailRef] = useKeenSlider<HTMLDivElement>(
     {
       initial: 0,
@@ -154,7 +154,7 @@ export const DailyCarouselWithInfos = ({
           ))}
         </Box>
 
-        {/*Thumbnails */}
+        {/*Thumbnails 01*/}
         <Box ref={thumbnailRef} className="keen-slider thumbnail" mb="4">
           <Dailys
             totalDays={totalDays}
@@ -165,6 +165,10 @@ export const DailyCarouselWithInfos = ({
           />
         </Box>
       </Flex>
+
+      <Box>
+        <Checklist scheduleId={scheduleId} selectedDateIdx={currentSlide} />
+      </Box>
     </>
   );
 };
