@@ -3,19 +3,11 @@ import { Input, InputGroup, InputRightAddon } from "@chakra-ui/input";
 import { VisuallyHidden, Button, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
 
+import { SpotResponse } from "../../types";
 import { MapContainer } from "../MapContainer";
 
-type Marker = {
-  spotId: number;
-  addressName: string;
-  roadAddressName: string;
-  phone: string;
-  position: { lat: number; lng: number };
-  placeName: string;
-};
-
 type SearchPlaceProps = {
-  setSelectedPlace: (value?: Marker) => void;
+  setSelectedPlace: (value?: SpotResponse) => void;
 };
 
 export const SearchPlace = ({ setSelectedPlace }: SearchPlaceProps) => {

@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { IoClose } from "react-icons/io5";
 
-type DailyPlace = {
+type DailyPlaceSummary = {
   dateOrder: number;
   placeName: string;
   spotId: string;
@@ -17,7 +17,7 @@ type DailyPlace = {
 
 type DailyProps = {
   idx: number;
-  dailyPlaces: DailyPlace[];
+  dailyPlacesSummary: DailyPlaceSummary[];
   focus?: boolean;
   onClick?: (idx: number) => void;
   className?: string;
@@ -26,7 +26,8 @@ type DailyProps = {
 };
 
 export const Daily = (props: DailyProps) => {
-  const { idx, focus, onClick, dailyPlaces, className, onDelete } = props;
+  const { idx, focus, onClick, dailyPlacesSummary, className, onDelete } =
+    props;
 
   return (
     <Box
@@ -46,7 +47,7 @@ export const Daily = (props: DailyProps) => {
           day{idx + 1}
         </Heading>
         <Stack spacing={2}>
-          {dailyPlaces.map((dailyPlace, dailyPlaceIdx) => {
+          {dailyPlacesSummary.map((dailyPlace, dailyPlaceIdx) => {
             if (dailyPlace.dateOrder === idx + 1) {
               return (
                 <HStack

@@ -8,7 +8,7 @@ import React, { MutableRefObject, useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import "keen-slider/keen-slider.min.css";
 
-import { Position } from "../../types";
+import { DetailSpotResponse } from "../../types";
 import { Dailys } from "../Dailys";
 import { ListWithVerticalLine } from "../ListWithVerticalLine";
 import { MapContainer } from "../MapContainer";
@@ -50,20 +50,8 @@ const ThumbnailPlugin = (
   };
 };
 
-type SpotResponse = {
-  spotId: number;
-  addressName: string;
-  phone: string;
-  placeName: string;
-  position: Position;
-  roadAddressName: string;
-  id: number;
-  dateOrder: number;
-  spotOrder: number;
-};
-
 type DailyCarouselWithInfosProps = {
-  spotResponseList: SpotResponse[];
+  spotResponseList: DetailSpotResponse[];
   totalDays: number;
 };
 
@@ -71,6 +59,7 @@ export const DailyCarouselWithInfos = ({
   spotResponseList,
   totalDays,
 }: DailyCarouselWithInfosProps) => {
+  console.log(spotResponseList);
   const perView = useBreakpointValue({
     xs: 2,
     base: 3,

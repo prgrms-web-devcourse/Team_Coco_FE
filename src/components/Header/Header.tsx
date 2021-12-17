@@ -20,6 +20,7 @@ export const Header = ({ children }: HeaderProps) => {
         p={4}
         pb={0}
         bg={mode("white", "white")}
+        zIndex={10}
       >
         <HStack h="full" align="center">
           {children}

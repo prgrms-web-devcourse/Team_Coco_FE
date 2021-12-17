@@ -1,20 +1,10 @@
 /* eslint-disable array-callback-return */
 import { Box, Heading } from "@chakra-ui/react";
 
+import { DailyPlace } from "../../types";
+
 import { List } from "./List";
 import { ListItem } from "./ListItem";
-
-type Marker = {
-  spotId?: number;
-  id?: number;
-  addressName: string;
-  roadAddressName: string;
-  phone: string;
-  position: { lat: number; lng: number };
-  placeName: string;
-};
-
-type DailyPlace = Marker & { dateOrder: number; spotOrder: number };
 
 type ListWithVerticalLineProps = {
   idx: number;

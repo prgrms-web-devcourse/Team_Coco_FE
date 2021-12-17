@@ -30,7 +30,7 @@ import { IoAdd } from "react-icons/io5";
 import * as yup from "yup";
 
 import { useCreateScheduleData } from "../../hooks";
-import type { Position } from "../../types";
+import type { DailyPlaceTemp, SpotResponse, Theme } from "../../types";
 import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
 import { FriendsList } from "../FriendsList";
@@ -42,23 +42,12 @@ import { CustomizedModal } from "@/components/CustomizedModal";
 import { DatePicker } from "@/components/DatePicker";
 import { getTotalDays } from "@/utils/date";
 
-type Marker = {
-  addressName: string;
-  phone: string;
-  placeName: string;
-  roadAddressName: string;
-  spotId: number;
-  position: Position;
-};
-
-type DailyPlace = Marker & { dateOrder: number; order: number };
-
 type FormValues = {
   title: string;
   themes: Theme;
   startDate: Date;
   endDate: Date;
-  dailySchedulePlaces: DailyPlace[];
+  dailySchedulePlaces: DailyPlaceTemp[];
 };
 
 const defaultValues: FormValues = {
@@ -69,7 +58,6 @@ const defaultValues: FormValues = {
   dailySchedulePlaces: [],
 };
 
-type Theme = "FOOD" | "ART" | "ACTIVITY" | "HISTORY" | "NATURE";
 type Themes = Record<Theme, string>;
 const themes: Themes = {
   FOOD: "맛집",
@@ -135,7 +123,7 @@ export const AddScheduleForm = () => {
     name: "dailySchedulePlaces",
   });
 
-  const [selectedPlace, setSelectedPlace] = useState<Marker>();
+  const [selectedPlace, setSelectedPlace] = useState<SpotResponse>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const tempStartDate = watch("startDate");

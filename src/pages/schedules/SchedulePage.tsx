@@ -27,7 +27,7 @@ import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { ScheduleDetail } from "@/features/schedules/components/ScheduleDetail";
 export const SchedulePage = () => {
-  const { _, scheduleId } = useParams();
+  const { scheduleId } = useParams();
 
   return (
     <PrivatePageLayout
