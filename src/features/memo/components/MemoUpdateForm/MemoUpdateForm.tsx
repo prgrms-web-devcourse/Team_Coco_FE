@@ -42,6 +42,7 @@ export const MemoUpdateForm = ({ memoId }: MemoUpdateFormProps) => {
   const navigate = useNavigate();
 
   const defaultValues: FormValues = {
+    // 메모 수정용
     // title: memo?.title || "",
     // content: memo?.content || "",
     title: "",

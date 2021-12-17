@@ -9,23 +9,6 @@ import type {
 
 import { axios } from "@/lib/axios";
 
-// export type GetMemosDTO = {
-//   scheduleId: number;
-// };
-
-// export type UseMemosDataProps = GetMemosDTO;
-
-// const getMemos = ({ scheduleId }: GetMemosDTO) => {
-//   return axios.get(`/schedules/${scheduleId}/memos`);
-// };
-
-// export const useMemosData = ({ scheduleId }: UseMemosDataProps) => {
-//   const { data = [], ...rest } = useQuery(["memos", scheduleId], () =>
-//     getMemos({ scheduleId })
-//   );
-//   return { data, ...rest };
-// };
-/////////////////////////////////////////////////////
 export type GetMemoDTO = {
   memoId: number;
   scheduleId: number;

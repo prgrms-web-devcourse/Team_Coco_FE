@@ -18,11 +18,11 @@ type VoteType = {
   memberCount: number;
 };
 
-type ThumbnailGridProps = {
+type VoteListProps = {
   scheduleId: string;
 };
 
-export const VoteList = ({ scheduleId: id }: ThumbnailGridProps) => {
+export const VoteList = ({ scheduleId: id }: VoteListProps) => {
   const { data: votesData } = useVotesData({
     scheduleId: parseInt(id, 10),
   });

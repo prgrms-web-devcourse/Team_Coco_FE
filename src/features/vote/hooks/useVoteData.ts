@@ -5,30 +5,30 @@ import type {
   VotingRequest,
   VotingCreationRequest,
   VotingDetailResponse,
-  VotingSimpleResponse,
+  // VotingSimpleResponse,
 } from "../types";
 
 import { axios } from "@/lib/axios";
 
-export type GetVotesDTO = {
-  scheduleId: number;
-};
+// export type GetVotesDTO = {
+//   scheduleId: number;
+// };
 
-export const getVotes = ({
-  scheduleId,
-}: GetVotesDTO): Promise<VotingSimpleResponse[]> => {
-  return axios.get(`/schedules/${scheduleId}/votings`);
-};
+// export const getVotes = ({
+//   scheduleId,
+// }: GetVotesDTO): Promise<VotingSimpleResponse[]> => {
+//   return axios.get(`/schedules/${scheduleId}/votings`);
+// };
 
-export type UseVotesDataProps = GetVotesDTO;
+// export type UseVotesDataProps = GetVotesDTO;
 
-export const useVotesData = ({ scheduleId }: UseVotesDataProps) => {
-  const { data = [], ...rest } = useQuery(["votes", scheduleId], () =>
-    getVotes({ scheduleId })
-  );
-  return { data, ...rest };
-};
-
+// export const useVotesData = ({ scheduleId }: UseVotesDataProps) => {
+//   const { data = [], ...rest } = useQuery(["votes", scheduleId], () =>
+//     getVotes({ scheduleId })
+//   );
+//   return { data, ...rest };
+// };
+/////////////////////////////////////////////////////////
 export type GetVoteDTO = {
   scheduleId: number;
   votingId: number;
@@ -38,7 +38,9 @@ export const getVote = ({
   scheduleId,
   votingId,
 }: GetVoteDTO): Promise<VotingDetailResponse> => {
-  return axios.get(`/schedules/${scheduleId}/votings/${votingId}`);
+  return axios
+    .get(`/schedules/${scheduleId}/votings/${votingId}`)
+    .then((response) => response.data);
 };
 
 export type UseVoteDataProps = GetVoteDTO;
@@ -50,7 +52,7 @@ export const useVoteData = ({ scheduleId, votingId }: UseVoteDataProps) => {
   );
   return { data, ...rest };
 };
-
+/////////////////////////////////////////////////////////
 export type CreateVoteDTO = {
   data: VotingCreationRequest;
   scheduleId: number;
@@ -64,13 +66,14 @@ export const createVote = ({
 };
 
 export const useCreateVote = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation(createVote, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["votes"]);
-      navigate(`/votes/${data}`);
+      console.log(data);
+      // navigate(`/votes/${data}`);
     },
   });
 };
@@ -97,7 +100,7 @@ export const useDeleteVote = () => {
     },
   });
 };
-
+////////////////////////////////////////////////////
 export type ModifyVoteDTO = {
   scheduleId: number;
   votingId: number;
@@ -109,7 +112,9 @@ export const modifyVote = ({
   votingId,
   data,
 }: ModifyVoteDTO): Promise<void> => {
-  return axios.patch(`/schedules/${scheduleId}/votings/${votingId}`, data);
+  return axios
+    .patch(`/schedules/${scheduleId}/votings/${votingId}`, data)
+    .then((response) => response.data);
 };
 
 export const useModifyVote = () => {

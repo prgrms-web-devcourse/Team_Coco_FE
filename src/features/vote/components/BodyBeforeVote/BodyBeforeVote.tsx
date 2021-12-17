@@ -13,48 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-const dummy = {
-  id: 2,
-  multipleFlag: false,
-  title: "투표 제목입니다",
-  numOfTotalParticipants: 0,
-  ownerAge: 22,
-  ownerGender: "남성",
-  ownerId: 0,
-  ownerNickname: "mynick",
-  votingContentResponses: [
-    {
-      content: "한식",
-      id: 0,
-      numOfParticipants: 1,
-      participantFlag: false,
-    },
-    {
-      content: "중식",
-      id: 0,
-      numOfParticipants: 0,
-      participantFlag: false,
-    },
-    {
-      content: "양식",
-      id: 0,
-      numOfParticipants: 2,
-      participantFlag: false,
-    },
-    {
-      content: "일식",
-      id: 0,
-      numOfParticipants: 0,
-      participantFlag: false,
-    },
-    {
-      content: "괴식",
-      id: 0,
-      numOfParticipants: 2,
-      participantFlag: false,
-    },
-  ],
-};
+import { useVoteData, useModifyVote } from "@/features/vote/hooks";
 
 type BodyBeforeVoteProps = {
   voteId?: string;
@@ -62,22 +21,36 @@ type BodyBeforeVoteProps = {
 };
 
 export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
-  const { title, votingContentResponses } = dummy;
-  const defaultValues: Record<number, boolean> = {};
-  votingContentResponses.forEach((_, idx) => (defaultValues[idx] = false));
+  const { data: vote } = useVoteData({
+    scheduleId: Number(scheduleId),
+    votingId: Number(voteId),
+  });
+
+  const { title, votingContentResponses } = vote;
+  const defaultValues: Record<string, boolean> = {};
+  votingContentResponses?.forEach((_, idx) => (defaultValues[idx] = false));
 
   const [checkedOptions, setCheckedOptions] = useState(defaultValues);
 
-  const checkedOptionHandler = (idx: number, isChecked: boolean) => {
+  const checkedOptionHandler = (idx: string, isChecked: boolean) => {
     setCheckedOptions((prev) => ({ ...prev, [idx]: isChecked }));
   };
 
   const checkHandler = ({ target }: any) => {
-    checkedOptionHandler(Number(target.value), target.checked);
+    checkedOptionHandler(target.value, target.checked);
   };
 
-  const onSubmit = () => {
-    alert(JSON.stringify(checkedOptions));
+  const { mutateAsync: joinVote } = useModifyVote();
+
+  const onSubmit = async () => {
+    console.log(checkedOptions);
+
+    const map = { votingMap: checkedOptions };
+    await joinVote({
+      scheduleId: Number(scheduleId),
+      votingId: Number(voteId),
+      data: map,
+    });
   };
 
   return (
@@ -99,7 +72,7 @@ export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
               <FormLabel>항목</FormLabel>
             </VisuallyHidden>
             <Stack spacing={2}>
-              {votingContentResponses.map((option, idx) => (
+              {votingContentResponses?.map((option, idx) => (
                 <HStack key={idx} spacing={4}>
                   <Checkbox
                     size="lg"

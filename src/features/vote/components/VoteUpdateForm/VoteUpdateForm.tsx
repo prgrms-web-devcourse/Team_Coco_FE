@@ -21,9 +21,11 @@ import {
   useFieldArray,
 } from "react-hook-form";
 import { IoCloseSharp, IoAddSharp } from "react-icons/io5";
+import { useNavigate } from "react-router";
 import * as yup from "yup";
 
 import { TextWithIcon } from "@/components/TextWithIcon";
+import { useCreateVote } from "@/features/vote/hooks";
 
 const schema = yup.object().shape({
   title: yup
@@ -45,9 +47,10 @@ type VoteUpdateFormProps = {
 };
 
 export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
+  const navigate = useNavigate();
   const defaultValues: FormValues = {
     title: "",
-    multipleFlag: false,
+    multipleFlag: true,
     contents: [{ value: "" }, { value: "" }, { value: "" }],
   };
 
@@ -67,12 +70,22 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
     name: "contents",
   });
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const { mutateAsync: createVote } = useCreateVote();
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await sleep(1000);
-    alert(JSON.stringify(data));
+  type submitValue = {
+    title: string;
+    multipleFlag: boolean;
+    contents: string[];
+  };
+
+  const onSubmit: SubmitHandler<submitValue> = async (data) => {
+    // alert(JSON.stringify(data));
+
+    console.log(data.contents);
+
+    await createVote({ data, scheduleId: Number(scheduleId) });
+
+    // navigate("/note", {state: scheduleId});
   };
 
   console.log(watch());

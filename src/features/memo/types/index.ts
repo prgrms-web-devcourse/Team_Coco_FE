@@ -8,10 +8,6 @@ export type MemoDetailResponse = {
   content: string;
   id: number;
   memberSimpleResponse: MemberSimpleResponse;
-  // ownerAge: number;
-  // ownerGender: string;
-  // ownerId: number;
-  // ownerNickname: string;
   title: string;
 };
 
