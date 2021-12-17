@@ -8,34 +8,45 @@ import {
   Stack,
   Select,
   HStack,
-  chakra,
   VisuallyHidden,
-  CheckboxGroup,
   RadioGroup,
   Radio,
   Text,
   Flex,
 } from "@chakra-ui/react";
-import { useForm, Controller } from "react-hook-form";
+import { Dispatch, SetStateAction } from "react";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-export const PostsSearchForm = () => {
+import type { GetPostsDTO } from "@/features/posts/hooks";
+import type { Omit } from "@/utils/types";
+
+type PostsSearchFormProps = {
+  setSearchState: Dispatch<SetStateAction<GetPostsDTO>>;
+};
+
+type FormValues = Omit<GetPostsDTO, "sorting">;
+
+export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
   const {
     handleSubmit,
     register,
     control,
-    formState: { errors, isSubmitting },
-  } = useForm();
+    formState: { errors },
+  } = useForm<FormValues>();
 
-  const onSubmit = handleSubmit((values: any) => {
-    console.log({ values });
-  });
+  const onSubmit: SubmitHandler<FormValues> = (values) => {
+    setSearchState((prevState) => ({ ...prevState, ...values }));
+  };
 
   return (
-    <chakra.form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4}>
-        <FormControl id="city">
+        <FormControl id="searchingCity">
           <FormLabel>도시</FormLabel>
-          <Select placeholder="도시를 선택해 주세요" {...register("city")}>
+          <Select
+            placeholder="도시를 선택해 주세요"
+            {...register("searchingCity")}
+          >
             <option>서울</option>
             <option>제주</option>
             <option>부산</option>
@@ -48,10 +59,10 @@ export const PostsSearchForm = () => {
           </Select>
         </FormControl>
 
-        <FormControl id="theme">
+        <FormControl id="searchingTheme">
           <FormLabel>테마</FormLabel>
           <Controller
-            name="theme"
+            name="searchingTheme"
             control={control}
             render={({ field: { ref, ...rest } }) => (
               <RadioGroup colorScheme="cyan" defaultValue="all" {...rest}>
@@ -86,14 +97,14 @@ export const PostsSearchForm = () => {
           />
         </FormControl>
 
-        <FormControl id="search-term">
+        <FormControl id="search">
           <VisuallyHidden>
             <FormLabel>검색어</FormLabel>
           </VisuallyHidden>
           <InputGroup w="full">
             <Input
               placeholder="제목 또는 본문을 입력해주세요"
-              {...register("search-term")}
+              {...register("search")}
             />
             <InputRightAddon
               p="0"
@@ -102,6 +113,6 @@ export const PostsSearchForm = () => {
           </InputGroup>
         </FormControl>
       </Stack>
-    </chakra.form>
+    </form>
   );
 };

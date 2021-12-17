@@ -66,7 +66,7 @@ export const RegisterForm = () => {
     resolver: yupResolver(schema),
   });
 
-  const { mutate: signUp } = useSignUpData();
+  const { mutateAsync: signUp } = useSignUpData();
 
   const onSubmit: SubmitHandler<FormValues> = async ({
     birthDate,
