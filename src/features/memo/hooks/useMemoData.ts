@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
-import type { MemoRequest, MemoDetailResponse } from "../types";
+import type {
+  MemoRequest,
+  MemoCreationRequest,
+  MemoDetailResponse,
+} from "../types";
 
 import { axios } from "@/lib/axios";
 
@@ -20,7 +25,7 @@ export const useMemosData = ({ scheduleId }: UseMemosDataProps) => {
   );
   return { data, ...rest };
 };
-
+/////////////////////////////////////////////////////
 export type GetMemoDTO = {
   memoId: number;
   scheduleId: number;
@@ -41,7 +46,31 @@ export const useMemoData = ({ memoId, scheduleId }: UseMemoDataProps) => {
   );
   return { data, ...rest };
 };
+///////////////////////////////////////////////////////////
+export type CreateMemoDTO = {
+  data: MemoCreationRequest;
+  scheduleId: number;
+};
 
+export const createMemo = ({
+  data,
+  scheduleId,
+}: CreateMemoDTO): Promise<number> => {
+  return axios.post(`/schedules/${scheduleId}/memos`, data);
+};
+
+export const useCreateMemo = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  return useMutation(createMemo, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["memos"]);
+      navigate(`/memos/${data}`);
+    },
+  });
+};
+///////////////////////////////////////////////////////////
 export type ModifyMemoDTO = {
   memoId: number;
   scheduleId: number;
@@ -65,7 +94,7 @@ export const useModifyMemoData = () => {
     },
   });
 };
-
+///////////////////////////////////////////////////////////
 export type DeleteMemoDTO = {
   scheduleId: number;
   memoId: number;

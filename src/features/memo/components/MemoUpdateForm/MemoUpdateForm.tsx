@@ -12,6 +12,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
+import { useCreateMemo } from "@/features/memo/hooks";
+
 const dummy = [
   {
     userId: 1,
@@ -99,21 +101,19 @@ export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    watch,
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const { mutate: createMemo } = useCreateMemo();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await sleep(1000);
-    alert(JSON.stringify(data));
+    await createMemo({
+      data,
+      scheduleId: Number(scheduleId),
+    });
   };
-
-  console.log(watch());
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

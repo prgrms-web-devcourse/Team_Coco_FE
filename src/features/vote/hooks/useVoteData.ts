@@ -70,7 +70,7 @@ export const useCreateVote = () => {
   return useMutation(createVote, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["votes"]);
-      navigate(`/memos/${data}`);
+      navigate(`/votes/${data}`);
     },
   });
 };
