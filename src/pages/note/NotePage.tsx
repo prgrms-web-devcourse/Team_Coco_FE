@@ -16,8 +16,7 @@ import { PrivatePageLayout } from "@/components/Layout";
 import { ThumbnailGrid } from "@/features/note/components";
 
 export const NotePage = () => {
-  const { state } = useLocation();
-  const scheduleId = state.scheduleId;
+  const { state: scheduleId } = useLocation();
 
   const tabs = ["memo", "vote"];
   const [tabIndex, setTabIndex] = useState(0);

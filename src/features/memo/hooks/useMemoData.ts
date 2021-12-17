@@ -57,18 +57,15 @@ export const createMemo = ({
   scheduleId,
 }: CreateMemoDTO): Promise<number> => {
   return axios
-    .post(`/schedules/${scheduleId}/memos`)
+    .post(`/schedules/${scheduleId}/memos`, data)
     .then((response) => response.data);
 };
-
-// return axios.post(`/schedules/${scheduleId}/memos`, data)
 
 export const useCreateMemo = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation(createMemo, {
-    // { id: 0 }
     onSuccess: (data) => {
       queryClient.invalidateQueries(["memos"]);
       console.log(data);

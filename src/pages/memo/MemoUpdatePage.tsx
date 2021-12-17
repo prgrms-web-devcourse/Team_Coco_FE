@@ -9,7 +9,6 @@ import { MemoUpdateForm } from "@/features/memo/components";
 
 export const MemoUpdatePage = () => {
   const { memoId } = useParams();
-  const { state } = useLocation(); // location={state: id}
 
   return (
     <PrivatePageLayout

@@ -90,9 +90,8 @@ type MemoUpdateFormProps = {
 };
 
 export const MemoUpdateForm = ({ memoId }: MemoUpdateFormProps) => {
-  const { state } = useLocation();
-  console.log(state);
-  const scheduleId = state.scheduleId;
+  const { state: scheduleId } = useLocation();
+  console.log("memoupdateform", scheduleId);
 
   const memo = dummy.find((data) => data.id === Number(memoId));
 
