@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { AxiosResponse } from "axios";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -17,10 +18,19 @@ export const login = ({ data }: LoginDTO): Promise<AxiosResponse> => {
 
 export const useLoginData = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   return useMutation(login, {
     onSuccess: ({ headers: { token } }) => {
       storage.setToken(token);
+      toast({
+        title: "로그인에 성공했습니다",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
       navigate("/schedules");
     },
   });
@@ -36,9 +46,18 @@ export const signUp = ({ data }: SignUpDTO): Promise<AxiosResponse> => {
 
 export const useSignUpData = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   return useMutation(signUp, {
     onSuccess: () => {
+      toast({
+        title: "회원가입에 성공했습니다",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
       navigate("/login");
     },
   });

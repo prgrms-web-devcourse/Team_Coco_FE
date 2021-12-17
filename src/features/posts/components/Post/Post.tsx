@@ -12,6 +12,11 @@ import { Link } from "react-router-dom";
 import { TextWithIcon } from "@/components/TextWithIcon";
 import { User } from "@/components/User";
 
+export type PostProps = {
+  startDate: string;
+  endDate: string;
+};
+
 export const Post = () => {
   return (
     <LinkBox p={4} w="full" bg="gray.50">
