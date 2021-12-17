@@ -1,6 +1,7 @@
 import { Heading, Button, Box } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
+import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { Schedules } from "@/features/schedules/components/Schedules";
 
@@ -40,6 +41,7 @@ export const SchedulesPage = () => {
       <Button as={Link} to="id">
         스케줄 보기
       </Button>
+      <GoToUpdateButton target="schedules" />
     </PrivatePageLayout>
   );
 };
