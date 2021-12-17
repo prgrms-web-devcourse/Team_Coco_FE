@@ -3,25 +3,25 @@ import { useNavigate } from "react-router-dom";
 
 import type {
   // MemoRequest,
-  // MemoCreationRequest,
   MemoSimpleResponse,
-  MemoDetailResponse,
+  // MemoDetailResponse,
+  VoteSimpleResponse,
   // MemosDataResponse,
 } from "../types";
 
 import { axios } from "@/lib/axios";
 
-export type GetMemosDTO = {
+type GetMemosDTO = {
   scheduleId: number;
 };
-
-export type UseMemosDataProps = GetMemosDTO;
 
 const getMemos = ({ scheduleId }: GetMemosDTO) => {
   return axios
     .get<MemoSimpleResponse>(`/schedules/${scheduleId}/memos`)
     .then((response) => response.data);
 };
+
+type UseMemosDataProps = GetMemosDTO;
 
 export const useMemosData = ({ scheduleId }: UseMemosDataProps) => {
   const { data = [] as MemoSimpleResponse, ...rest } = useQuery(
@@ -31,26 +31,51 @@ export const useMemosData = ({ scheduleId }: UseMemosDataProps) => {
   return { data, ...rest };
 };
 ///////////////////////////////////////////////
-export type GetMemoDTO = {
-  memoId: number;
+export type GetVotesDTO = {
   scheduleId: number;
 };
 
-export const getMemo = ({
-  memoId,
-  scheduleId,
-}: GetMemoDTO): Promise<MemoDetailResponse> => {
-  return axios.get(`/schedules/${scheduleId}/memos/${memoId}`);
+// export const getVotes = ({
+//   scheduleId,
+// }: GetVotesDTO): Promise<VotingSimpleResponse[]> => {
+//   return axios.get<VoteSimpleResponse>(`/schedules/${scheduleId}/votings`);
+// };
+export const getVotes = ({ scheduleId }: GetVotesDTO) => {
+  return axios
+    .get<VoteSimpleResponse>(`/schedules/${scheduleId}/votings`)
+    .then((response) => response.data);
 };
 
-export type UseMemoDataProps = GetMemoDTO;
+export type UseVotesDataProps = GetVotesDTO;
 
-export const useMemoData = ({ memoId, scheduleId }: UseMemoDataProps) => {
-  const { data = {}, ...rest } = useQuery(["memos", memoId, scheduleId], () =>
-    getMemo({ memoId, scheduleId })
+export const useVotesData = ({ scheduleId }: UseVotesDataProps) => {
+  const { data = [] as VoteSimpleResponse, ...rest } = useQuery(
+    ["votes", scheduleId],
+    () => getVotes({ scheduleId })
   );
   return { data, ...rest };
 };
+
+// export type GetMemoDTO = {
+//   memoId: number;
+//   scheduleId: number;
+// };
+
+// export const getMemo = ({
+//   memoId,
+//   scheduleId,
+// }: GetMemoDTO): Promise<MemoDetailResponse> => {
+//   return axios.get(`/schedules/${scheduleId}/memos/${memoId}`);
+// };
+
+// export type UseMemoDataProps = GetMemoDTO;
+
+// export const useMemoData = ({ memoId, scheduleId }: UseMemoDataProps) => {
+//   const { data = {}, ...rest } = useQuery(["memos", memoId, scheduleId], () =>
+//     getMemo({ memoId, scheduleId })
+//   );
+//   return { data, ...rest };
+// };
 ///////////////////////////////////////////////////////////
 // export type CreateMemoDTO = {
 //   data: MemoCreationRequest;

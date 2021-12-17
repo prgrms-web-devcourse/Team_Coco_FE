@@ -13,7 +13,7 @@ import { useLocation } from "react-router-dom";
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
-import { ThumbnailGrid } from "@/features/note/components";
+import { MemoList, VoteList } from "@/features/note/components";
 
 export const NotePage = () => {
   const { state: scheduleId } = useLocation();
@@ -50,12 +50,14 @@ export const NotePage = () => {
               투표
             </Tab>
           </TabList>
+
           <TabPanels height="630px" overflow="auto">
             <TabPanel paddingTop="0">
-              <ThumbnailGrid tab="memo" scheduleId={scheduleId} />
+              <MemoList scheduleId={scheduleId} />
             </TabPanel>
+
             <TabPanel paddingTop="0">
-              <ThumbnailGrid tab="vote" scheduleId={scheduleId} />
+              <VoteList scheduleId={scheduleId} />
             </TabPanel>
           </TabPanels>
         </Tabs>
