@@ -17,7 +17,6 @@ import { ThumbnailGrid } from "@/features/note/components";
 
 export const NotePage = () => {
   const { state } = useLocation();
-  console.log("state", state);
   const scheduleId = state.scheduleId;
 
   const tabs = ["memo", "vote"];
@@ -61,7 +60,7 @@ export const NotePage = () => {
             </TabPanel>
           </TabPanels>
         </Tabs>
-        <GoToUpdateButton target={tabs[tabIndex]} />
+        <GoToUpdateButton target={tabs[tabIndex]} scheduleId={scheduleId} />
       </Box>
     </PrivatePageLayout>
   );

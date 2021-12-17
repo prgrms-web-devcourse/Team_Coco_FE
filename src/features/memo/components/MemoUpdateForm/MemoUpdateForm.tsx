@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import * as yup from "yup";
 
 import { useCreateMemo } from "@/features/memo/hooks";
@@ -86,10 +87,13 @@ type FormValues = {
 
 type MemoUpdateFormProps = {
   memoId?: string;
-  scheduleId?: string;
 };
 
-export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
+export const MemoUpdateForm = ({ memoId }: MemoUpdateFormProps) => {
+  const { state } = useLocation();
+  console.log(state);
+  const scheduleId = state.scheduleId;
+
   const memo = dummy.find((data) => data.id === Number(memoId));
 
   const defaultValues: FormValues = {

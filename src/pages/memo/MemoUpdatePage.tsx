@@ -24,7 +24,7 @@ export const MemoUpdatePage = () => {
       <Flex h={100}>
         <User size="md" />
       </Flex>
-      <MemoUpdateForm memoId={memoId} scheduleId={state} />
+      <MemoUpdateForm memoId={memoId} />
     </PrivatePageLayout>
   );
 };
