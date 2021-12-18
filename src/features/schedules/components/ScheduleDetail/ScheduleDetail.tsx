@@ -61,7 +61,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
     new Date(schedule.scheduleSimpleResponse.endDate),
     new Date(schedule.scheduleSimpleResponse.startDate)
   );
-  console.log(schedule);
+
   return (
     <Stack spacing={4}>
       <Flex justify="space-between" align="center">
@@ -76,11 +76,8 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       </Flex>
 
       <Flex justify="space-between" align="center">
-        <Text fontSize="lg">
-          <ThemeTag
-            theme={formattedSchedule.scheduleSimpleResponse.themes[0]}
-          />
-        </Text>
+        <ThemeTag theme={formattedSchedule.scheduleSimpleResponse.themes[0]} />
+
         <Text fontSize="md" color="gray.500">
           {formattedSchedule.scheduleSimpleResponse.startDate} ~{" "}
           {formattedSchedule.scheduleSimpleResponse.endDate}
