@@ -4,9 +4,13 @@ import { Link } from "react-router-dom";
 
 type GoToUpdateButtonProps = {
   target: string;
+  scheduleId?: string;
 };
 
-export const GoToUpdateButton = ({ target }: GoToUpdateButtonProps) => {
+export const GoToUpdateButton = ({
+  target,
+  scheduleId,
+}: GoToUpdateButtonProps) => {
   return (
     <Portal>
       <IconButton
@@ -15,6 +19,7 @@ export const GoToUpdateButton = ({ target }: GoToUpdateButtonProps) => {
         right="1rem"
         bottom="4.5rem"
         to={`/${target}/update`}
+        state={scheduleId}
         aria-label="add-new"
         borderRadius="50%"
         bg="white"
