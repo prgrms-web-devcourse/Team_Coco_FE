@@ -1,35 +1,68 @@
-import { Flex, Box, Text, Input } from "@chakra-ui/react";
+import { VStack, Text, Input, Flex } from "@chakra-ui/react";
+import { useState } from "react";
+
+import { PostLikeButton } from "@/features/posts/components/PostLikeButton";
+import { Carousel } from "@/features/schedules/components/Carousel";
+import { Dailys } from "@/features/schedules/components/Dailys";
 
 type PostDetailContentProps = {
-  postId?: string;
+  title: string;
+  content: string;
+  dailyPlaces: {
+    spotId: number;
+    dateOrder: number;
+    spotOrder: number;
+    placeName: string;
+  }[];
+  views: number;
+  isLiked: boolean;
+  likeCount: number;
+  postId: number | null;
 };
 
-export const PostDetailContent = ({ postId }: PostDetailContentProps) => {
-  const post = {
-    title: "제목",
-    body: "동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람, 대한으로 길이 보전하세동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람, 대한으로 길이 보전하세동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람, 대한으로 길이 보전하세동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람, 대한으로 길이 보전하세동해 물과 백",
-  };
+export const PostDetailContent = ({
+  title,
+  content,
+  dailyPlaces,
+  views,
+  isLiked,
+  likeCount,
+  postId,
+}: PostDetailContentProps) => {
+  const [selectedDateIdx, setSelectedDateIdx] = useState(0);
 
   return (
-    <Flex direction="column">
-      <Box minHeight="40px">
-        <Input
-          fontSize="md"
-          color="gray.600"
-          fontWeight="bold"
-          variant="flushed"
-          value={post?.title}
-          disabled
+    <VStack spacing={4} align="stretch">
+      <Input
+        fontSize="md"
+        color="gray.600"
+        fontWeight="bold"
+        variant="flushed"
+        value={title}
+        disabled
+      />
+      <Carousel perViewInfo={{ base: 2 }}>
+        <Dailys
+          totalDays={dailyPlaces.length}
+          selectedDateIdx={selectedDateIdx}
+          setSelectedDateIdx={setSelectedDateIdx}
+          dailyPlaces={dailyPlaces}
+          className="keen-slider__slide"
         />
-      </Box>
-      <Box marginTop="1rem">
+      </Carousel>
+      <Text fontSize="sm" color="gray.500">
+        {content}
+      </Text>
+      <Flex justifyContent="space-between">
+        <PostLikeButton
+          likeCount={likeCount}
+          isLiked={isLiked}
+          postId={postId}
+        />
         <Text fontSize="sm" color="gray.500">
-          {post?.body}
+          {views}명이 봤어요
         </Text>
-      </Box>
-      <Box height="300px" bgColor="gray.100">
-        일정 상세정보 컴포넌트
-      </Box>
-    </Flex>
+      </Flex>
+    </VStack>
   );
 };

@@ -1,28 +1,32 @@
 import { Stack, Flex } from "@chakra-ui/react";
-import {
-  IoEllipsisHorizontalOutline,
-  IoLocationSharp,
-  IoCalendarSharp,
-} from "react-icons/io5";
+import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 
 import { TextWithIcon } from "@/components/TextWithIcon";
 import { User } from "@/components/User";
+import { formatCreatedAt } from "@/utils/date";
 
 type PostDetailHeaderProps = {
-  postId: string | undefined;
+  writerId: number;
+  nickname: string;
+  city: string;
+  createdAt: string;
 };
 
-export const PostDetailHeader = ({ postId }: PostDetailHeaderProps) => {
+export const PostDetailHeader = ({
+  writerId,
+  nickname,
+  city,
+  createdAt,
+}: PostDetailHeaderProps) => {
   return (
-    <Stack height="100px" spacing={4}>
+    <Stack spacing={4}>
       <Flex alignItems="center" justifyContent="space-between">
-        <User size="md" />
-        <IoEllipsisHorizontalOutline color="#718096" />
+        <User size="sm" nickname={nickname} />
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
-        <TextWithIcon icon={<IoLocationSharp />}>도시명</TextWithIcon>
+        <TextWithIcon icon={<IoLocationSharp />}>{city}</TextWithIcon>
         <TextWithIcon icon={<IoCalendarSharp />}>
-          2021년 10월 21일 14:00
+          {formatCreatedAt(createdAt)}
         </TextWithIcon>
       </Flex>
     </Stack>

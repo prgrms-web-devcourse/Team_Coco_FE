@@ -1,4 +1,4 @@
-import type { Omit, Dict } from "./types";
+import type { Omit, Dict, Entries } from "./types";
 
 export const omit = <T extends Dict, K extends keyof T>(
   object: T,
@@ -38,3 +38,6 @@ export const filterFalsy = (object: Dict) =>
 
 export const objectKeys = <T extends Dict>(obj: T) =>
   Object.keys(obj) as unknown as (keyof T)[];
+
+export const objectEntries = <T extends Dict>(obj: T): Entries<T> =>
+  Object.entries(obj);
