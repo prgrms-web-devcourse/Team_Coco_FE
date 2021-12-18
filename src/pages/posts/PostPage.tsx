@@ -1,4 +1,4 @@
-import { Heading, Stack, Flex } from "@chakra-ui/react";
+import { Heading, Stack } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
 
@@ -7,13 +7,28 @@ import { PrivatePageLayout } from "@/components/Layout";
 import {
   PostDetailHeader,
   PostDetailContent,
-  Comment,
+  Comments,
+  AddCommentForm,
 } from "@/features/posts/components";
+import { usePostData } from "@/features/posts/hooks";
+import { useCommentsData } from "@/features/posts/hooks";
+import { isEmpty } from "@/utils/assertion";
+
 export const PostPage = () => {
   const { postId } = useParams();
+  const { data: post } = usePostData({
+    postId: postId ? Number(postId) : null,
+    enabled: !!postId,
+  });
+
+  const { data: comments } = useCommentsData({
+    postId: postId ? Number(postId) : null,
+    enabled: !!postId,
+  });
+
   return (
     <PrivatePageLayout
-      title="id"
+      title={isEmpty(post) ? "" : post.title}
       header={
         <>
           <GoToBackButton />
@@ -21,11 +36,34 @@ export const PostPage = () => {
         </>
       }
     >
-      <Stack py={4} spacing={4}>
-        <PostDetailHeader postId={postId} />
-        <PostDetailContent postId={postId} />
-        <Comment />
-      </Stack>
+      {isEmpty(post) ? (
+        <div>빈 포스트에요</div>
+      ) : (
+        <Stack py={4} spacing={4}>
+          <PostDetailHeader
+            writerId={post.writerId}
+            nickname={post.nickname}
+            city={post.city}
+            createdAt={post.createdAt}
+          />
+          <PostDetailContent
+            title={post.title}
+            content={post.content}
+            dailyPlaces={post.dailyScheduleSpots}
+            views={post.views}
+            isLiked={post.isLiked}
+            likeCount={post.likeCount}
+            postId={postId ? Number(postId) : null}
+          />
+          <Stack spacing={4}>
+            <AddCommentForm
+              postId={postId ? Number(postId) : null}
+              nickname={post.nickname}
+            />
+            {isEmpty(comments) ? null : <Comments comments={comments} />}
+          </Stack>
+        </Stack>
+      )}
     </PrivatePageLayout>
   );
 };

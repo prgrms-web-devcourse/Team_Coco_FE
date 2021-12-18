@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Heading } from "@chakra-ui/react";
+import { Box, Flex, HStack, Heading, Center, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 
 import { GoToUpdateButton } from "@/components/GoToUpdateButton";
@@ -20,7 +20,7 @@ export const PostsPage = () => {
     search: "",
   } as GetPostsDTO);
 
-  const { data: posts } = usePostsData(searchState);
+  const { data: posts, isLoading } = usePostsData(searchState);
 
   return (
     <PrivatePageLayout
@@ -36,7 +36,11 @@ export const PostsPage = () => {
         </HStack>
       </Flex>
       <Box my={4}>
-        {isEmpty(posts) ? (
+        {isLoading ? (
+          <Center>
+            <Spinner />
+          </Center>
+        ) : isEmpty(posts) ? (
           <div>포스트가 없습니다.</div>
         ) : (
           <Posts data={posts} />

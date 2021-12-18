@@ -17,7 +17,10 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
+import { cities } from "@/features/posts/constants";
+import { searchThemes } from "@/features/posts/constants";
 import type { GetPostsDTO } from "@/features/posts/hooks";
+import { objectEntries } from "@/utils/object";
 import type { Omit } from "@/utils/types";
 
 type PostsSearchFormProps = {
@@ -45,17 +48,17 @@ export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
           <FormLabel>도시</FormLabel>
           <Select
             placeholder="도시를 선택해 주세요"
+            defaultValue="전체"
             {...register("searchingCity")}
           >
-            <option>서울</option>
-            <option>제주</option>
-            <option>부산</option>
-            <option>인천</option>
-            <option>대구</option>
-            <option>대전</option>
-            <option>광주</option>
-            <option>울산</option>
-            <option>전주</option>
+            <option value="전체">전체</option>
+            {cities.map((city, idx) => {
+              return (
+                <option key={`city-${idx}`} value={city}>
+                  {city}
+                </option>
+              );
+            })}
           </Select>
         </FormControl>
 
@@ -65,32 +68,21 @@ export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
             name="searchingTheme"
             control={control}
             render={({ field: { ref, ...rest } }) => (
-              <RadioGroup colorScheme="cyan" defaultValue="all" {...rest}>
+              <RadioGroup colorScheme="cyan" defaultValue="ALL" {...rest}>
                 <HStack>
-                  <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Radio value="all"></Radio>
-                    <Text color="gray.400">전체</Text>
-                  </Flex>
-                  <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Radio value="nature"></Radio>
-                    <Text color="gray.400">자연</Text>
-                  </Flex>
-                  <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Radio value="art"></Radio>
-                    <Text color="gray.400">예술</Text>
-                  </Flex>
-                  <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Radio value="history"></Radio>
-                    <Text color="gray.400">역사</Text>
-                  </Flex>
-                  <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Radio value="food"></Radio>
-                    <Text color="gray.400">맛집</Text>
-                  </Flex>
-                  <Flex direction="column" alignItems="center" flexGrow={1}>
-                    <Radio value="activity"></Radio>
-                    <Text color="gray.400">액티비티</Text>
-                  </Flex>
+                  {objectEntries(searchThemes).map(([key, value]) => {
+                    return (
+                      <Flex
+                        direction="column"
+                        alignItems="center"
+                        flexGrow={1}
+                        key={key}
+                      >
+                        <Radio value={key}></Radio>
+                        <Text color="gray.400">{value}</Text>
+                      </Flex>
+                    );
+                  })}
                 </HStack>
               </RadioGroup>
             )}

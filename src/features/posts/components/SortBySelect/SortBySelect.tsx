@@ -9,12 +9,7 @@ import type { GetPostsDTO } from "@/features/posts/hooks";
 
 const sortByOptions = {
   defaultValue: "",
-  options: [
-    { label: "최신순", value: "new" },
-    { label: "조회순", value: "views" },
-    { label: "좋아요순", value: "likes" },
-    { label: "댓글순", value: "comments" },
-  ],
+  options: ["최신순", "조회순", "좋아요순", "댓글순"],
 };
 
 export type SortBySelectProps = {
@@ -40,8 +35,8 @@ export const SortBySelect = ({
       {...selectProps}
     >
       {sortByOptions.options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
+        <option key={option} value={option}>
+          {option}
         </option>
       ))}
     </Select>
