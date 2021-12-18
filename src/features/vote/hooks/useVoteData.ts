@@ -52,7 +52,6 @@ export const useCreateVote = () => {
   return useMutation(createVote, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["votes"]);
-      console.log(data);
     },
   });
 };
