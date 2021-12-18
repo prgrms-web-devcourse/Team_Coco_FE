@@ -61,7 +61,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
     new Date(schedule.scheduleSimpleResponse.endDate),
     new Date(schedule.scheduleSimpleResponse.startDate)
   );
-  console.log(schedule);
+
   return (
     <Stack spacing={4}>
       <Flex justify="space-between" align="center">
