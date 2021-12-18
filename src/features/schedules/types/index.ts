@@ -12,7 +12,7 @@ export type ScheduleSimpleResponse = {
 
 export type ScheduleDetailResponse = {
   id: number;
-  memberSimpleResponse: MemberSimpleResponse[];
+  memberSimpleResponses: MemberSimpleResponse[];
   scheduleSimpleResponse: ScheduleSimpleResponse;
   spotResponseList: ScheduleSpotResponse[];
 };

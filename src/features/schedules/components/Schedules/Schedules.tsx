@@ -6,7 +6,7 @@ import { Schedule } from "../Schedule";
 
 export const Schedules = () => {
   const { data: schedules, isLoading } = useSchedulesData();
-
+  console.log(schedules);
   return (
     <Stack spacing={4}>
       {!schedules.length && !isLoading && (
@@ -24,6 +24,7 @@ export const Schedules = () => {
             title={schedule.title}
             startedDate={schedule.startDate}
             endedDate={schedule.endDate}
+            themes={schedule.themes}
           />
         );
       })}

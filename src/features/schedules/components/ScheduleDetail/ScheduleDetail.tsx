@@ -14,6 +14,7 @@ import {
 import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
 
 import { useScheduleData } from "../../hooks";
+import { ThemeTag } from "../ThemeTag";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { CustomizedModal } from "@/components/CustomizedModal";
@@ -52,7 +53,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
     new Date(schedule.scheduleSimpleResponse.endDate),
     new Date(schedule.scheduleSimpleResponse.startDate)
   );
-
+  console.log(schedule);
   return (
     <Stack spacing={4}>
       <Flex justify="space-between" align="center">
@@ -67,7 +68,11 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       </Flex>
 
       <Flex justify="space-between" align="center">
-        <Text fontSize="lg">🍽 🏛 🏯</Text>
+        <Text fontSize="lg">
+          <ThemeTag
+            theme={formattedSchedule.scheduleSimpleResponse.themes[0]}
+          />
+        </Text>
         <Text fontSize="md" color="gray.500">
           {formattedSchedule.scheduleSimpleResponse.startDate} ~{" "}
           {formattedSchedule.scheduleSimpleResponse.endDate}
@@ -79,11 +84,15 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       </Heading>
       <HStack>
         <AvatarGroup size="md" max={5}>
-          <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-          <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
-          <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-          <Avatar name="Prosper Otemuyiwa" src="https://bit.ly/prosper-baba" />
-          <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
+          {formattedSchedule.memberSimpleResponses.map((member) => {
+            return (
+              <Avatar
+                key={`Avatar-${member.id}`}
+                name={member.nickname}
+                src={member.imageUrl}
+              />
+            );
+          })}
         </AvatarGroup>
         <IoAdd color="718096" />
         <RoundUserAddButton onClick={onOpen} />
