@@ -8,10 +8,13 @@ import {
   Box,
   Stack,
   useDisclosure,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
 
 import { useScheduleData } from "../../hooks";
+import { ThemeTag } from "../ThemeTag";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { CustomizedModal } from "@/components/CustomizedModal";
@@ -21,16 +24,29 @@ import { RoundUserAddButton } from "@/features/schedules/components/RoundUserAdd
 import { getTotalDays } from "@/utils/date";
 
 type ScheduleDetailProps = {
-  scheduleId?: string;
+  scheduleId: number;
 };
 
 export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
-  const number = parseInt(scheduleId || "0", 10);
-  const { data: schedule } = useScheduleData({ scheduleId: number });
+  const { data: schedule, isLoading } = useScheduleData({ scheduleId });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(schedule);
 
-  if (Object.keys(schedule).length === 0) return <div></div>;
+  if (isLoading) {
+    return (
+      <Center h="80vh">
+        <Spinner color="cyan.500" />
+      </Center>
+    );
+  }
+
+  if (Object.keys(schedule).length === 0) {
+    return (
+      <Center h="80vh">
+        <Text>schedule정보를 찾을 수 없습니다</Text>
+      </Center>
+    );
+  }
+
   const formattedSchedule = {
     ...schedule,
     spotResponseList: schedule.spotResponseList?.map(
@@ -45,7 +61,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
     new Date(schedule.scheduleSimpleResponse.endDate),
     new Date(schedule.scheduleSimpleResponse.startDate)
   );
-
+  console.log(schedule);
   return (
     <Stack spacing={4}>
       <Flex justify="space-between" align="center">
@@ -60,7 +76,11 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       </Flex>
 
       <Flex justify="space-between" align="center">
-        <Text fontSize="lg">🍽 🏛 🏯</Text>
+        <Text fontSize="lg">
+          <ThemeTag
+            theme={formattedSchedule.scheduleSimpleResponse.themes[0]}
+          />
+        </Text>
         <Text fontSize="md" color="gray.500">
           {formattedSchedule.scheduleSimpleResponse.startDate} ~{" "}
           {formattedSchedule.scheduleSimpleResponse.endDate}
@@ -72,11 +92,15 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       </Heading>
       <HStack>
         <AvatarGroup size="md" max={5}>
-          <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-          <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
-          <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-          <Avatar name="Prosper Otemuyiwa" src="https://bit.ly/prosper-baba" />
-          <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
+          {formattedSchedule.memberSimpleResponses.map((member) => {
+            return (
+              <Avatar
+                key={`Avatar-${member.id}`}
+                name={member.nickname}
+                src={member.imageUrl}
+              />
+            );
+          })}
         </AvatarGroup>
         <IoAdd color="718096" />
         <RoundUserAddButton onClick={onOpen} />
@@ -87,6 +111,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       <DailyCarouselWithInfos
         spotResponseList={formattedSchedule.spotResponseList}
         totalDays={totalDays}
+        scheduleId={scheduleId}
       />
     </Stack>
   );

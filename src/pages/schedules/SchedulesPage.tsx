@@ -1,32 +1,8 @@
-import { Heading, Box, Button, Link } from "@chakra-ui/react";
+import { Heading, Box } from "@chakra-ui/react";
 
 import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { Schedules } from "@/features/schedules/components/Schedules";
-
-const dummy = [
-  {
-    id: 1,
-    title: "string",
-    startDate: [2021, 12, 13],
-    endDate: [2021, 12, 13],
-    thema: ["FOOD"],
-  },
-  {
-    id: 2,
-    title: "string",
-    startDate: [2021, 12, 13],
-    endDate: [2021, 12, 13],
-    thema: ["FOOD"],
-  },
-  {
-    id: 3,
-    title: "string",
-    startDate: [2021, 12, 13],
-    endDate: [2021, 12, 13],
-    thema: ["FOOD"],
-  },
-];
 
 export const SchedulesPage = () => {
   return (

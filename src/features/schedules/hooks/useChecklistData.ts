@@ -11,15 +11,16 @@ export type GetChecklistsDTO = {
 export const getChecklists = ({
   scheduleId,
 }: GetChecklistsDTO): Promise<ChecklistResponse[]> => {
-  return axios.get(`/schedules/${scheduleId}/checklists`);
+  return axios
+    .get(`/schedules/${scheduleId}/checklists`)
+    .then((response) => response.data);
 };
 
 export type UseChecklistsDataProps = GetChecklistsDTO;
 
 export const useChecklistsData = ({ scheduleId }: UseChecklistsDataProps) => {
-  const { data = [], ...rest } = useQuery(
-    ["schedules", scheduleId, "checklists"],
-    () => getChecklists({ scheduleId })
+  const { data = [], ...rest } = useQuery(["checklists"], () =>
+    getChecklists({ scheduleId })
   );
   return { data, ...rest };
 };
@@ -40,6 +41,18 @@ export const useCreateChecklistData = () => {
   const queryClient = useQueryClient();
 
   return useMutation(createChecklist, {
+    onMutate: async ({ data }) => {
+      await queryClient.cancelQueries(["checklists"]);
+
+      const previousChecklist = queryClient.getQueryData(["checklists"]);
+      queryClient.setQueriesData(["checklists"], (old: any) => [
+        ...old,
+        { day: data.day, content: data.title, checked: false },
+      ]);
+
+      return { previousChecklist };
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries(["checklists"]);
     },
@@ -62,6 +75,17 @@ export const useDeleteChecklistData = () => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteChecklist, {
+    onMutate: async ({ checklistId }) => {
+      await queryClient.cancelQueries(["checklists"]);
+
+      const previousChecklist = queryClient.getQueryData(["checklists"]);
+      queryClient.setQueriesData(["checklists"], (oldChecklists: any) =>
+        oldChecklists.filter((checklist: any) => checklist.id !== checklistId)
+      );
+
+      return { previousChecklist };
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries(["checklists"]);
     },
@@ -88,6 +112,21 @@ export const useModifyChecklistData = () => {
   const queryClient = useQueryClient();
 
   return useMutation(modifyChecklist, {
+    onMutate: async ({ checklistId }) => {
+      await queryClient.cancelQueries(["checklists"]);
+
+      const previousChecklist = queryClient.getQueryData(["checklists"]);
+      queryClient.setQueriesData(["checklists"], (oldChecklists: any) =>
+        oldChecklists.map((checklist: any) =>
+          checklist.id === checklistId
+            ? { ...checklist, checked: !checklist.checked }
+            : checklist
+        )
+      );
+
+      return { previousChecklist };
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries(["checklists"]);
     },
