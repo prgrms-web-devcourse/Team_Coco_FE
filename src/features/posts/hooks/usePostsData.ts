@@ -1,5 +1,10 @@
 import { useToast } from "@chakra-ui/react";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseQueryOptions,
+} from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import type {
@@ -7,15 +12,39 @@ import type {
   PostResponse,
   PostsResponse,
   PostCreationResponse,
+  PostDetailResponse,
 } from "../types";
 
+import type { City } from "@/features/posts/types";
+import type { Theme } from "@/features/schedules/types";
 import { axios } from "@/lib/axios";
 import { filterFalsy } from "@/utils/object";
 
+export type GetPostByIdDTO = {
+  postId: number | null;
+};
+
+export const getPostById = ({ postId }: GetPostByIdDTO) => {
+  return axios
+    .get<PostDetailResponse>(`/posts/schedules/${postId}`)
+    .then((response) => response.data);
+};
+
+export type UsePostDataProps = GetPostByIdDTO & UseQueryOptions;
+
+export const usePostData = ({ postId, enabled }: UsePostDataProps) => {
+  const { data = {} as PostDetailResponse, ...rest } = useQuery(
+    ["post", postId],
+    () => getPostById({ postId }),
+    { enabled }
+  );
+  return { data, ...rest };
+};
+
 export type GetPostsDTO = {
   sorting: "최신순";
-  searchingTheme: "ALL";
-  searchingCity: "전체";
+  searchingTheme: Theme | "ALL";
+  searchingCity: City | "전체";
   search: string;
 };
 
@@ -36,7 +65,7 @@ export const getPosts = ({
     .get<PostsResponse>(`/posts/schedules`, {
       params,
     })
-    .then((response) => response.data.content);
+    .then((response) => response.data);
 };
 
 export const usePostsData = ({
@@ -87,6 +116,7 @@ export const createPost = ({ data }: CreatePostDTO) => {
 export const useCreatePostData = () => {
   const toast = useToast();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   return useMutation(createPost, {
     onSuccess: ({ postId }) => {
       toast({
@@ -97,7 +127,28 @@ export const useCreatePostData = () => {
         duration: 2000,
         isClosable: true,
       });
-      navigate(`/posts/${postId}`);
+      queryClient.invalidateQueries(["posts"]);
+      navigate(`/posts/${postId}`, { replace: true });
+    },
+  });
+};
+
+export type ModifyLikedPostDTO = {
+  data: { flag: boolean; schedulePostId: number | null };
+  postId: number | null;
+};
+
+export const modifyLikedPost = ({ postId, data }: ModifyLikedPostDTO) => {
+  return axios
+    .post<{ likeCount: number }>(`/posts/schedules/${postId}/liked`, data)
+    .then((response) => response.data);
+};
+
+export const useModifyLikedPostData = () => {
+  const queryClient = useQueryClient();
+  return useMutation(modifyLikedPost, {
+    onSuccess: ({ likeCount }) => {
+      queryClient.invalidateQueries(["post"]);
     },
   });
 };

@@ -8,7 +8,7 @@ import { MemoHeader, MemoContent } from "@/features/memo/components";
 
 export const MemoPage = () => {
   const { memoId } = useParams();
-  const { state } = useLocation(); // location={state: id}
+  const { state: scheduleId } = useLocation();
 
   return (
     <PrivatePageLayout
@@ -20,8 +20,8 @@ export const MemoPage = () => {
         </>
       }
     >
-      <MemoHeader memoId={memoId} scheduleId={state} />
-      <MemoContent memoId={memoId} scheduleId={state} />
+      <MemoHeader memoId={memoId} scheduleId={scheduleId} />
+      <MemoContent memoId={memoId} scheduleId={scheduleId} />
     </PrivatePageLayout>
   );
 };

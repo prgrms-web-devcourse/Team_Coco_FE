@@ -1,5 +1,5 @@
 import { Heading, Flex } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
@@ -9,12 +9,28 @@ import {
   BodyAfterVote,
   BodyBeforeVote,
 } from "@/features/vote/components";
+import { useVoteData } from "@/features/vote/hooks";
 
 export const VotePage = () => {
   const { voteId } = useParams();
-  const { state } = useLocation(); // location={state: 일정id}
+  const { state: scheduleId } = useLocation();
+  const [isJoined, setIsJoined] = useState(false);
 
-  const [isJoined, setIsJoined] = useState(true);
+  const { data: vote } = useVoteData({
+    scheduleId: Number(scheduleId),
+    votingId: Number(voteId),
+  });
+
+  console.log(vote);
+  const { votingContentResponses } = vote;
+
+  console.log(votingContentResponses);
+
+  votingContentResponses?.map((response) => {
+    if (response.participantFlag) {
+      setIsJoined(true);
+    }
+  });
 
   return (
     <PrivatePageLayout
@@ -26,12 +42,12 @@ export const VotePage = () => {
         </>
       }
     >
-      <VoteHeader voteId={voteId} scheduleId={state} />
+      <VoteHeader voteId={voteId} scheduleId={scheduleId} />
       <Flex direction="column" height="550px">
         {isJoined ? (
-          <BodyAfterVote voteId={voteId} scheduleId={state} />
+          <BodyAfterVote voteId={voteId} scheduleId={scheduleId} />
         ) : (
-          <BodyBeforeVote voteId={voteId} scheduleId={state} />
+          <BodyBeforeVote voteId={voteId} scheduleId={scheduleId} />
         )}
       </Flex>
     </PrivatePageLayout>

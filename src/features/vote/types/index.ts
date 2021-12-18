@@ -1,6 +1,12 @@
-export type VotingContentResponse = {
-  content: string;
+export type MemberSimpleResponse = {
   id: number;
+  imageUrl: string;
+  nickname: string;
+};
+
+export type VotingContentResponse = {
+  id: number;
+  content: string;
   numOfParticipants: number;
   participantFlag: boolean;
 };
@@ -13,21 +19,18 @@ export type VotingCreationRequest = {
 
 export type VotingDetailResponse = {
   id: number;
+  title: string;
   multipleFlag: boolean;
   numOfTotalParticipants: number;
-  ownerAge: number;
-  ownerGender: string;
-  ownerId: number;
-  ownerNickname: string;
-  title: string;
   votingContentResponses: VotingContentResponse[];
+  memberSimpleResponse: MemberSimpleResponse;
 };
 
-export type VotingSimpleResponse = {
-  id: number;
-  memberCount: number;
-  title: string;
-};
+// export type VotingSimpleResponse = {
+//   id: number;
+//   memberCount: number;
+//   title: string;
+// };
 
 export type VotingRequest = {
   votingMap: Record<string, boolean>;

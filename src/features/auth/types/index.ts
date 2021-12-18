@@ -10,5 +10,4 @@ export type SignUpRequest = {
   name: string;
   nickname: string;
   password: string;
-  phoneNumber: string;
 };

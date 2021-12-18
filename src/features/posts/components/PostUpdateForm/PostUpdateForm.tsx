@@ -15,24 +15,28 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
+import { cities } from "@/features/posts/constants";
 import { useCreatePostData } from "@/features/posts/hooks";
+import type { City } from "@/features/posts/types";
+import { useSchedulesData } from "@/features/schedules/hooks";
 
 const schema = yup.object().shape({
   title: yup.string().min(1).max(16).required(),
-  content: yup.string().min(1).required(),
+  content: yup.string().min(1).max(10000).required(),
+  scheduleId: yup.number().required(),
+  city: yup.string().required(),
 });
 
 const defaultValues: FormValues = {
-  city: "123",
+  city: "서울",
   content: "",
   title: "",
-  scheduleId: 1,
 };
 
 type FormValues = {
-  city: string;
+  city: City;
   content: string;
-  scheduleId: number;
+  scheduleId?: number;
   title: string;
 };
 
@@ -50,10 +54,16 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
     resolver: yupResolver(schema),
   });
 
+  const { data: schedules } = useSchedulesData();
+
   const { mutateAsync: createPost } = useCreatePostData();
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await createPost({ data });
+  const onSubmit: SubmitHandler<FormValues> = async ({
+    scheduleId,
+    ...rest
+  }) => {
+    if (!scheduleId) return;
+    await createPost({ data: { scheduleId, ...rest } });
   };
 
   return (
@@ -64,12 +74,14 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             <VisuallyHidden>
               <FormLabel>도시</FormLabel>
             </VisuallyHidden>
-            <Select placeholder="도시를 선택해 주세요" {...register("city")}>
-              <option value="all">전체</option>
-              <option>서울</option>
-              <option>제주</option>
-              <option>부산</option>
-              <option>대전</option>
+            <Select isInvalid={Boolean(errors.city)} {...register("city")}>
+              {cities.map((city, idx) => {
+                return (
+                  <option key={`city-${idx}`} value={city}>
+                    {city}
+                  </option>
+                );
+              })}
             </Select>
           </FormControl>
           <Box flexShrink={0} ml={4}>
@@ -81,17 +93,17 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
                 placeholder="자랑할 여행을 선택해 주세요"
                 {...register("scheduleId")}
               >
-                <option>경주졸업여행</option>
-                <option>4박5일 댕댕이와 제주 여행</option>
-                <option>부산먹방투어</option>
-                <option>무박2일</option>
+                {schedules.map(({ id: scheduleId, title }) => {
+                  return (
+                    <option key={scheduleId} value={scheduleId}>
+                      {title}
+                    </option>
+                  );
+                })}
               </Select>
             </FormControl>
           </Box>
         </Flex>
-        <Box bgColor="gray.100" minHeight={200}>
-          <i>여행 세부 일정 컴포넌트</i>
-        </Box>
         <FormControl id="title" isInvalid={Boolean(errors.title)}>
           <VisuallyHidden>
             <FormLabel>제목</FormLabel>
@@ -118,8 +130,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
       </Stack>
       <Button
         type="submit"
-        color="white"
-        bg="cyan.600"
+        colorScheme="cyan"
         size="lg"
         isFullWidth
         my={4}

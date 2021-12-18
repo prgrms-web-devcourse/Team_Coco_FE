@@ -13,26 +13,39 @@ import { TextWithIcon } from "@/components/TextWithIcon";
 import { User } from "@/components/User";
 
 export type PostProps = {
+  city: string;
   startDate: string;
   endDate: string;
+  nickname: string;
+  postId: number;
+  themes: string[];
+  title: string;
 };
 
-export const Post = () => {
+export const Post = ({
+  city,
+  nickname,
+  startDate,
+  endDate,
+  themes,
+  title,
+  postId,
+}: PostProps) => {
   return (
     <LinkBox p={4} w="full" bg="gray.50">
       <HStack justify="space-between">
-        <User size="sm" />
-        <Box>테마</Box>
+        <User size="sm" nickname={nickname} />
+        <Box>{themes.toString()}</Box>
       </HStack>
       <Heading size="md" my={4}>
-        <LinkOverlay as={Link} to="id">
-          제목
+        <LinkOverlay as={Link} to={`/posts/${postId}`}>
+          {title}
         </LinkOverlay>
       </Heading>
       <Flex justify="space-between">
-        <TextWithIcon icon={<IoLocationSharp />}>도시명</TextWithIcon>
+        <TextWithIcon icon={<IoLocationSharp />}>{city}</TextWithIcon>
         <TextWithIcon icon={<IoCalendarSharp />}>
-          2021-12-05 ~ 2021-12-12
+          {`${startDate} ~ ${endDate}`}
         </TextWithIcon>
       </Flex>
     </LinkBox>

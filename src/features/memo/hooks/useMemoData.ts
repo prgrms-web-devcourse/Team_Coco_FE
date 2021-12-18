@@ -1,25 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
-import type { MemoRequest, MemoDetailResponse } from "../types";
+import type {
+  MemoRequest,
+  MemoCreationRequest,
+  MemoDetailResponse,
+} from "../types";
 
 import { axios } from "@/lib/axios";
-
-export type GetMemosDTO = {
-  scheduleId: number;
-};
-
-export type UseMemosDataProps = GetMemosDTO;
-
-const getMemos = ({ scheduleId }: GetMemosDTO) => {
-  return axios.get(`/schedules/${scheduleId}/memos`);
-};
-
-export const useMemosData = ({ scheduleId }: UseMemosDataProps) => {
-  const { data = [], ...rest } = useQuery(["memos", scheduleId], () =>
-    getMemos({ scheduleId })
-  );
-  return { data, ...rest };
-};
 
 export type GetMemoDTO = {
   memoId: number;
@@ -30,18 +18,46 @@ export const getMemo = ({
   memoId,
   scheduleId,
 }: GetMemoDTO): Promise<MemoDetailResponse> => {
-  return axios.get(`/schedules/${scheduleId}/memos/${memoId}`);
+  return axios
+    .get(`/schedules/${scheduleId}/memos/${memoId}`)
+    .then((response) => response.data);
 };
 
 export type UseMemoDataProps = GetMemoDTO;
 
 export const useMemoData = ({ memoId, scheduleId }: UseMemoDataProps) => {
-  const { data = {}, ...rest } = useQuery(["memos", memoId, scheduleId], () =>
-    getMemo({ memoId, scheduleId })
+  const { data = {} as MemoDetailResponse, ...rest } = useQuery(
+    ["memos", memoId, scheduleId],
+    () => getMemo({ memoId, scheduleId })
   );
   return { data, ...rest };
 };
+///////////////////////////////////////////////////////////
+export type CreateMemoDTO = {
+  data: MemoCreationRequest;
+  scheduleId: number;
+};
 
+export const createMemo = ({
+  data,
+  scheduleId,
+}: CreateMemoDTO): Promise<number> => {
+  return axios
+    .post(`/schedules/${scheduleId}/memos`, data)
+    .then((response) => response.data);
+};
+
+export const useCreateMemo = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(createMemo, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["memos"]);
+      console.log(data);
+    },
+  });
+};
+///////////////////////////////////////////////////////////
 export type ModifyMemoDTO = {
   memoId: number;
   scheduleId: number;
@@ -65,7 +81,7 @@ export const useModifyMemoData = () => {
     },
   });
 };
-
+///////////////////////////////////////////////////////////
 export type DeleteMemoDTO = {
   scheduleId: number;
   memoId: number;

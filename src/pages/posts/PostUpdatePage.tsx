@@ -11,7 +11,7 @@ export const PostUpdatePage = () => {
 
   return (
     <PrivatePageLayout
-      title="id"
+      title={`포스트 ${postId ? "수정" : "생성"}`}
       header={
         <>
           <GoToBackButton />
