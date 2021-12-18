@@ -21,6 +21,7 @@ import {
   useModifyChecklistData,
 } from "../../hooks";
 import { ChecklistForm } from "../ChecklistForm";
+import { CustomCheckbox } from "../CustomCheckBox";
 
 type ChecklistProps = {
   scheduleId: number;
@@ -62,21 +63,12 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
                 .map((checklist, idx) => (
                   <ListItem my="1" key={`CheckListItem-${idx}`}>
                     <Flex justify="space-between" align="center">
-                      <input
-                        id={`cb-${checklist.id}`}
-                        type="checkbox"
-                        checked={checklist.checked}
+                      <CustomCheckbox
+                        checklist={checklist}
                         onChange={() => {
                           onCheck(checklist.id, checklist.checked);
                         }}
-                        style={{ marginTop: 4 }}
                       />
-                      <label htmlFor={`cb-${checklist.id}`}>
-                        <Text as={checklist.checked ? "del" : undefined}>
-                          {checklist.content}
-                        </Text>
-                      </label>
-
                       <IconButton
                         aria-label="delete-todo"
                         size="xs"
