@@ -9,7 +9,6 @@ import {
   Checkbox,
   IconButton,
   Divider,
-  Text,
   Skeleton,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
@@ -21,7 +20,7 @@ import {
   useModifyChecklistData,
 } from "../../hooks";
 import { ChecklistForm } from "../ChecklistForm";
-import { CustomCheckbox } from "../CustomCheckBox";
+import { CustomCheckbox } from "../CustomCheckbox";
 
 type ChecklistProps = {
   scheduleId: number;

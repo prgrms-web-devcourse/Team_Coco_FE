@@ -8,6 +8,8 @@ import {
   Box,
   Stack,
   useDisclosure,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
 
@@ -28,7 +30,14 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
   const { data: schedule } = useScheduleData({ scheduleId });
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (Object.keys(schedule).length === 0) return <div></div>;
+  if (Object.keys(schedule).length === 0) {
+    return (
+      <Center h="80vh">
+        <Spinner color="cyan.500" />
+      </Center>
+    );
+  }
+
   const formattedSchedule = {
     ...schedule,
     spotResponseList: schedule.spotResponseList?.map(
