@@ -79,7 +79,7 @@ export const useDeleteChecklistData = () => {
       await queryClient.cancelQueries(["checklists"]);
 
       const previousChecklist = queryClient.getQueryData(["checklists"]);
-      queryClient.setQueriesData(["checklists"], (oldChecklists: any) =>
+      queryClient.setQueryData(["checklists"], (oldChecklists: any) =>
         oldChecklists.filter((checklist: any) => checklist.id !== checklistId)
       );
 

@@ -60,8 +60,8 @@ export const useModifyScheduleData = () => {
 
   return useMutation(modifySchedule, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["schedules"]);
       navigate(`/schedules`);
+      queryClient.invalidateQueries(["schedules"]);
     },
   });
 };
@@ -81,6 +81,20 @@ export const useDeleteScheduleData = () => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteSchedule, {
+    onMutate: async ({ scheduleId }) => {
+      await queryClient.cancelQueries(["schedules"]);
+      const previousSchedules = queryClient.getQueryData(["schedules"]);
+
+      console.log(previousSchedules);
+      if (previousSchedules) {
+        queryClient.setQueryData(["schedules"], (oldSchedules: any) =>
+          oldSchedules.filter((schedule: any) => schedule.id !== scheduleId)
+        );
+      }
+
+      return previousSchedules;
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries(["schedules"]);
       navigate(`/schedules`);
@@ -103,9 +117,21 @@ export const useCreateScheduleData = () => {
   const queryClient = useQueryClient();
 
   return useMutation(createSchedule, {
+    onMutate: async ({ data }) => {
+      await queryClient.cancelQueries(["schedules"]);
+      const previousSchedules = queryClient.getQueryData(["schedules"]);
+
+      queryClient.setQueryData(["schedules"], (oldSchedules: any) => [
+        ...oldSchedules,
+        { ...data, id: 0 },
+      ]);
+
+      return { previousSchedules };
+    },
+
     onSuccess: () => {
-      queryClient.invalidateQueries(["schedules"]);
       navigate(`/schedules`);
+      queryClient.invalidateQueries(["schedules"]);
     },
   });
 };

@@ -10,10 +10,20 @@ import {
   useDisclosure,
   Spinner,
   Center,
+  Link as ChakraLink,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
 } from "@chakra-ui/react";
+import { useRef } from "react";
 import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
-import { useScheduleData } from "../../hooks";
+import { useDeleteScheduleData, useScheduleData } from "../../hooks";
 import { ThemeTag } from "../ThemeTag";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
@@ -29,7 +39,22 @@ type ScheduleDetailProps = {
 
 export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
   const { data: schedule, isLoading } = useScheduleData({ scheduleId });
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { mutateAsync: deleteSchedule } = useDeleteScheduleData();
+  const {
+    isOpen: isMemberModalOpen,
+    onOpen: onMemberModalOpen,
+    onClose: onMemberModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isAlertOpen,
+    onOpen: onAlertOpen,
+    onClose: onAlertClose,
+  } = useDisclosure();
+
+  const onDeleteSchedule = async () => {
+    onAlertClose();
+    await deleteSchedule({ scheduleId });
+  };
 
   if (isLoading) {
     return (
@@ -57,11 +82,12 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       })
     ),
   };
+
   const totalDays = getTotalDays(
     new Date(schedule.scheduleSimpleResponse.endDate),
     new Date(schedule.scheduleSimpleResponse.startDate)
   );
-  console.log(schedule);
+
   return (
     <Stack spacing={4}>
       <Flex justify="space-between" align="center">
@@ -70,17 +96,43 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
         </Heading>
 
         <ActionsMenu icon={<IoEllipsisHorizontal />}>
-          <Box>수정</Box>
-          <Box color="red.600">삭제</Box>
+          <Box>
+            <ChakraLink as={Link} to={`/schedules/update/${schedule.id}`}>
+              수정
+            </ChakraLink>
+          </Box>
+          <Box color="red.600" onClick={onAlertOpen}>
+            삭제
+          </Box>
         </ActionsMenu>
+
+        <AlertDialog
+          isOpen={isAlertOpen}
+          onClose={onAlertClose}
+          leastDestructiveRef={undefined}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent mx={4}>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                플랜 삭제하기
+              </AlertDialogHeader>
+
+              <AlertDialogBody>정말로 플랜을 삭제하시겠습니까?</AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button onClick={onAlertClose}>취소</Button>
+                <Button colorScheme="red" onClick={onDeleteSchedule} ml={3}>
+                  플랜 삭제
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
       </Flex>
 
       <Flex justify="space-between" align="center">
-        <Text fontSize="lg">
-          <ThemeTag
-            theme={formattedSchedule.scheduleSimpleResponse.themes[0]}
-          />
-        </Text>
+        <ThemeTag theme={formattedSchedule.scheduleSimpleResponse.themes[0]} />
+
         <Text fontSize="md" color="gray.500">
           {formattedSchedule.scheduleSimpleResponse.startDate} ~{" "}
           {formattedSchedule.scheduleSimpleResponse.endDate}
@@ -103,8 +155,12 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
           })}
         </AvatarGroup>
         <IoAdd color="718096" />
-        <RoundUserAddButton onClick={onOpen} />
-        <CustomizedModal head="멤버 초대하기" isOpen={isOpen} onClose={onClose}>
+        <RoundUserAddButton onClick={onMemberModalOpen} />
+        <CustomizedModal
+          head="멤버 초대하기"
+          isOpen={isMemberModalOpen}
+          onClose={onMemberModalClose}
+        >
           <FriendsList showRole={true} showInvitation={true} />
         </CustomizedModal>
       </HStack>

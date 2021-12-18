@@ -32,15 +32,15 @@ type DynamicStyles = Record<
 const dynamicStyles: DynamicStyles = {
   before: {
     label: "예정",
-    bgColor: "#eec05e",
+    bgColor: "#f7b63e",
   },
   during: {
     label: "여행 중",
-    bgColor: "#1fc9e7",
+    bgColor: "#0fb6d3",
   },
   end: {
     label: "완료",
-    bgColor: "#a8bbc2",
+    bgColor: "#9dbfcc",
   },
 };
 

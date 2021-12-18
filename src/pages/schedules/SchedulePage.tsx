@@ -47,6 +47,6 @@ export const SchedulePage = () => {
       </PrivatePageLayout>
     );
   } else {
-    return <div></div>;
+    return <div>스케줄 id가 없습니다.</div>;
   }
 };

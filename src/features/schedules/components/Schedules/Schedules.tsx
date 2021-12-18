@@ -6,7 +6,7 @@ import { Schedule } from "../Schedule";
 
 export const Schedules = () => {
   const { data: schedules, isLoading } = useSchedulesData();
-  console.log(schedules);
+
   return (
     <Stack spacing={4}>
       {!schedules.length && !isLoading && (
@@ -16,23 +16,26 @@ export const Schedules = () => {
           </Text>
         </Center>
       )}
-      {schedules.map((schedule, idx) => {
-        return (
-          <Schedule
-            key={`Schedule-${schedule.id}-${idx}`}
-            id={schedule.id}
-            title={schedule.title}
-            startedDate={schedule.startDate}
-            endedDate={schedule.endDate}
-            themes={schedule.themes}
-          />
-        );
-      })}
+
       {isLoading && (
         <Center py="8">
           <Spinner color="cyan.500" />
         </Center>
       )}
+
+      {schedules.length &&
+        schedules.map((schedule, idx) => {
+          return (
+            <Schedule
+              key={`Schedule-${schedule.id}-${idx}`}
+              id={schedule.id}
+              title={schedule.title}
+              startedDate={schedule.startDate}
+              endedDate={schedule.endDate}
+              themes={schedule.themes}
+            />
+          );
+        })}
     </Stack>
   );
 };
