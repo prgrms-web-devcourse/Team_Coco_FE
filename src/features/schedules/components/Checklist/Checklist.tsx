@@ -39,9 +39,7 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
   const onCheck = async (checklistId: number, isChecked: boolean) => {
     await modifyChecklist({ checklistId, scheduleId, flag: !isChecked });
   };
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
+
   return (
     <Box>
       <Stack bg="gray.50" p="8" spacing="4">

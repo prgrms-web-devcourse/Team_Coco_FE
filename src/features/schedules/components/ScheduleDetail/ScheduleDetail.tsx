@@ -28,13 +28,21 @@ type ScheduleDetailProps = {
 };
 
 export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
-  const { data: schedule } = useScheduleData({ scheduleId });
+  const { data: schedule, isLoading } = useScheduleData({ scheduleId });
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  if (isLoading) {
+    return (
+      <Center h="80vh">
+        <Spinner color="cyan.500" />
+      </Center>
+    );
+  }
 
   if (Object.keys(schedule).length === 0) {
     return (
       <Center h="80vh">
-        <Spinner color="cyan.500" />
+        <Text>schedule정보를 찾을 수 없습니다</Text>
       </Center>
     );
   }
