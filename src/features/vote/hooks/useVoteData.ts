@@ -10,25 +10,6 @@ import type {
 
 import { axios } from "@/lib/axios";
 
-// export type GetVotesDTO = {
-//   scheduleId: number;
-// };
-
-// export const getVotes = ({
-//   scheduleId,
-// }: GetVotesDTO): Promise<VotingSimpleResponse[]> => {
-//   return axios.get(`/schedules/${scheduleId}/votings`);
-// };
-
-// export type UseVotesDataProps = GetVotesDTO;
-
-// export const useVotesData = ({ scheduleId }: UseVotesDataProps) => {
-//   const { data = [], ...rest } = useQuery(["votes", scheduleId], () =>
-//     getVotes({ scheduleId })
-//   );
-//   return { data, ...rest };
-// };
-/////////////////////////////////////////////////////////
 export type GetVoteDTO = {
   scheduleId: number;
   votingId: number;
@@ -52,7 +33,7 @@ export const useVoteData = ({ scheduleId, votingId }: UseVoteDataProps) => {
   );
   return { data, ...rest };
 };
-/////////////////////////////////////////////////////////
+
 export type CreateVoteDTO = {
   data: VotingCreationRequest;
   scheduleId: number;
@@ -66,14 +47,12 @@ export const createVote = ({
 };
 
 export const useCreateVote = () => {
-  // const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation(createVote, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["votes"]);
       console.log(data);
-      // navigate(`/votes/${data}`);
     },
   });
 };
@@ -100,7 +79,7 @@ export const useDeleteVote = () => {
     },
   });
 };
-////////////////////////////////////////////////////
+
 export type ModifyVoteDTO = {
   scheduleId: number;
   votingId: number;
