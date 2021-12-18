@@ -20,7 +20,6 @@ export const Dailys = (props: DailysProps) => {
     className,
     onDelete,
   } = props;
-  console.log(dailyPlaces);
 
   return (
     <>

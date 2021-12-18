@@ -16,6 +16,7 @@ import {
   InputRightElement,
   Divider,
 } from "@chakra-ui/react";
+import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { IoClose, IoAdd } from "react-icons/io5";
 
@@ -33,17 +34,11 @@ type ChecklistProps = {
 };
 
 export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
-  const { data: checklistsData, isSuccess } = useChecklistsData({ scheduleId });
+  const { data: checklists } = useChecklistsData({ scheduleId });
   const { mutateAsync: createChecklist } = useCreateChecklistData();
   const { mutateAsync: deleteChecklist } = useDeleteChecklistData();
   const { mutateAsync: modifyChecklist } = useModifyChecklistData();
-  const [specificChecklists, setSpecificChecklists] = useState<
-    ChecklistResponse[]
-  >([]);
   const [specificChecklistText, setSpecificChecklistText] = useState("");
-  const [commonChecklists, setCommonChecklists] = useState<ChecklistResponse[]>(
-    []
-  );
   const [commonChecklistText, setCommonChecklistText] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,57 +55,26 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
 
     const data = { day, title: specificChecklistText };
     const checklistId = await createChecklist({ scheduleId, data });
-    const checklist = {
-      day,
-      content: isSpecific ? specificChecklistText : commonChecklistText,
-      id: checklistId,
-      checked: false,
-    };
+    console.log(checklistId);
 
     if (isSpecific) {
-      setSpecificChecklists((prevChecklists) => [...prevChecklists, checklist]);
       setSpecificChecklistText("");
     } else {
-      setCommonChecklists((prevChecklists) => [...prevChecklists, checklist]);
       setCommonChecklistText("");
     }
   };
 
   const onDelete = async (checklistId: number) => {
-    setSpecificChecklists((prevChecklists) =>
-      prevChecklists.filter((checklist) => checklist.id !== checklistId)
-    );
     await deleteChecklist({ checklistId, scheduleId });
   };
 
   const onCheck = async (checklistId: number, isChecked: boolean) => {
-    setSpecificChecklists((prevChecklists) =>
-      prevChecklists.map((checklist) => {
-        if (checklist.id === checklistId) {
-          return { ...checklist, checked: !checklist.checked };
-        } else {
-          return checklist;
-        }
-      })
-    );
     await modifyChecklist({ checklistId, scheduleId, flag: !isChecked });
   };
 
   useEffect(() => {
-    setSpecificChecklists(
-      checklistsData.filter(
-        (checklist) => checklist.day === selectedDateIdx + 1
-      )
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, selectedDateIdx]);
-
-  useEffect(() => {
-    setCommonChecklists(
-      checklistsData.filter((checklist) => checklist.day === 0)
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+    console.log(checklists);
+  }, [checklists]);
 
   return (
     <Box>
@@ -121,30 +85,38 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
         <Stack>
           <List color="gray.600" ml="1">
             <CheckboxGroup colorScheme="cyan">
-              {specificChecklists.map((checklist, idx) => (
-                <ListItem my="1" key={`CheckListItem-${idx}-${checklist.id}`}>
-                  <Flex justify="space-between">
-                    <Checkbox
-                      defaultChecked={checklist.checked}
-                      onChange={() => {
-                        onCheck(checklist.id, checklist.checked);
-                      }}
-                    >
-                      {checklist.content}
-                    </Checkbox>
-                    <IconButton
-                      aria-label="delete-todo"
-                      size="xs"
-                      icon={<IoClose />}
-                      variant="ghost"
-                      mr="3"
-                      onClick={() => {
-                        onDelete(checklist.id);
-                      }}
-                    />
-                  </Flex>
-                </ListItem>
-              ))}
+              {checklists
+                .filter((checklist) => checklist.day === selectedDateIdx + 1)
+                .map((checklist, idx) => (
+                  <ListItem my="1" key={`CheckListItem-${idx}`}>
+                    <Flex justify="space-between" align="center">
+                      <input
+                        id={`cb-${checklist.id}`}
+                        type="checkbox"
+                        value={checklist.id}
+                        checked={checklist.checked}
+                        onChange={() => {
+                          onCheck(checklist.id, checklist.checked);
+                        }}
+                        style={{ marginTop: 4 }}
+                      />
+                      <label htmlFor={`cb-${checklist.id}`}>
+                        {checklist.content}
+                      </label>
+
+                      <IconButton
+                        aria-label="delete-todo"
+                        size="xs"
+                        icon={<IoClose />}
+                        variant="ghost"
+                        mr="3"
+                        onClick={() => {
+                          onDelete(checklist.id);
+                        }}
+                      />
+                    </Flex>
+                  </ListItem>
+                ))}
             </CheckboxGroup>
           </List>
 
@@ -185,7 +157,7 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
         <Stack>
           <List color="gray.600" ml="1">
             <CheckboxGroup colorScheme="cyan">
-              {commonChecklists
+              {checklists
                 .filter((checklist) => checklist.day === 0)
                 .map((checklist, idx) => (
                   <ListItem my="1" key={`CheckListItem-${idx}-${checklist.id}`}>
