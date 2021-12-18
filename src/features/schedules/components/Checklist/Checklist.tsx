@@ -9,7 +9,10 @@ import {
   Checkbox,
   IconButton,
   Divider,
+  Text,
+  Skeleton,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 
 import {
@@ -25,7 +28,7 @@ type ChecklistProps = {
 };
 
 export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
-  const { data: checklists } = useChecklistsData({ scheduleId });
+  const { data: checklists, isLoading } = useChecklistsData({ scheduleId });
   const { mutateAsync: deleteChecklist } = useDeleteChecklistData();
   const { mutateAsync: modifyChecklist } = useModifyChecklistData();
 
@@ -36,7 +39,9 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
   const onCheck = async (checklistId: number, isChecked: boolean) => {
     await modifyChecklist({ checklistId, scheduleId, flag: !isChecked });
   };
-
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
   return (
     <Box>
       <Stack bg="gray.50" p="8" spacing="4">
@@ -44,8 +49,14 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
           이 날의 체크리스트
         </Heading>
         <Stack>
-          <List color="gray.600" ml="1">
+          <List ml="1" color="gray.500">
             <CheckboxGroup colorScheme="cyan">
+              {isLoading && (
+                <Stack my="1" spacing={2}>
+                  <Skeleton height="20px" />
+                  <Skeleton height="20px" />
+                </Stack>
+              )}
               {checklists
                 .filter((checklist) => checklist.day === selectedDateIdx + 1)
                 .map((checklist, idx) => (
@@ -61,7 +72,9 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
                         style={{ marginTop: 4 }}
                       />
                       <label htmlFor={`cb-${checklist.id}`}>
-                        {checklist.content}
+                        <Text as={checklist.checked ? "del" : undefined}>
+                          {checklist.content}
+                        </Text>
                       </label>
 
                       <IconButton
@@ -89,13 +102,19 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
 
       <Divider orientation="horizontal" />
 
-      <Stack bg="gray.50" p="8" spacing="4">
+      <Stack bg="gray.50" p="8" spacing="4" borderBottomRadius="2xl" mb="4">
         <Heading size="sm" color="gray.600">
           공통 체크리스트
         </Heading>
         <Stack>
-          <List color="gray.600" ml="1">
+          <List color="gray.500" ml="1">
             <CheckboxGroup colorScheme="cyan">
+              {isLoading && (
+                <Stack my="1" spacing={2}>
+                  <Skeleton height="20px" />
+                  <Skeleton height="20px" />
+                </Stack>
+              )}
               {checklists
                 .filter((checklist) => checklist.day === 0)
                 .map((checklist, idx) => (

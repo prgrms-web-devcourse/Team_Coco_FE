@@ -90,7 +90,7 @@ export const DailyCarouselWithInfos = (props: DailyCarouselWithInfosProps) => {
   );
 
   return (
-    <>
+    <Box>
       <MapContainer
         dailyPlaces={spotResponseList.filter(
           (spotResponseList) => spotResponseList.dateOrder === currentSlide + 1
@@ -155,7 +155,7 @@ export const DailyCarouselWithInfos = (props: DailyCarouselWithInfosProps) => {
         </Box>
 
         {/*Thumbnails 01*/}
-        <Box ref={thumbnailRef} className="keen-slider thumbnail" mb="4">
+        <Box ref={thumbnailRef} className="keen-slider thumbnail" my="4">
           <Dailys
             totalDays={totalDays}
             selectedDateIdx={currentSlide}
@@ -166,9 +166,7 @@ export const DailyCarouselWithInfos = (props: DailyCarouselWithInfosProps) => {
         </Box>
       </Flex>
 
-      <Box>
-        <Checklist scheduleId={scheduleId} selectedDateIdx={currentSlide} />
-      </Box>
-    </>
+      <Checklist scheduleId={scheduleId} selectedDateIdx={currentSlide} />
+    </Box>
   );
 };
