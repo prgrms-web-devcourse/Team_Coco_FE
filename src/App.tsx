@@ -1,10 +1,11 @@
-import { Center, ChakraProvider, Spinner } from "@chakra-ui/react";
+import { Center, ChakraProvider } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
 import { PropsWithChildren, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
+import { CustomSpinner } from "@/components/CustomSpinner";
 import { queryClient } from "@/lib/react-query";
 import { AppRoutes } from "@/routes";
 import theme from "@/theme";
@@ -17,7 +18,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     <Suspense
       fallback={
         <Center h="100vh">
-          <Spinner />
+          <CustomSpinner />
         </Center>
       }
     >

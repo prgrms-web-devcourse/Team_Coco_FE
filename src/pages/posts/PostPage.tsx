@@ -1,9 +1,10 @@
 import { Heading, Stack } from "@chakra-ui/react";
-import { Spinner, Center } from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
+import { CustomSpinner } from "@/components/CustomSpinner";
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import {
@@ -18,7 +19,7 @@ import { isEmpty } from "@/utils/assertion";
 
 export const PostPage = () => {
   const { postId } = useParams();
-  const { data: post, isLoading } = usePostData({
+  const { data: post, isLoading: postLoading } = usePostData({
     postId: postId ? Number(postId) : null,
     enabled: !!postId,
   });
@@ -38,9 +39,9 @@ export const PostPage = () => {
         </>
       }
     >
-      {isLoading ? (
-        <Center sx={{ height: "calc(100vh - 80px)" }}>
-          <Spinner />
+      {postLoading ? (
+        <Center sx={{ height: "calc(100vh-5rem)" }}>
+          <CustomSpinner />
         </Center>
       ) : isEmpty(post) ? (
         <Navigate to="/posts" />
@@ -67,7 +68,12 @@ export const PostPage = () => {
               postId={postId ? Number(postId) : null}
               nickname={post.nickname}
             />
-            {isEmpty(comments) ? null : <Comments comments={comments} />}
+            {isEmpty(comments) ? null : (
+              <Comments
+                postId={postId ? Number(postId) : null}
+                comments={comments}
+              />
+            )}
           </Stack>
         </Stack>
       )}

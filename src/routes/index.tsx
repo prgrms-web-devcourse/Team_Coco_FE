@@ -1,4 +1,4 @@
-import { Spinner, Center } from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
 import { createBrowserHistory, BrowserHistory } from "history";
 import React, {
   Suspense,
@@ -9,6 +9,7 @@ import React, {
 import { Outlet, Navigate } from "react-router-dom";
 import { Router, Routes, Route, RoutesProps } from "react-router-dom";
 
+import { CustomSpinner } from "@/components/CustomSpinner";
 import { AppLayout } from "@/components/Layout";
 import { lazyImport } from "@/utils/lazyImport";
 import { storage } from "@/utils/storage";
@@ -48,7 +49,7 @@ const App = () => {
       <Suspense
         fallback={
           <Center h="100vh">
-            <Spinner />
+            <CustomSpinner />
           </Center>
         }
       >

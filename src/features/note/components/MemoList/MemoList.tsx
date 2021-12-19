@@ -4,12 +4,12 @@ import {
   Stack,
   Text,
   Center,
-  Spinner,
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { CustomSpinner } from "@/components/CustomSpinner";
 import { useMemosData } from "@/features/note/hooks";
 
 type MemoType = {
@@ -31,7 +31,7 @@ export const MemoList = ({ scheduleId: id }: MemoListProps) => {
     <Stack>
       {isLoading && (
         <Center py="8">
-          <Spinner color="cyan.500" />
+          <CustomSpinner />
         </Center>
       )}
       <SimpleGrid columns={2} spacing={4}>
