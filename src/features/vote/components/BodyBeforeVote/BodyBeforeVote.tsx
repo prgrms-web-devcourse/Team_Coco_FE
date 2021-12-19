@@ -10,24 +10,27 @@ import {
   VisuallyHidden,
   FormLabel,
   Checkbox,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 import { useVoteData, useModifyVote } from "@/features/vote/hooks";
 
-type BodyBeforeVoteProps = {
-  voteId?: string;
-  scheduleId?: string;
-};
+const defaultValues: Record<string, boolean> = {};
 
-export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
-  const { data: vote } = useVoteData({
+export const BodyBeforeVote = () => {
+  const navigate = useNavigate();
+  const { voteId } = useParams();
+  const { state: scheduleId } = useLocation();
+
+  const { data: vote, isLoading } = useVoteData({
     scheduleId: Number(scheduleId),
     votingId: Number(voteId),
   });
 
   const { title, votingContentResponses } = vote;
-  const defaultValues: Record<string, boolean> = {};
   votingContentResponses?.forEach((_, idx) => (defaultValues[idx] = false));
 
   const [checkedOptions, setCheckedOptions] = useState(defaultValues);
@@ -40,21 +43,27 @@ export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
     checkedOptionHandler(target.value, target.checked);
   };
 
-  const { mutateAsync: joinVote } = useModifyVote();
+  const { mutateAsync: modifyVote } = useModifyVote();
 
   const onSubmit = async () => {
-    console.log(checkedOptions);
-
     const map = { votingMap: checkedOptions };
-    await joinVote({
+
+    await modifyVote({
       scheduleId: Number(scheduleId),
       votingId: Number(voteId),
       data: map,
     });
+
+    navigate("/note", { state: scheduleId });
   };
 
   return (
     <Stack spacing={4}>
+      {isLoading && (
+        <Center>
+          <Spinner color="cyan.500" />
+        </Center>
+      )}
       <Box minHeight="40px">
         <Input
           fontSize="md"
@@ -96,16 +105,18 @@ export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
               ))}
             </Stack>
           </FormControl>
-          <Button
-            type="submit"
-            size="lg"
-            color="white"
-            bg="cyan.600"
-            isFullWidth
-            onClick={() => onSubmit()}
-          >
-            투표하기
-          </Button>
+          {!isLoading && (
+            <Button
+              type="submit"
+              size="lg"
+              color="white"
+              bg="cyan.600"
+              isFullWidth
+              onClick={() => onSubmit()}
+            >
+              투표하기
+            </Button>
+          )}
         </Stack>
       </Box>
     </Stack>

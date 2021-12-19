@@ -1,5 +1,5 @@
 import { Heading, Flex } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
@@ -21,10 +21,7 @@ export const VotePage = () => {
     votingId: Number(voteId),
   });
 
-  console.log(vote);
   const { votingContentResponses } = vote;
-
-  console.log(votingContentResponses);
 
   votingContentResponses?.map((response) => {
     if (response.participantFlag) {
@@ -47,7 +44,7 @@ export const VotePage = () => {
         {isJoined ? (
           <BodyAfterVote voteId={voteId} scheduleId={scheduleId} />
         ) : (
-          <BodyBeforeVote voteId={voteId} scheduleId={scheduleId} />
+          <BodyBeforeVote />
         )}
       </Flex>
     </PrivatePageLayout>

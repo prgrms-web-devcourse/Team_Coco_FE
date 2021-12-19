@@ -5,8 +5,9 @@ import type {
   VotingRequest,
   VotingCreationRequest,
   VotingDetailResponse,
-  // VotingSimpleResponse,
 } from "../types";
+
+import { queryClient } from "./../../../lib/react-query";
 
 import { axios } from "@/lib/axios";
 
@@ -52,7 +53,6 @@ export const useCreateVote = () => {
   return useMutation(createVote, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["votes"]);
-      console.log(data);
     },
   });
 };
@@ -91,9 +91,7 @@ export const modifyVote = ({
   votingId,
   data,
 }: ModifyVoteDTO): Promise<void> => {
-  return axios
-    .patch(`/schedules/${scheduleId}/votings/${votingId}`, data)
-    .then((response) => response.data);
+  return axios.patch(`/schedules/${scheduleId}/votings/${votingId}`, data);
 };
 
 export const useModifyVote = () => {

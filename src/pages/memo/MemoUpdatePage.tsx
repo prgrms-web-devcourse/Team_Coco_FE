@@ -1,6 +1,6 @@
 import { Heading, Flex } from "@chakra-ui/react";
 import React from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
@@ -23,7 +23,7 @@ export const MemoUpdatePage = () => {
       <Flex h={100}>
         <User size="md" />
       </Flex>
-      <MemoUpdateForm memoId={memoId} />
+      <MemoUpdateForm />
     </PrivatePageLayout>
   );
 };
