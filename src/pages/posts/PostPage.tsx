@@ -40,7 +40,7 @@ export const PostPage = () => {
       }
     >
       {postLoading ? (
-        <Center sx={{ height: "calc(100vh-5rem)" }}>
+        <Center sx={{ height: "calc(100vh - 5rem)" }}>
           <CustomSpinner />
         </Center>
       ) : isEmpty(post) ? (

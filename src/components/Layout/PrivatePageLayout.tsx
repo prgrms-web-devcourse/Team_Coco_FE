@@ -17,7 +17,7 @@ export const PrivatePageLayout = ({
   header,
 }: PageLayoutProps) => {
   return (
-    <Box pt="80px" pb="4rem">
+    <Box pt="5rem" pb="4rem">
       <Head title={title} description={description} />
       <Header>{header}</Header>
       {children}

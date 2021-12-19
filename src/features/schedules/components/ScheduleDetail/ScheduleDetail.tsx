@@ -33,7 +33,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
 
   if (isLoading) {
     return (
-      <Center sx={{ height: "calc(100vh-5rem)" }}>
+      <Center sx={{ height: "calc(100vh - 5rem)" }}>
         <CustomSpinner />
       </Center>
     );
@@ -41,7 +41,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
 
   if (Object.keys(schedule).length === 0) {
     return (
-      <Center sx={{ height: "calc(100vh-5rem)" }}>
+      <Center sx={{ height: "calc(100vh - 5rem)" }}>
         <Text>schedule정보를 찾을 수 없습니다</Text>
       </Center>
     );
