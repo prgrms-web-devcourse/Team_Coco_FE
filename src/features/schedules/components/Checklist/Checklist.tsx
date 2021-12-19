@@ -71,6 +71,7 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
                         icon={<IoClose />}
                         variant="ghost"
                         mr="3"
+                        disabled={!Boolean(checklist.id)}
                         onClick={() => {
                           onDelete(checklist.id);
                         }}

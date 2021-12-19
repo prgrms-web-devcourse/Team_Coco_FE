@@ -47,7 +47,7 @@ export const useCreateChecklistData = () => {
       const previousChecklist = queryClient.getQueryData(["checklists"]);
       queryClient.setQueriesData(["checklists"], (old: any) => [
         ...old,
-        { day: data.day, content: data.title, checked: false },
+        { day: data.day, content: data.title, checked: false, isLoading: true },
       ]);
 
       return { previousChecklist };
