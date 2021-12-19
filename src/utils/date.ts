@@ -9,3 +9,7 @@ export const getTotalDays = (endDate: Date, startDate: Date) => {
 export const formatCreatedAt = (createdAt: string) => {
   return format(new Date(createdAt), "PP E p", { locale: ko });
 };
+
+export const formatDateToString = (date: Date) => {
+  return format(date, "yyyy-MM-dd");
+};

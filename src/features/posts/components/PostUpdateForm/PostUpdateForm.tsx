@@ -15,7 +15,7 @@ import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
-import { cities } from "@/features/posts/constants";
+import { cityMap } from "@/features/posts/constants";
 import {
   useCreatePostData,
   useModifyPostData,
@@ -24,6 +24,7 @@ import {
 import type { City } from "@/features/posts/types";
 import { useSchedulesData } from "@/features/schedules/hooks";
 import { isEmpty } from "@/utils/assertion";
+import { objectEntries } from "@/utils/object";
 
 const schema = yup.object().shape({
   title: yup.string().min(1).max(16).required(),
@@ -33,7 +34,7 @@ const schema = yup.object().shape({
 });
 
 const defaultValues: FormValues = {
-  city: "서울",
+  city: "SEOUL",
   content: "",
   title: "",
 };
@@ -70,10 +71,11 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
   const { mutateAsync: modifyPost } = useModifyPostData();
 
   const mode = postId ? "modify" : "create";
+
   useEffect(() => {
     if (isEmpty(post)) return;
-    const { content, title } = post;
-    reset({ content, title });
+    const { content, title, scheduleId, city } = post;
+    reset({ content, title, scheduleId, city });
   }, [post, reset]);
 
   const onSubmit: SubmitHandler<FormValues> = async ({
@@ -95,10 +97,10 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
               <FormLabel>도시</FormLabel>
             </VisuallyHidden>
             <Select isInvalid={Boolean(errors.city)} {...register("city")}>
-              {cities.map((city, idx) => {
+              {objectEntries(cityMap).map(([city, label], idx) => {
                 return (
                   <option key={`city-${idx}`} value={city}>
-                    {city}
+                    {label}
                   </option>
                 );
               })}

@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { format, addDays } from "date-fns";
+import { addDays } from "date-fns";
 import { useState } from "react";
 import {
   SubmitHandler,
@@ -41,6 +41,7 @@ import { SearchPlace } from "../SearchPlace";
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { DatePicker } from "@/components/DatePicker";
 import { getTotalDays } from "@/utils/date";
+import { formatDateToString } from "@/utils/date";
 
 type FormValues = {
   title: string;
@@ -85,9 +86,8 @@ const schema = yup.object().shape({
         startDate &&
         schema.max(
           addDays(startDate, 6),
-          `완료날짜는 ${format(
-            addDays(startDate, 6),
-            "yyyy-MM-dd"
+          `완료날짜는 ${formatDateToString(
+            addDays(startDate, 6)
           )}이전이여야 합니다`
         )
     ),
@@ -135,8 +135,8 @@ export const AddScheduleForm = () => {
     const formattedData = {
       title: data.title,
       themes: Array.isArray(data.themes) ? data.themes : [data.themes],
-      startDate: format(data.startDate, "yyyy-MM-dd"),
-      endDate: format(data.endDate, "yyyy-MM-dd"),
+      startDate: formatDateToString(data.startDate),
+      endDate: formatDateToString(data.endDate),
       dailyScheduleSpotCreationRequests: data.dailySchedulePlaces.map(
         ({ order: spotOrder, ...rest }) => ({ spotOrder, ...rest }) // 추후에 백엔드 측에서 GET-schedule-detail 내 order속성 명이 spotOrder로 바뀌면 컴포넌트 단에서 spotOrder로 통일할 예정
       ),

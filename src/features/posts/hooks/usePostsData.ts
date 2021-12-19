@@ -9,10 +9,11 @@ import { useNavigate } from "react-router-dom";
 
 import type {
   PostCreationRequest,
-  PostResponse,
-  PostsResponse,
+  PostSimpleResponse,
+  PostsSimpleResponse,
   PostCreationResponse,
   PostDetailResponse,
+  Sorting,
 } from "../types";
 
 import type { City } from "@/features/posts/types";
@@ -42,7 +43,7 @@ export const usePostData = ({ postId, enabled }: UsePostDataProps) => {
 };
 
 export type GetPostsDTO = {
-  sorting: "최신순";
+  sorting: Sorting;
   searchingTheme: Theme | "ALL";
   searchingCity: City | "전체";
   search: string;
@@ -62,7 +63,7 @@ export const getPosts = ({
   });
 
   return axios
-    .get<PostsResponse>(`/posts/schedules`, {
+    .get<PostsSimpleResponse>(`/posts/schedules`, {
       params,
     })
     .then((response) => response.data);
@@ -83,7 +84,7 @@ export const usePostsData = ({
 
 export const getLikedPosts = () => {
   return axios
-    .get<PostResponse[]>(`/posts/schedules/liked`)
+    .get<PostSimpleResponse[]>(`/posts/schedules/liked`)
     .then((response) => response.data);
 };
 
@@ -98,7 +99,7 @@ export type CreatePostDTO = {
 
 export const getMyPosts = () => {
   return axios
-    .get<PostResponse[]>(`/posts/schedules/me`)
+    .get<PostsSimpleResponse>(`/posts/schedules/me`)
     .then((response) => response.data);
 };
 
@@ -207,7 +208,7 @@ export const useModifyLikedPostData = () => {
     onMutate: async ({ postId, data }) => {
       await queryClient.cancelQueries(["post", postId]);
 
-      const previousPost = queryClient.getQueryData<PostResponse>([
+      const previousPost = queryClient.getQueryData<PostDetailResponse>([
         "post",
         postId,
       ]);
@@ -226,7 +227,7 @@ export const useModifyLikedPostData = () => {
     },
     onError: (error, { postId }, context: any) => {
       if (context?.previousPost) {
-        queryClient.setQueryData<PostResponse>(
+        queryClient.setQueryData<PostDetailResponse>(
           ["post", postId],
           context.previousPost
         );

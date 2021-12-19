@@ -1,11 +1,11 @@
 import { VStack } from "@chakra-ui/react";
 import React from "react";
 
-import { PostResponse } from "../../types";
+import { PostsSimpleResponse } from "../../types";
 import { Post } from "../Post";
 
 export type PostsProps = {
-  data: PostResponse[];
+  data: PostsSimpleResponse;
 };
 
 export const Posts = ({ data }: PostsProps) => {

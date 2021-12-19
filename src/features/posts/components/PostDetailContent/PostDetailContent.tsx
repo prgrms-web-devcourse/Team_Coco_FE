@@ -2,18 +2,14 @@ import { VStack, Text, Input, Flex } from "@chakra-ui/react";
 import { useState } from "react";
 
 import { PostLikeButton } from "@/features/posts/components/PostLikeButton";
+import type { DailyScheduleSpotResponse } from "@/features/posts/types";
 import { Carousel } from "@/features/schedules/components/Carousel";
 import { Dailys } from "@/features/schedules/components/Dailys";
 
 type PostDetailContentProps = {
   title: string;
   content: string;
-  dailyPlaces: {
-    spotId: number;
-    dateOrder: number;
-    spotOrder: number;
-    placeName: string;
-  }[];
+  dailyPlaces: DailyScheduleSpotResponse[];
   views: number;
   isLiked: boolean;
   likeCount: number;

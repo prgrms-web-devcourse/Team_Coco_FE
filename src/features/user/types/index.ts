@@ -1,4 +1,4 @@
-export type Gender = "DEFAULT" | "FEMALE" | "MALE";
+export type Gender = "FEMALE" | "MALE";
 
 export type UserDetailResponse = {
   id: number;
