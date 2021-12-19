@@ -44,7 +44,7 @@ export const VotePage = () => {
         {isJoined ? (
           <BodyAfterVote voteId={voteId} scheduleId={scheduleId} />
         ) : (
-          <BodyBeforeVote voteId={voteId} scheduleId={scheduleId} />
+          <BodyBeforeVote />
         )}
       </Flex>
     </PrivatePageLayout>

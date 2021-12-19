@@ -8,6 +8,8 @@ import type {
   // VotingSimpleResponse,
 } from "../types";
 
+import { queryClient } from "./../../../lib/react-query";
+
 import { axios } from "@/lib/axios";
 
 export type GetVoteDTO = {
@@ -79,6 +81,7 @@ export const useDeleteVote = () => {
   });
 };
 
+////////////////////////////////////////////////
 export type ModifyVoteDTO = {
   scheduleId: number;
   votingId: number;
@@ -90,9 +93,7 @@ export const modifyVote = ({
   votingId,
   data,
 }: ModifyVoteDTO): Promise<void> => {
-  return axios
-    .patch(`/schedules/${scheduleId}/votings/${votingId}`, data)
-    .then((response) => response.data);
+  return axios.patch(`/schedules/${scheduleId}/votings/${votingId}`, data);
 };
 
 export const useModifyVote = () => {

@@ -25,9 +25,9 @@ type VoteListProps = {
   scheduleId: string;
 };
 
-export const VoteList = ({ scheduleId: id }: VoteListProps) => {
+export const VoteList = ({ scheduleId }: VoteListProps) => {
   const { data: votesData, isLoading } = useVotesData({
-    scheduleId: parseInt(id, 10),
+    scheduleId: parseInt(scheduleId, 10),
   });
 
   return (
@@ -42,7 +42,7 @@ export const VoteList = ({ scheduleId: id }: VoteListProps) => {
           <ChakraLink
             as={Link}
             to={`/vote/${vote.id}`}
-            state={id}
+            state={scheduleId}
             key={vote.id}
           >
             <Box

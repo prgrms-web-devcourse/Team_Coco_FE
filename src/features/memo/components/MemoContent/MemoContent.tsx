@@ -5,6 +5,7 @@ import {
   Spinner,
   Box,
   Text,
+  Textarea,
   Input,
 } from "@chakra-ui/react";
 
@@ -40,9 +41,16 @@ export const MemoContent = ({ memoId, scheduleId }: MemoContentProps) => {
           />
         </Box>
         <Box marginTop="1rem">
-          <Text fontSize="sm" color="gray.500">
+          <Textarea
+            minH={500}
+            maxH={500}
+            fontSize="sm"
+            color="gray.500"
+            isReadOnly
+            variant="unstyled"
+          >
             {memo?.content}
-          </Text>
+          </Textarea>
         </Box>
       </Flex>
     </Stack>

@@ -10,10 +10,14 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
-import { useCreateMemo } from "@/features/memo/hooks";
+import {
+  useMemoData,
+  useCreateMemo,
+  useModifyMemoData,
+} from "@/features/memo/hooks";
 
 const schema = yup.object().shape({
   title: yup
@@ -33,20 +37,19 @@ type FormValues = {
   content: string;
 };
 
-type MemoUpdateFormProps = {
-  memoId?: string;
-};
-
-export const MemoUpdateForm = ({ memoId }: MemoUpdateFormProps) => {
-  const { state: scheduleId } = useLocation();
+export const MemoUpdateForm = () => {
   const navigate = useNavigate();
+  const { memoId } = useParams();
+  const { state: scheduleId } = useLocation();
+
+  const { data: memo } = useMemoData({
+    memoId: Number(memoId),
+    scheduleId: Number(scheduleId),
+  });
 
   const defaultValues: FormValues = {
-    // 메모 수정용
-    // title: memo?.title || "",
-    // content: memo?.content || "",
-    title: "",
-    content: "",
+    title: memo?.title || "",
+    content: memo?.content || "",
   };
 
   const {
@@ -59,12 +62,23 @@ export const MemoUpdateForm = ({ memoId }: MemoUpdateFormProps) => {
   });
 
   const { mutateAsync: createMemo } = useCreateMemo();
+  const { mutateAsync: modifyMemo } = useModifyMemoData();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await createMemo({
-      data,
-      scheduleId: Number(scheduleId),
-    });
+    // const formattedContent = data.content.replace(/<br>|<brV>|<br V>)\g, "\r\n");
+
+    if (memo) {
+      await modifyMemo({
+        scheduleId: Number(scheduleId),
+        memoId: Number(memoId),
+        data,
+      });
+    } else {
+      await createMemo({
+        data,
+        scheduleId: Number(scheduleId),
+      });
+    }
 
     navigate("/note", { state: scheduleId });
   };

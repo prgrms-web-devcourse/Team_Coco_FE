@@ -32,7 +32,7 @@ export const useMemoData = ({ memoId, scheduleId }: UseMemoDataProps) => {
   );
   return { data, ...rest };
 };
-///////////////////////////////////////////////////////////
+
 export type CreateMemoDTO = {
   data: MemoCreationRequest;
   scheduleId: number;
@@ -51,9 +51,8 @@ export const useCreateMemo = () => {
   const queryClient = useQueryClient();
 
   return useMutation(createMemo, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["memos"]);
-      console.log(data);
     },
   });
 };
