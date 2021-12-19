@@ -54,7 +54,7 @@ export const Schedule = (props: ScheduleProps) => {
     const isBeforeEnded = isBefore(today, formattedEndedDate);
 
     return isBeforeStarted ? "before" : isBeforeEnded ? "during" : "end";
-  }, []);
+  }, [startedDate, endedDate]);
 
   return (
     <LinkBox w="full" display="flex" justifyContent="center">

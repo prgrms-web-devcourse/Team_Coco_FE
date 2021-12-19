@@ -27,6 +27,7 @@ axios.interceptors.response.use(undefined, (error) => {
     const statusCode = error.response?.status;
     if (statusCode === 401 || statusCode === 403) {
       storage.clearToken();
+      storage.clearUserId();
       history.replace("/login");
     }
   }

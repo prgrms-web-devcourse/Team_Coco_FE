@@ -8,7 +8,6 @@ import {
   Box,
   Stack,
   useDisclosure,
-  Spinner,
   Center,
 } from "@chakra-ui/react";
 import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
@@ -18,6 +17,7 @@ import { ThemeTag } from "../ThemeTag";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { CustomizedModal } from "@/components/CustomizedModal";
+import { CustomSpinner } from "@/components/CustomSpinner";
 import { DailyCarouselWithInfos } from "@/features/schedules/components/DailyCarouselWithInfos";
 import { FriendsList } from "@/features/schedules/components/FriendsList";
 import { RoundUserAddButton } from "@/features/schedules/components/RoundUserAddButton";
@@ -33,15 +33,15 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
 
   if (isLoading) {
     return (
-      <Center h="80vh">
-        <Spinner color="cyan.500" />
+      <Center sx={{ height: "calc(100vh - 5rem)" }}>
+        <CustomSpinner />
       </Center>
     );
   }
 
   if (Object.keys(schedule).length === 0) {
     return (
-      <Center h="80vh">
+      <Center sx={{ height: "calc(100vh - 5rem)" }}>
         <Text>schedule정보를 찾을 수 없습니다</Text>
       </Center>
     );

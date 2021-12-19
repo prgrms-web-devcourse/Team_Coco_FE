@@ -8,6 +8,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 
+import { CustomSpinner } from "@/components/CustomSpinner";
 import { useMemoData } from "@/features/memo/hooks";
 
 type MemoContentProps = {
@@ -25,7 +26,7 @@ export const MemoContent = ({ memoId, scheduleId }: MemoContentProps) => {
     <Stack>
       {isLoading && (
         <Center py="8">
-          <Spinner color="cyan.500" />
+          <CustomSpinner />
         </Center>
       )}
       <Flex direction="column">

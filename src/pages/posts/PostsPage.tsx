@@ -1,6 +1,7 @@
-import { Box, Flex, HStack, Heading, Center, Spinner } from "@chakra-ui/react";
+import { Box, Flex, HStack, Heading, Center } from "@chakra-ui/react";
 import { useState } from "react";
 
+import { CustomSpinner } from "@/components/CustomSpinner";
 import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import {
@@ -38,7 +39,7 @@ export const PostsPage = () => {
       <Box my={4}>
         {isLoading ? (
           <Center>
-            <Spinner />
+            <CustomSpinner />
           </Center>
         ) : isEmpty(posts) ? (
           <div>포스트가 없습니다.</div>

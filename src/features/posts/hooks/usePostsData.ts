@@ -133,6 +133,63 @@ export const useCreatePostData = () => {
   });
 };
 
+export type ModifyPostDTO = {
+  data: PostCreationRequest;
+  postId: number;
+};
+
+export const modifyPost = ({ postId, data }: ModifyPostDTO) => {
+  return axios.put(`/posts/schedules/${postId}`, data);
+};
+
+export const useModifyPostData = () => {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const navigate = useNavigate();
+  return useMutation(modifyPost, {
+    onSuccess: (_, { postId }) => {
+      toast({
+        title: "게시글 수정에 성공했습니다",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
+      queryClient.invalidateQueries(["post", postId]);
+      navigate(`/posts/${postId}`, { replace: true });
+    },
+  });
+};
+
+export type DeletePostDTO = {
+  postId: number | null;
+};
+
+export const deletePost = ({ postId }: DeletePostDTO) => {
+  return axios.delete(`/posts/schedules/${postId}`);
+};
+
+export const useDeletePostData = () => {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const navigate = useNavigate();
+  return useMutation(deletePost, {
+    onSuccess: () => {
+      toast({
+        title: "게시글 삭제에 성공했습니다",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
+      queryClient.invalidateQueries(["posts"]);
+      navigate(`/posts`, { replace: true });
+    },
+  });
+};
+
 export type ModifyLikedPostDTO = {
   data: { flag: boolean; schedulePostId: number | null };
   postId: number | null;
@@ -147,8 +204,36 @@ export const modifyLikedPost = ({ postId, data }: ModifyLikedPostDTO) => {
 export const useModifyLikedPostData = () => {
   const queryClient = useQueryClient();
   return useMutation(modifyLikedPost, {
-    onSuccess: ({ likeCount }) => {
-      queryClient.invalidateQueries(["post"]);
+    onMutate: async ({ postId, data }) => {
+      await queryClient.cancelQueries(["post", postId]);
+
+      const previousPost = queryClient.getQueryData<PostResponse>([
+        "post",
+        postId,
+      ]);
+
+      if (previousPost) {
+        queryClient.setQueryData(["post", postId], {
+          ...previousPost,
+          likeCount: data.flag
+            ? previousPost.likeCount + 1
+            : previousPost.likeCount - 1,
+          isLiked: data.flag,
+        });
+      }
+
+      return { previousPost };
+    },
+    onError: (error, { postId }, context: any) => {
+      if (context?.previousPost) {
+        queryClient.setQueryData<PostResponse>(
+          ["post", postId],
+          context.previousPost
+        );
+      }
+    },
+    onSettled: (_, error, { postId }) => {
+      queryClient.invalidateQueries(["post", postId]);
     },
   });
 };
