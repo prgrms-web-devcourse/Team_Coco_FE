@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { User } from "@/components/User";
 import { useMemoData, useDeleteMemo } from "@/features/memo/hooks";
+import { useMyProfileData } from "@/features/user/hooks";
 
 type MemoHeaderProps = {
   memoId?: string;
@@ -21,6 +22,8 @@ export const MemoHeader = ({ memoId, scheduleId }: MemoHeaderProps) => {
   });
 
   const { memberSimpleResponse } = data;
+
+  const { data: myprofile } = useMyProfileData();
 
   const { mutateAsync: deleteMemo } = useDeleteMemo();
 
@@ -38,15 +41,17 @@ export const MemoHeader = ({ memoId, scheduleId }: MemoHeaderProps) => {
       <Flex height="100px" alignItems="center">
         <User size="md" nickname={memberSimpleResponse?.nickname} />
         <Spacer />
-        <ActionsMenu icon={<IoEllipsisHorizontalSharp />}>
-          <Box onClick={() => onDelete()} color="red">
-            삭제
-          </Box>
-          <Box as={Link} to={`/memo/update/${memoId}`} state={scheduleId}>
-            수정
-          </Box>
-          <Box color="gray.500">취소</Box>
-        </ActionsMenu>
+        {myprofile.id === memberSimpleResponse.id ? (
+          <ActionsMenu icon={<IoEllipsisHorizontalSharp />}>
+            <Box onClick={() => onDelete()} color="red">
+              삭제
+            </Box>
+            <Box as={Link} to={`/memo/update/${memoId}`} state={scheduleId}>
+              수정
+            </Box>
+            <Box color="gray.500">취소</Box>
+          </ActionsMenu>
+        ) : null}
       </Flex>
     </Box>
   );
