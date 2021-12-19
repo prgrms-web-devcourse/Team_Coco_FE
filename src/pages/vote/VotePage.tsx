@@ -1,5 +1,5 @@
 import { Heading, Flex } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
@@ -21,12 +21,9 @@ export const VotePage = () => {
     votingId: Number(voteId),
   });
 
-  console.log(vote);
   const { votingContentResponses } = vote;
 
-  console.log(votingContentResponses);
-
-  votingContentResponses?.map((response) => {
+  votingContentResponses?.forEach((response) => {
     if (response.participantFlag) {
       setIsJoined(true);
     }

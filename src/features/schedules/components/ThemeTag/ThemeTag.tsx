@@ -1,4 +1,4 @@
-import { Tag, TagLabel, Box, Center, Text } from "@chakra-ui/react";
+import { Center, Text } from "@chakra-ui/react";
 import React from "react";
 
 import { Theme } from "../../types";

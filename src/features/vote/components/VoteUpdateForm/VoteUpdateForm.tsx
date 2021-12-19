@@ -21,7 +21,6 @@ import {
   useFieldArray,
 } from "react-hook-form";
 import { IoCloseSharp, IoAddSharp } from "react-icons/io5";
-import { useNavigate } from "react-router";
 import * as yup from "yup";
 
 import { TextWithIcon } from "@/components/TextWithIcon";
@@ -47,7 +46,6 @@ type VoteUpdateFormProps = {
 };
 
 export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
-  const navigate = useNavigate();
   const defaultValues: FormValues = {
     title: "",
     multipleFlag: true,
@@ -58,7 +56,6 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    watch,
     control,
   } = useForm<FormValues>({
     defaultValues,
@@ -79,16 +76,8 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
   };
 
   const onSubmit: SubmitHandler<submitValue> = async (data) => {
-    // alert(JSON.stringify(data));
-
-    console.log(data.contents);
-
     await createVote({ data, scheduleId: Number(scheduleId) });
-
-    // navigate("/note", {state: scheduleId});
   };
-
-  console.log(watch());
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

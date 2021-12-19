@@ -1,5 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
 
 import type {
   MemoRequest,
@@ -32,7 +31,7 @@ export const useMemoData = ({ memoId, scheduleId }: UseMemoDataProps) => {
   );
   return { data, ...rest };
 };
-///////////////////////////////////////////////////////////
+
 export type CreateMemoDTO = {
   data: MemoCreationRequest;
   scheduleId: number;
@@ -53,11 +52,10 @@ export const useCreateMemo = () => {
   return useMutation(createMemo, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["memos"]);
-      console.log(data);
     },
   });
 };
-///////////////////////////////////////////////////////////
+
 export type ModifyMemoDTO = {
   memoId: number;
   scheduleId: number;
@@ -81,7 +79,7 @@ export const useModifyMemoData = () => {
     },
   });
 };
-///////////////////////////////////////////////////////////
+
 export type DeleteMemoDTO = {
   scheduleId: number;
   memoId: number;

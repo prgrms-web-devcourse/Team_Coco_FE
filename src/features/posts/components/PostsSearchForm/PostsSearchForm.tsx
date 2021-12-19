@@ -30,12 +30,7 @@ type PostsSearchFormProps = {
 type FormValues = Omit<GetPostsDTO, "sorting">;
 
 export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
-  const {
-    handleSubmit,
-    register,
-    control,
-    formState: { errors },
-  } = useForm<FormValues>();
+  const { handleSubmit, register, control } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = (values) => {
     setSearchState((prevState) => ({ ...prevState, ...values }));

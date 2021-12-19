@@ -43,8 +43,6 @@ export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
   const { mutateAsync: joinVote } = useModifyVote();
 
   const onSubmit = async () => {
-    console.log(checkedOptions);
-
     const map = { votingMap: checkedOptions };
     await joinVote({
       scheduleId: Number(scheduleId),

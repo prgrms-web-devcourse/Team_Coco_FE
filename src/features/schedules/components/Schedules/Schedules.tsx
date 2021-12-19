@@ -1,12 +1,13 @@
 import { Center, Stack, Text } from "@chakra-ui/layout";
-import { Spinner } from "@chakra-ui/react";
 
 import { useSchedulesData } from "../../hooks";
 import { Schedule } from "../Schedule";
 
+import { CustomSpinner } from "@/components/CustomSpinner";
+
 export const Schedules = () => {
   const { data: schedules, isLoading } = useSchedulesData();
-  console.log(schedules);
+
   return (
     <Stack spacing={4}>
       {!schedules.length && !isLoading && (
@@ -30,7 +31,7 @@ export const Schedules = () => {
       })}
       {isLoading && (
         <Center py="8">
-          <Spinner color="cyan.500" />
+          <CustomSpinner />
         </Center>
       )}
     </Stack>
