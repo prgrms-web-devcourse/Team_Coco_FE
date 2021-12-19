@@ -6,7 +6,6 @@ import {
   CheckboxGroup,
   ListItem,
   Flex,
-  Checkbox,
   IconButton,
   Divider,
   Skeleton,
@@ -23,10 +22,11 @@ import { CustomCheckbox } from "../CustomCheckBox";
 
 type ChecklistProps = {
   scheduleId: number;
-  selectedDateIdx: number;
+  selectedDateOrder: number;
 };
 
-export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
+export const Checklist = (props: ChecklistProps) => {
+  const { scheduleId, selectedDateOrder } = props;
   const { data: checklists, isLoading } = useChecklistsData({ scheduleId });
   const { mutateAsync: deleteChecklist } = useDeleteChecklistData();
   const { mutateAsync: modifyChecklist } = useModifyChecklistData();
@@ -55,7 +55,7 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
                 </Stack>
               )}
               {checklists
-                .filter((checklist) => checklist.day === selectedDateIdx + 1)
+                .filter((checklist) => checklist.day === selectedDateOrder)
                 .map((checklist, idx) => (
                   <ListItem my="1" key={`CheckListItem-${idx}`}>
                     <Flex justify="space-between" align="center">
@@ -83,7 +83,7 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
           </List>
 
           <ChecklistForm
-            selectedDateOrder={selectedDateIdx + 1}
+            selectedDateOrder={selectedDateOrder}
             scheduleId={scheduleId}
           />
         </Stack>

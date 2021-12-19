@@ -7,23 +7,23 @@ import { List } from "./List";
 import { ListItem } from "./ListItem";
 
 type ListWithVerticalLineProps = {
-  idx: number;
+  dateOrder: number;
   dailyPlaces: DailyPlace[];
   className?: string;
 };
 
 export const ListWithVerticalLine = (props: ListWithVerticalLineProps) => {
-  const { idx, dailyPlaces, className } = props;
+  const { dateOrder, dailyPlaces, className } = props;
 
   return (
     <Box as="section" className={className}>
       <Heading size="sm" mx="2" color="cyan.500">
-        day{idx + 1}
+        day{dateOrder}
       </Heading>
       <Box maxW="2xl" mx="auto" p={{ base: "4", md: "8" }}>
         <List spacing="4">
           {dailyPlaces
-            .filter((dailyPlace) => dailyPlace.dateOrder === idx + 1)
+            .filter((dailyPlace) => dailyPlace.dateOrder === dateOrder)
             .map((dailyPlace, _idx) => {
               return (
                 <ListItem
