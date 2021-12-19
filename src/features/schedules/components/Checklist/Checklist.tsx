@@ -49,9 +49,9 @@ export const Checklist = (props: ChecklistProps) => {
           <List ml="1" color="gray.500">
             <CheckboxGroup colorScheme="cyan">
               {isLoading && (
-                <Stack my="1" spacing={2}>
-                  <Skeleton height="20px" />
-                  <Skeleton height="20px" />
+                <Stack my="3" spacing={1}>
+                  <Skeleton height="18px" />
+                  <Skeleton height="18px" />
                 </Stack>
               )}
               {checklists
