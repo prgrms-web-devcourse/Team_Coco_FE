@@ -64,7 +64,7 @@ export const useCreateChecklistData = () => {
       }
     },
 
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.invalidateQueries(["checklists"]);
     },
   });
@@ -108,7 +108,7 @@ export const useDeleteChecklistData = () => {
       }
     },
 
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.invalidateQueries(["checklists"]);
     },
   });
@@ -160,7 +160,7 @@ export const useModifyChecklistData = () => {
       }
     },
 
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.invalidateQueries(["checklists"]);
     },
   });
