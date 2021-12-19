@@ -1,3 +1,4 @@
+import { Spinner } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import React, { PropsWithChildren } from "react";
 
@@ -7,14 +8,14 @@ const CheckboxContainer = styled.label`
   justify-content: space-between;
 `;
 
-const Checkbox = styled.div<{ checked: boolean }>`
+const Checkbox = styled.div<{ checked: boolean; isLoading: boolean }>`
   display: inline-block;
   width: 1rem;
   height: 1rem;
   margin-right: 1rem;
   cursor: pointer;
   background: ${({ checked }) => (checked ? "#29bedb" : "transparent")};
-  border: 3px solid #29bedb;
+  border: ${({ isLoading }) => (isLoading ? "none" : "3px solid #29bedb")};
   border-radius: 4px;
 `;
 
@@ -47,13 +48,15 @@ export const CustomCheckbox = ({
 }: CheckboxProps) => {
   return (
     <CheckboxContainer htmlFor={`cb-${checklist.id}`} {...rest}>
-      <Checkbox checked={checklist.checked}>
+      <Checkbox checked={checklist.checked} isLoading={checklist.isLoading}>
         <HiddenCheckbox
           id={`cb-${checklist.id}`}
           type="checkbox"
           onChange={onChange}
           checked={checklist.checked}
+          disabled={checklist.isLoading}
         />
+        {checklist.isLoading && <Spinner size="xs" color="cyan.500" mb="1" />}
         {checklist.checked && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
