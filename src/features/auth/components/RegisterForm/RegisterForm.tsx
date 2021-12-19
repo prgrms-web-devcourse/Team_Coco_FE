@@ -24,7 +24,7 @@ import { omit } from "@/utils/object";
 
 const schema = yup.object().shape({
   name: yup.string().min(2).max(255).required(),
-  gender: yup.string().oneOf(["남성", "여성"]).required(),
+  gender: yup.string().oneOf(["MALE", "FEMALE"]).required(),
   birthDate: yup.date().required(),
   nickname: yup.string().min(2).max(255).required(),
   email: yup.string().email().required(),
@@ -37,7 +37,7 @@ const schema = yup.object().shape({
 
 const defaultValues: FormValues = {
   name: "",
-  gender: "남성",
+  gender: "MALE",
   birthDate: new Date(),
   nickname: "",
   email: "",
@@ -47,7 +47,7 @@ const defaultValues: FormValues = {
 
 type FormValues = {
   name: string;
-  gender: "남성" | "여성";
+  gender: "MALE" | "FEMALE";
   birthDate: Date;
   nickname: string;
   email: string;
@@ -99,8 +99,8 @@ export const RegisterForm = () => {
             <FormControl id="gender" isInvalid={Boolean(errors.gender)}>
               <FormLabel>성별</FormLabel>
               <Select {...register("gender")}>
-                <option value="남성">남성</option>
-                <option value="여성">여성</option>
+                <option value="MALE">남성</option>
+                <option value="FEMALE">여성</option>
               </Select>
               <FormErrorMessage>
                 {errors.gender && "성별은 남성/여성 중 하나여야 합니다."}
