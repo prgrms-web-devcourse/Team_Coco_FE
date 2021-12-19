@@ -5,7 +5,6 @@ import type {
   VotingRequest,
   VotingCreationRequest,
   VotingDetailResponse,
-  // VotingSimpleResponse,
 } from "../types";
 
 import { queryClient } from "./../../../lib/react-query";
@@ -81,7 +80,6 @@ export const useDeleteVote = () => {
   });
 };
 
-////////////////////////////////////////////////
 export type ModifyVoteDTO = {
   scheduleId: number;
   votingId: number;

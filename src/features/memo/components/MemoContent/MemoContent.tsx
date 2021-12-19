@@ -16,14 +16,11 @@ type MemoContentProps = {
 };
 
 export const MemoContent = ({ memoId, scheduleId }: MemoContentProps) => {
-  console.log(memoId);
-  console.log(scheduleId);
   const { data: memo, isLoading } = useMemoData({
     memoId: memoId ? Number(memoId) : null,
     scheduleId: Number(scheduleId),
   });
 
-  console.log(memo);
   return (
     <Stack>
       {isLoading && (

@@ -12,7 +12,6 @@ import React, { useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useLocation, Link } from "react-router-dom";
 
-import { GoToBackButton } from "@/components/GoToBackButton";
 import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { MemoList, VoteList } from "@/features/note/components";

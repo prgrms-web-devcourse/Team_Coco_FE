@@ -47,7 +47,6 @@ export const BodyBeforeVote = () => {
 
   const onSubmit = async () => {
     const map = { votingMap: checkedOptions };
-    console.log(map);
 
     await modifyVote({
       scheduleId: Number(scheduleId),
@@ -55,7 +54,7 @@ export const BodyBeforeVote = () => {
       data: map,
     });
 
-    // navigate("/note", { state: scheduleId });
+    navigate("/note", { state: scheduleId });
   };
 
   return (

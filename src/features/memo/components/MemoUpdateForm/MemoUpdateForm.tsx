@@ -66,7 +66,6 @@ export const MemoUpdateForm = () => {
   const { mutateAsync: modifyMemo } = useModifyMemoData();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    // console.log(memo);
     if (memo.title) {
       await modifyMemo({
         scheduleId: Number(scheduleId),
