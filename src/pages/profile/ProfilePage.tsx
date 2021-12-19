@@ -19,11 +19,14 @@ import { CustomizedModal } from "@/components/CustomizedModal";
 import { PrivatePageLayout } from "@/components/Layout";
 import { User } from "@/components/User";
 import { LikedPosts, MyPosts } from "@/features/posts/components";
+import { FriendsList } from "@/features/user/components/FriendsList";
+import { UserSearchForm } from "@/features/user/components/UserSearchForm";
 import { useMyProfileData } from "@/features/user/hooks";
 
 export const ProfilePage = () => {
   const friendsDisclosure = useDisclosure();
   const { data: profile } = useMyProfileData();
+
   const { nickname } = profile;
 
   return (
@@ -53,7 +56,12 @@ export const ProfilePage = () => {
             head="나의 친구"
             isOpen={friendsDisclosure.isOpen}
             onClose={friendsDisclosure.onClose}
-          ></CustomizedModal>
+          >
+            <Stack spacing={4}>
+              <UserSearchForm />
+              <FriendsList />
+            </Stack>
+          </CustomizedModal>
         </Flex>
         <Tabs isFitted>
           <TabList>

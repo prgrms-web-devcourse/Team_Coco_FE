@@ -9,3 +9,10 @@ export type UserDetailResponse = {
   nickname: string;
   profileImage: string;
 };
+
+export type UserSimpleResponse = {
+  id: number;
+  nickname: string;
+};
+
+export type Friends = UserSimpleResponse[];
