@@ -19,10 +19,10 @@ export const MemoHeader = ({ memoId, scheduleId }: MemoHeaderProps) => {
   const { data } = useMemoData({
     memoId: Number(memoId),
     scheduleId: Number(scheduleId),
+    enabled: !!memoId,
   });
 
   const { memberSimpleResponse } = data;
-
   const { data: myprofile } = useMyProfileData();
 
   const { mutateAsync: deleteMemo } = useDeleteMemo();
@@ -41,7 +41,7 @@ export const MemoHeader = ({ memoId, scheduleId }: MemoHeaderProps) => {
       <Flex height="100px" alignItems="center">
         <User size="md" nickname={memberSimpleResponse?.nickname} />
         <Spacer />
-        {myprofile.id === memberSimpleResponse.id ? (
+        {myprofile?.id === memberSimpleResponse?.id ? (
           <ActionsMenu icon={<IoEllipsisHorizontalSharp />}>
             <Box onClick={() => onDelete()} color="red">
               삭제
