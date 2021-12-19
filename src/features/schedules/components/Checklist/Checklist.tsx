@@ -107,22 +107,21 @@ export const Checklist = ({ scheduleId, selectedDateIdx }: ChecklistProps) => {
               {checklists
                 .filter((checklist) => checklist.day === 0)
                 .map((checklist, idx) => (
-                  <ListItem my="1" key={`CheckListItem-${idx}-${checklist.id}`}>
-                    <Flex justify="space-between">
-                      <Checkbox
-                        defaultChecked={checklist.checked}
+                  <ListItem my="1" key={`CheckListItem-${idx}`}>
+                    <Flex justify="space-between" align="center">
+                      <CustomCheckbox
+                        checklist={checklist}
                         onChange={() => {
                           onCheck(checklist.id, checklist.checked);
                         }}
-                      >
-                        {checklist.content}
-                      </Checkbox>
+                      />
                       <IconButton
                         aria-label="delete-todo"
                         size="xs"
                         icon={<IoClose />}
                         variant="ghost"
                         mr="3"
+                        disabled={!Boolean(checklist.id)}
                         onClick={() => {
                           onDelete(checklist.id);
                         }}

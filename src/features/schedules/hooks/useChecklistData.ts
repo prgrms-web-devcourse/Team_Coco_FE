@@ -44,13 +44,24 @@ export const useCreateChecklistData = () => {
     onMutate: async ({ data }) => {
       await queryClient.cancelQueries(["checklists"]);
 
-      const previousChecklist = queryClient.getQueryData(["checklists"]);
+      const previousChecklist = queryClient.getQueryData<ChecklistResponse>([
+        "checklists",
+      ]);
       queryClient.setQueriesData(["checklists"], (old: any) => [
         ...old,
         { day: data.day, content: data.title, checked: false, isLoading: true },
       ]);
 
       return { previousChecklist };
+    },
+
+    onError: (error, _, context: any) => {
+      if (context?.previousChecklist) {
+        queryClient.setQueryData<ChecklistResponse>(
+          ["checklists"],
+          context.previousChecklist
+        );
+      }
     },
 
     onSuccess: () => {
@@ -78,12 +89,23 @@ export const useDeleteChecklistData = () => {
     onMutate: async ({ checklistId }) => {
       await queryClient.cancelQueries(["checklists"]);
 
-      const previousChecklist = queryClient.getQueryData(["checklists"]);
+      const previousChecklist = queryClient.getQueryData<ChecklistResponse>([
+        "checklists",
+      ]);
       queryClient.setQueriesData(["checklists"], (oldChecklists: any) =>
         oldChecklists.filter((checklist: any) => checklist.id !== checklistId)
       );
 
       return { previousChecklist };
+    },
+
+    onError: (error, _, context: any) => {
+      if (context?.previousChecklist) {
+        queryClient.setQueryData<ChecklistResponse>(
+          ["checklists"],
+          context.previousChecklist
+        );
+      }
     },
 
     onSuccess: () => {
@@ -115,7 +137,9 @@ export const useModifyChecklistData = () => {
     onMutate: async ({ checklistId }) => {
       await queryClient.cancelQueries(["checklists"]);
 
-      const previousChecklist = queryClient.getQueryData(["checklists"]);
+      const previousChecklist = queryClient.getQueryData<ChecklistResponse>([
+        "checklists",
+      ]);
       queryClient.setQueriesData(["checklists"], (oldChecklists: any) =>
         oldChecklists.map((checklist: any) =>
           checklist.id === checklistId
@@ -125,6 +149,15 @@ export const useModifyChecklistData = () => {
       );
 
       return { previousChecklist };
+    },
+
+    onError: (error, _, context: any) => {
+      if (context?.previousChecklist) {
+        queryClient.setQueryData<ChecklistResponse>(
+          ["checklists"],
+          context.previousChecklist
+        );
+      }
     },
 
     onSuccess: () => {
