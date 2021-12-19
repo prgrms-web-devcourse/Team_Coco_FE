@@ -19,7 +19,7 @@ export const getChecklists = ({
 export type UseChecklistsDataProps = GetChecklistsDTO;
 
 export const useChecklistsData = ({ scheduleId }: UseChecklistsDataProps) => {
-  const { data = [], ...rest } = useQuery(["checklists"], () =>
+  const { data = [], ...rest } = useQuery(["checklists", scheduleId], () =>
     getChecklists({ scheduleId })
   );
   return { data, ...rest };

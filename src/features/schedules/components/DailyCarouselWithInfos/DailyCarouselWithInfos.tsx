@@ -147,8 +147,8 @@ export const DailyCarouselWithInfos = (props: DailyCarouselWithInfosProps) => {
           {Array.from({ length: totalDays }, (_, idx) => idx).map((idx) => (
             <ListWithVerticalLine
               key={`ListWithVerticalLine-${idx}`}
-              idx={idx}
               dailyPlaces={spotResponseList}
+              dateOrder={idx + 1}
               className={"keen-slider__slide"}
             />
           ))}
@@ -166,7 +166,7 @@ export const DailyCarouselWithInfos = (props: DailyCarouselWithInfosProps) => {
         </Box>
       </Flex>
 
-      <Checklist scheduleId={scheduleId} selectedDateIdx={currentSlide} />
+      <Checklist scheduleId={scheduleId} selectedDateOrder={currentSlide + 1} />
     </Box>
   );
 };

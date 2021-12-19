@@ -49,16 +49,6 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
     );
   }
 
-  const formattedSchedule = {
-    ...schedule,
-    spotResponseList: schedule.spotResponseList?.map(
-      ({ date: dateOrder, order: spotOrder, ...rest }) => ({
-        dateOrder,
-        spotOrder,
-        ...rest,
-      })
-    ),
-  };
   const totalDays = getTotalDays(
     new Date(schedule.scheduleSimpleResponse.endDate),
     new Date(schedule.scheduleSimpleResponse.startDate)
@@ -68,7 +58,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
     <Stack spacing={4}>
       <Flex justify="space-between" align="center">
         <Heading fontSize="2xl" color="gray.700">
-          {formattedSchedule.scheduleSimpleResponse.title}
+          {schedule.scheduleSimpleResponse.title}
         </Heading>
 
         <ActionsMenu icon={<IoEllipsisHorizontal />}>
@@ -78,11 +68,11 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       </Flex>
 
       <Flex justify="space-between" align="center">
-        <ThemeTag theme={formattedSchedule.scheduleSimpleResponse.themes[0]} />
+        <ThemeTag theme={schedule.scheduleSimpleResponse.themes[0]} />
 
         <Text fontSize="md" color="gray.500">
-          {formattedSchedule.scheduleSimpleResponse.startDate} ~{" "}
-          {formattedSchedule.scheduleSimpleResponse.endDate}
+          {schedule.scheduleSimpleResponse.startDate} ~{" "}
+          {schedule.scheduleSimpleResponse.endDate}
         </Text>
       </Flex>
 
@@ -91,7 +81,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
       </Heading>
       <HStack>
         <AvatarGroup size="md" max={5}>
-          {formattedSchedule.memberSimpleResponses.map((member) => {
+          {schedule.memberSimpleResponses.map((member) => {
             return (
               <Avatar
                 key={`Avatar-${member.id}`}
@@ -108,7 +98,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
         </CustomizedModal>
       </HStack>
       <DailyCarouselWithInfos
-        spotResponseList={formattedSchedule.spotResponseList}
+        spotResponseList={schedule.spotResponseList}
         totalDays={totalDays}
         scheduleId={scheduleId}
       />

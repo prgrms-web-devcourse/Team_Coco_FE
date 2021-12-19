@@ -30,7 +30,7 @@ import { IoAdd } from "react-icons/io5";
 import * as yup from "yup";
 
 import { useCreateScheduleData } from "../../hooks";
-import type { DailyPlaceTemp, SpotResponse, Theme } from "../../types";
+import type { DailyPlace, Marker, Theme } from "../../types";
 import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
 import { FriendsList } from "../FriendsList";
@@ -48,7 +48,7 @@ type FormValues = {
   themes: Theme;
   startDate: Date;
   endDate: Date;
-  dailySchedulePlaces: DailyPlaceTemp[];
+  dailySchedulePlaces: DailyPlace[];
 };
 
 const defaultValues: FormValues = {
@@ -123,7 +123,7 @@ export const AddScheduleForm = () => {
     name: "dailySchedulePlaces",
   });
 
-  const [selectedPlace, setSelectedPlace] = useState<SpotResponse>();
+  const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const tempStartDate = watch("startDate");
@@ -137,9 +137,7 @@ export const AddScheduleForm = () => {
       themes: Array.isArray(data.themes) ? data.themes : [data.themes],
       startDate: formatDateToString(data.startDate),
       endDate: formatDateToString(data.endDate),
-      dailyScheduleSpotCreationRequests: data.dailySchedulePlaces.map(
-        ({ order: spotOrder, ...rest }) => ({ spotOrder, ...rest }) // 추후에 백엔드 측에서 GET-schedule-detail 내 order속성 명이 spotOrder로 바뀌면 컴포넌트 단에서 spotOrder로 통일할 예정
-      ),
+      dailyScheduleSpotCreationRequests: data.dailySchedulePlaces,
     };
 
     await createSchedule({ data: formattedData });
@@ -161,7 +159,7 @@ export const AddScheduleForm = () => {
 
         <SimpleGrid columns={2} spacing={2}>
           <Stack>
-            <FormControl id="startDate">
+            <FormControl id="start-date">
               <FormLabel>출발 날짜</FormLabel>
               <Controller
                 control={control}
@@ -174,7 +172,7 @@ export const AddScheduleForm = () => {
           </Stack>
 
           <Stack>
-            <FormControl id="endDate" isInvalid={Boolean(errors.endDate)}>
+            <FormControl id="end-date" isInvalid={Boolean(errors.endDate)}>
               <FormLabel>완료 날짜</FormLabel>
               <Controller
                 control={control}
@@ -269,9 +267,10 @@ export const AddScheduleForm = () => {
                 append({
                   ...selectedPlace,
                   dateOrder: selectedDateIdx + 1,
-                  order:
+                  spotOrder:
                     fields.filter(
-                      (dailyPlace: any) => dailyPlace.date === selectedDateIdx
+                      (dailyPlace: DailyPlace) =>
+                        dailyPlace.dateOrder === selectedDateIdx + 1
                     ).length + 1,
                 });
               }}
