@@ -60,9 +60,8 @@ export const MemoList = ({ scheduleId: id }: MemoListProps) => {
                 isReadOnly
                 resize="none"
                 variant="unstyled"
-              >
-                {memo.content}
-              </Textarea>
+                value={memo.content}
+              />
             </Box>
           </ChakraLink>
         ))}

@@ -6,9 +6,12 @@ import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { User } from "@/components/User";
 import { MemoUpdateForm } from "@/features/memo/components";
+import { useMyProfileData } from "@/features/user/hooks";
 
 export const MemoUpdatePage = () => {
   const { memoId } = useParams();
+
+  const { data: myprofile } = useMyProfileData();
 
   return (
     <PrivatePageLayout
@@ -21,7 +24,7 @@ export const MemoUpdatePage = () => {
       }
     >
       <Flex h={100}>
-        <User size="md" />
+        <User size="md" nickname={myprofile.nickname} />
       </Flex>
       <MemoUpdateForm />
     </PrivatePageLayout>
