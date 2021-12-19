@@ -4,7 +4,6 @@ import {
   Center,
   Spinner,
   Box,
-  Text,
   Textarea,
   Input,
 } from "@chakra-ui/react";
@@ -17,11 +16,14 @@ type MemoContentProps = {
 };
 
 export const MemoContent = ({ memoId, scheduleId }: MemoContentProps) => {
+  console.log(memoId);
+  console.log(scheduleId);
   const { data: memo, isLoading } = useMemoData({
-    memoId: Number(memoId),
+    memoId: memoId ? Number(memoId) : null,
     scheduleId: Number(scheduleId),
   });
 
+  console.log(memo);
   return (
     <Stack>
       {isLoading && (
@@ -48,9 +50,8 @@ export const MemoContent = ({ memoId, scheduleId }: MemoContentProps) => {
             color="gray.500"
             isReadOnly
             variant="unstyled"
-          >
-            {memo?.content}
-          </Textarea>
+            value={memo?.content}
+          />
         </Box>
       </Flex>
     </Stack>

@@ -43,8 +43,9 @@ export const MemoUpdateForm = () => {
   const { state: scheduleId } = useLocation();
 
   const { data: memo } = useMemoData({
-    memoId: Number(memoId),
+    memoId: memoId ? Number(memoId) : null,
     scheduleId: Number(scheduleId),
+    enabled: !!memoId,
   });
 
   const defaultValues: FormValues = {
@@ -65,9 +66,8 @@ export const MemoUpdateForm = () => {
   const { mutateAsync: modifyMemo } = useModifyMemoData();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    // const formattedContent = data.content.replace(/<br>|<brV>|<br V>)\g, "\r\n");
-
-    if (memo) {
+    // console.log(memo);
+    if (memo.title) {
       await modifyMemo({
         scheduleId: Number(scheduleId),
         memoId: Number(memoId),
