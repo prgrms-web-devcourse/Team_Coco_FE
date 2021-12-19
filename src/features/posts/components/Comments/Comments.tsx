@@ -3,6 +3,7 @@ import React from "react";
 import { Comment } from "@/features/posts/components";
 
 export type CommentsProps = {
+  postId: number | null;
   comments: {
     commentId: number;
     content: string;
@@ -13,11 +14,11 @@ export type CommentsProps = {
   }[];
 };
 
-export const Comments = ({ comments }: CommentsProps) => {
+export const Comments = ({ comments, postId }: CommentsProps) => {
   return (
     <>
       {comments.map((comment) => {
-        return <Comment key={comment.commentId} {...comment} />;
+        return <Comment postId={postId} key={comment.commentId} {...comment} />;
       })}
     </>
   );

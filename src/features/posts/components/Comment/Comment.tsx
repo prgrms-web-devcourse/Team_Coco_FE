@@ -1,13 +1,15 @@
-import { Divider, Text, Flex, Badge, Box } from "@chakra-ui/react";
+import { Divider, Text, Flex, Badge, Box, IconButton } from "@chakra-ui/react";
 import React from "react";
-import { IoEllipsisHorizontalSharp } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
 
-import { ActionsMenu } from "@/components/ActionsMenu";
+import { useDeleteCommentData } from "../../hooks";
+
 import { User } from "@/components/User";
 import { formatCreatedAt } from "@/utils/date";
 import { storage } from "@/utils/storage";
 
 export type CommentProps = {
+  postId: number | null;
   commentId: number;
   content: string;
   createdAt: string;
@@ -23,8 +25,10 @@ export const Comment = ({
   nickname,
   schedulePostWriter,
   writerId,
+  postId,
 }: CommentProps) => {
   const userId = storage.getUserId();
+  const { mutate: deleteComment } = useDeleteCommentData();
 
   return (
     <>
@@ -44,15 +48,21 @@ export const Comment = ({
           />
         </Flex>
         {Number(userId) === writerId ? (
-          <ActionsMenu icon={<IoEllipsisHorizontalSharp />}>
-            <Box>수정</Box>
-            <Box>삭제</Box>
-          </ActionsMenu>
+          <IconButton
+            aria-label="댓글 삭제"
+            icon={<IoCloseOutline />}
+            variant="unstyle"
+            onClick={() => {
+              deleteComment({ commentId, postId });
+            }}
+          />
         ) : null}
       </Flex>
-      <Text pl={12} fontSize="md">
-        {content}
-      </Text>
+
+      <Box pl={12}>
+        <Text fontSize="md">{content}</Text>
+      </Box>
+
       <Text pl={12} fontSize="sm" color="gray.500">
         {formatCreatedAt(createdAt)}
       </Text>
