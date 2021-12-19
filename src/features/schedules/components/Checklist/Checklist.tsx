@@ -11,7 +11,6 @@ import {
   Divider,
   Skeleton,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 
 import {
@@ -20,7 +19,7 @@ import {
   useModifyChecklistData,
 } from "../../hooks";
 import { ChecklistForm } from "../ChecklistForm";
-import { CustomCheckbox } from "../CustomCheckbox";
+import { CustomCheckbox } from "../CustomCheckBox";
 
 type ChecklistProps = {
   scheduleId: number;

@@ -11,28 +11,28 @@ const Checkbox = styled.div<{ checked: boolean }>`
   display: inline-block;
   width: 1rem;
   height: 1rem;
-  border: 3px solid #29bedb;
-  background: ${({ checked }) => (checked ? "#29bedb" : "transparent")};
-  border-radius: 4px;
-  cursor: pointer;
   margin-right: 1rem;
+  cursor: pointer;
+  background: ${({ checked }) => (checked ? "#29bedb" : "transparent")};
+  border: 3px solid #29bedb;
+  border-radius: 4px;
 `;
 
 const HiddenCheckbox = styled.input`
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
   position: absolute;
-  white-space: nowrap;
   width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 `;
 
 const StyledText = styled.div<{ checked: boolean }>`
-  text-decoration: ${({ checked }) => (checked ? "line-through" : "")};
   display: "inline-block";
+  text-decoration: ${({ checked }) => (checked ? "line-through" : "")};
 `;
 
 type CheckboxProps = PropsWithChildren<{
