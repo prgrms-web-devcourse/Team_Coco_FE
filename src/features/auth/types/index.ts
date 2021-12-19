@@ -11,7 +11,7 @@ export type LoginResponse = {
 export type SignUpRequest = {
   birth: string;
   email: string;
-  gender: "남성" | "여성";
+  gender: "MALE" | "FEMALE";
   name: string;
   nickname: string;
   password: string;
