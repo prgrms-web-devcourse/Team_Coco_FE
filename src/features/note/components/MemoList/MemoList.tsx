@@ -3,6 +3,7 @@ import {
   Box,
   Stack,
   Text,
+  Textarea,
   Center,
   Link as ChakraLink,
 } from "@chakra-ui/react";
@@ -51,9 +52,17 @@ export const MemoList = ({ scheduleId: id }: MemoListProps) => {
               <Text fontSize="md" color="gray.600" isTruncated>
                 {memo.title}
               </Text>
-              <Text fontSize="sm" color="gray.500" noOfLines={8}>
+              <Textarea
+                height={160}
+                fontSize="sm"
+                color="gray.500"
+                noOfLines={8}
+                isReadOnly
+                resize="none"
+                variant="unstyled"
+              >
                 {memo.content}
-              </Text>
+              </Textarea>
             </Box>
           </ChakraLink>
         ))}

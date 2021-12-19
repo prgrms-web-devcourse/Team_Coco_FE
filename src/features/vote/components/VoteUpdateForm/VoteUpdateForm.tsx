@@ -14,6 +14,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useState } from "react";
 import {
   useForm,
   SubmitHandler,
@@ -21,6 +22,8 @@ import {
   useFieldArray,
 } from "react-hook-form";
 import { IoCloseSharp, IoAddSharp } from "react-icons/io5";
+import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
 import * as yup from "yup";
 
 import { TextWithIcon } from "@/components/TextWithIcon";
@@ -32,7 +35,6 @@ const schema = yup.object().shape({
     .min(1, "제목은 최소 1자 이상이어야 합니다.")
     .max(16, "제목은 최대 16자 이하이어야 합니다.")
     .required("제목을 입력해주세요."),
-  contents: yup.array().of(yup.string().required("항목을 입력해주세요.")),
 });
 
 type FormValues = {
@@ -41,15 +43,16 @@ type FormValues = {
   contents: Array<object>;
 };
 
-type VoteUpdateFormProps = {
-  scheduleId?: string;
-};
+export const VoteUpdateForm = () => {
+  const { state: scheduleId } = useLocation();
+  const navigate = useNavigate();
 
-export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
+  const [inputList, setInputList] = useState([{ value: "" }, { value: "" }]);
+
   const defaultValues: FormValues = {
     title: "",
     multipleFlag: true,
-    contents: [{ value: "" }, { value: "" }, { value: "" }],
+    contents: [],
   };
 
   const {
@@ -62,12 +65,28 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
     resolver: yupResolver(schema),
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "contents",
-  });
-
   const { mutateAsync: createVote } = useCreateVote();
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const list = [...inputList];
+
+    list[index].value = e.target.value;
+    setInputList([...list]);
+  };
+
+  const handleInputRemove = (index: number) => {
+    const list = [...inputList];
+
+    list.splice(index, 1);
+    setInputList([...list]);
+  };
+
+  const handleInputAdd = () => {
+    setInputList([...inputList, { value: "" }]);
+  };
 
   type submitValue = {
     title: string;
@@ -76,7 +95,14 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
   };
 
   const onSubmit: SubmitHandler<submitValue> = async (data) => {
+    const values: string[] = [];
+
+    inputList.map((input) => values.push(input.value));
+
+    data.contents = values;
+
     await createVote({ data, scheduleId: Number(scheduleId) });
+    navigate("/note", { state: scheduleId });
   };
 
   return (
@@ -108,48 +134,36 @@ export const VoteUpdateForm = ({ scheduleId }: VoteUpdateFormProps) => {
         </FormControl>
 
         <Box flexGrow={1}>
-          <FormControl id="option" isInvalid={Boolean(errors.contents)}>
-            <Stack spcaing={2}>
-              {fields.map((item, index) => (
-                <div key={item.id}>
-                  <Controller
-                    control={control}
-                    name={`contents.${index}`}
-                    render={({ field }) => (
-                      <InputGroup key={index}>
-                        <Input
-                          placeholder="항목을 입력하세요"
-                          color="#71809"
-                          {...register(`contents.${index}`)}
-                          {...field.value}
-                        />
-                        <InputRightElement
-                          children={<IoCloseSharp color="#757575" />}
-                          onClick={() => remove(index)}
-                        />
-                      </InputGroup>
-                    )}
+          <Stack spcaing={2}>
+            {inputList.map((input, index) => (
+              <div key={index}>
+                <InputGroup>
+                  <Input
+                    placeholder="항목을 입력하세요"
+                    color="#71809"
+                    name="option"
+                    value={input.value}
+                    onChange={(e) => handleInputChange(e, index)}
                   />
-                </div>
-              ))}
-            </Stack>
-            <FormErrorMessage>
-              {errors.contents && "항목을 입력해주세요"}
-            </FormErrorMessage>
-          </FormControl>
-
-          <TextWithIcon
-            w="full"
-            marginTop={4}
-            icon={<IoAddSharp />}
-            onClick={() => {
-              append({ value: "" });
-            }}
-          >
-            항목 추가
-          </TextWithIcon>
+                  <InputRightElement
+                    children={<IoCloseSharp color="#757575" />}
+                    onClick={() => handleInputRemove(index)}
+                  />
+                </InputGroup>
+                {inputList.length - 1 === index && (
+                  <TextWithIcon
+                    w="full"
+                    marginTop={4}
+                    icon={<IoAddSharp />}
+                    onClick={() => handleInputAdd()}
+                  >
+                    항목 추가
+                  </TextWithIcon>
+                )}
+              </div>
+            ))}
+          </Stack>
         </Box>
-
         <Button
           type="submit"
           size="lg"

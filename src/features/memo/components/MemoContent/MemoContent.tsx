@@ -1,4 +1,12 @@
-import { Stack, Flex, Center, Box, Text, Input } from "@chakra-ui/react";
+import {
+  Stack,
+  Flex,
+  Center,
+  Spinner,
+  Box,
+  Textarea,
+  Input,
+} from "@chakra-ui/react";
 
 import { CustomSpinner } from "@/components/CustomSpinner";
 import { useMemoData } from "@/features/memo/hooks";
@@ -10,7 +18,7 @@ type MemoContentProps = {
 
 export const MemoContent = ({ memoId, scheduleId }: MemoContentProps) => {
   const { data: memo, isLoading } = useMemoData({
-    memoId: Number(memoId),
+    memoId: memoId ? Number(memoId) : null,
     scheduleId: Number(scheduleId),
   });
 
@@ -33,9 +41,15 @@ export const MemoContent = ({ memoId, scheduleId }: MemoContentProps) => {
           />
         </Box>
         <Box marginTop="1rem">
-          <Text fontSize="sm" color="gray.500">
-            {memo?.content}
-          </Text>
+          <Textarea
+            minH={500}
+            maxH={500}
+            fontSize="sm"
+            color="gray.500"
+            isReadOnly
+            variant="unstyled"
+            value={memo?.content}
+          />
         </Box>
       </Flex>
     </Stack>

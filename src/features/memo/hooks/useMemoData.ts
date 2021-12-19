@@ -1,4 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { UseQueryProps } from "@chakra-ui/media-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseQueryOptions,
+} from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import type {
   MemoRequest,
@@ -8,26 +15,31 @@ import type {
 
 import { axios } from "@/lib/axios";
 
-export type GetMemoDTO = {
-  memoId: number;
+export type GetMemoByIdDTO = {
+  memoId: number | null;
   scheduleId: number;
 };
 
-export const getMemo = ({
+export const getMemoById = ({
   memoId,
   scheduleId,
-}: GetMemoDTO): Promise<MemoDetailResponse> => {
+}: GetMemoByIdDTO): Promise<MemoDetailResponse> => {
   return axios
     .get(`/schedules/${scheduleId}/memos/${memoId}`)
     .then((response) => response.data);
 };
 
-export type UseMemoDataProps = GetMemoDTO;
+export type UseMemoDataProps = GetMemoByIdDTO & UseQueryOptions;
 
-export const useMemoData = ({ memoId, scheduleId }: UseMemoDataProps) => {
+export const useMemoData = ({
+  memoId,
+  scheduleId,
+  enabled,
+}: UseMemoDataProps) => {
   const { data = {} as MemoDetailResponse, ...rest } = useQuery(
     ["memos", memoId, scheduleId],
-    () => getMemo({ memoId, scheduleId })
+    () => getMemoById({ memoId, scheduleId }),
+    { enabled }
   );
   return { data, ...rest };
 };
@@ -50,7 +62,7 @@ export const useCreateMemo = () => {
   const queryClient = useQueryClient();
 
   return useMutation(createMemo, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["memos"]);
     },
   });
