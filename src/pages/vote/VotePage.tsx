@@ -22,7 +22,7 @@ export const VotePage = () => {
   });
 
   const { votingContentResponses } = vote;
-  
+
   votingContentResponses?.forEach((response) => {
     if (response.participantFlag) {
       setIsJoined(true);
