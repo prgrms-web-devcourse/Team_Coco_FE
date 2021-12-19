@@ -14,3 +14,10 @@ export const searchThemes: Themes = {
   HISTORY: "역사",
   NATURE: "자연",
 };
+
+export const cityMap = {
+  SEOUL: "서울",
+  BUSAN: "부산",
+  INCHEON: "인천",
+  JEJU: "제주",
+};

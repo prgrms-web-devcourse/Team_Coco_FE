@@ -67,7 +67,7 @@ export const useCreateMemo = () => {
     },
   });
 };
-///////////////////////////////////////////////////////////
+
 export type ModifyMemoDTO = {
   memoId: number;
   scheduleId: number;
@@ -91,7 +91,7 @@ export const useModifyMemoData = () => {
     },
   });
 };
-///////////////////////////////////////////////////////////
+
 export type DeleteMemoDTO = {
   scheduleId: number;
   memoId: number;

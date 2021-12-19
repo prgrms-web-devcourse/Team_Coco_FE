@@ -59,7 +59,6 @@ export const VoteUpdateForm = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    watch,
     control,
   } = useForm<FormValues>({
     defaultValues,

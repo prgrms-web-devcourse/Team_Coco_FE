@@ -23,7 +23,7 @@ export const VotePage = () => {
 
   const { votingContentResponses } = vote;
 
-  votingContentResponses?.map((response) => {
+  votingContentResponses?.forEach((response) => {
     if (response.participantFlag) {
       setIsJoined(true);
     }
@@ -41,11 +41,7 @@ export const VotePage = () => {
     >
       <VoteHeader voteId={voteId} scheduleId={scheduleId} />
       <Flex direction="column" height="550px">
-        {isJoined ? (
-          <BodyAfterVote voteId={voteId} scheduleId={scheduleId} />
-        ) : (
-          <BodyBeforeVote />
-        )}
+        {isJoined ? <BodyAfterVote /> : <BodyBeforeVote />}
       </Flex>
     </PrivatePageLayout>
   );

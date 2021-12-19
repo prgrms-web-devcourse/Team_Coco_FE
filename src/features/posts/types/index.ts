@@ -26,6 +26,8 @@ export type PostResponse = {
   themes: Theme[];
   title: string;
   writerId: number;
+  isLiked: boolean;
+  likeCount: number;
 };
 
 export type PostDetailResponse = {
