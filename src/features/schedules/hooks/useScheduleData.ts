@@ -5,12 +5,13 @@ import type {
   ScheduleSimpleResponse,
   ScheduleModificationRequest,
   ScheduleCreationRequest,
+  ScheduleDetailResponse,
 } from "../types";
 
 import { axios } from "@/lib/axios";
 
 export const getSchedules = (): Promise<ScheduleSimpleResponse[]> => {
-  return axios.get(`/schedules`);
+  return axios.get(`/schedules`).then((response) => response.data);
 };
 
 export const useSchedulesData = () => {
@@ -24,15 +25,18 @@ export type GetScheduleDTO = {
 
 export const getSchedule = ({
   scheduleId,
-}: GetScheduleDTO): Promise<ScheduleSimpleResponse[]> => {
-  return axios.get(`/schedules/${scheduleId}`);
+}: GetScheduleDTO): Promise<ScheduleDetailResponse> => {
+  return axios
+    .get(`/schedules/${scheduleId}`)
+    .then((response) => response.data);
 };
 
 export type UseScheduleDataProps = GetScheduleDTO;
 
 export const useScheduleData = ({ scheduleId }: UseScheduleDataProps) => {
-  const { data = [], ...rest } = useQuery(["schedules", scheduleId], () =>
-    getSchedule({ scheduleId })
+  const { data = {} as ScheduleDetailResponse, ...rest } = useQuery(
+    ["schedules", scheduleId],
+    () => getSchedule({ scheduleId })
   );
 
   return { data, ...rest };
@@ -91,7 +95,7 @@ export type CreateScheduleDTO = {
 export const createSchedule = ({
   data,
 }: CreateScheduleDTO): Promise<number> => {
-  return axios.post(`/schedules`, data);
+  return axios.post(`/schedules`, data).then((response) => response.data);
 };
 
 export const useCreateScheduleData = () => {

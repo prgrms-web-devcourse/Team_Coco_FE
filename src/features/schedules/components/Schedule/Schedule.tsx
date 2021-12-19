@@ -1,7 +1,6 @@
 import {
   Box,
   Heading,
-  Text,
   LinkBox,
   Stack,
   HStack,
@@ -12,12 +11,17 @@ import { useMemo } from "react";
 import { IoCalendarSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
+import { Theme } from "../../types";
+import { ThemeTag } from "../ThemeTag";
+
 import { TextWithIcon } from "@/components/TextWithIcon";
 
 type ScheduleProps = {
   title: string;
   startedDate: string;
   endedDate: string;
+  id: number;
+  themes: Theme[];
 };
 
 type DynamicStyles = Record<
@@ -28,19 +32,20 @@ type DynamicStyles = Record<
 const dynamicStyles: DynamicStyles = {
   before: {
     label: "예정",
-    bgColor: "cyan.400",
+    bgColor: "#eec05e",
   },
   during: {
     label: "여행 중",
-    bgColor: "cyan.600",
+    bgColor: "#1fc9e7",
   },
   end: {
     label: "완료",
-    bgColor: "gray.400",
+    bgColor: "#a8bbc2",
   },
 };
 
-export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
+export const Schedule = (props: ScheduleProps) => {
+  const { title, startedDate, endedDate, id, themes } = props;
   const scheduleStatus = useMemo(() => {
     const today = Date.now();
     const formattedStartedDate = new Date(startedDate);
@@ -49,19 +54,19 @@ export const Schedule = ({ title, startedDate, endedDate }: ScheduleProps) => {
     const isBeforeEnded = isBefore(today, formattedEndedDate);
 
     return isBeforeStarted ? "before" : isBeforeEnded ? "during" : "end";
-  }, []);
+  }, [startedDate, endedDate]);
 
   return (
     <LinkBox w="full" display="flex" justifyContent="center">
-      <Box maxW="sm" borderRadius="xl" overflow="hidden" flex="1">
+      <Box maxW="sm" borderRadius="xl" overflow="hidden" flex="1" shadow="md">
         <Box bg={dynamicStyles[scheduleStatus]?.bgColor} h={"106px"} p={4}>
           <Stack spacing={4}>
             <Heading color="gray.50" fontSize="xl" fontFamily={"body"}>
-              <LinkOverlay as={Link} to="id">
+              <LinkOverlay as={Link} to={id.toString()}>
                 {title}
               </LinkOverlay>
             </Heading>
-            <Text fontSize="md">🍽 🏛 ⛷ 🏕 🏯</Text>
+            <ThemeTag theme={themes[0]} />
           </Stack>
         </Box>
         <Box bg="gray.100" p={4}>

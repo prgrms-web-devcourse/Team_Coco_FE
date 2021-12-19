@@ -24,8 +24,10 @@ axios.interceptors.request.use((config: AxiosRequestConfig) => {
 
 axios.interceptors.response.use(undefined, (error) => {
   if (Axios.isAxiosError(error)) {
-    if (error.response?.status === 401) {
+    const statusCode = error.response?.status;
+    if (statusCode === 401 || statusCode === 403) {
       storage.clearToken();
+      storage.clearUserId();
       history.replace("/login");
     }
   }

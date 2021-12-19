@@ -10,78 +10,60 @@ import {
   VisuallyHidden,
   FormLabel,
   Checkbox,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
-const dummy = {
-  id: 2,
-  multipleFlag: false,
-  title: "투표 제목입니다",
-  numOfTotalParticipants: 0,
-  ownerAge: 22,
-  ownerGender: "남성",
-  ownerId: 0,
-  ownerNickname: "mynick",
-  votingContentResponses: [
-    {
-      content: "한식",
-      id: 0,
-      numOfParticipants: 1,
-      participantFlag: false,
-    },
-    {
-      content: "중식",
-      id: 0,
-      numOfParticipants: 0,
-      participantFlag: false,
-    },
-    {
-      content: "양식",
-      id: 0,
-      numOfParticipants: 2,
-      participantFlag: false,
-    },
-    {
-      content: "일식",
-      id: 0,
-      numOfParticipants: 0,
-      participantFlag: false,
-    },
-    {
-      content: "괴식",
-      id: 0,
-      numOfParticipants: 2,
-      participantFlag: false,
-    },
-  ],
-};
+import { useVoteData, useModifyVote } from "@/features/vote/hooks";
 
-type BodyBeforeVoteProps = {
-  voteId?: string;
-  scheduleId?: string;
-};
+const defaultValues: Record<string, boolean> = {};
 
-export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
-  const { title, votingContentResponses } = dummy;
-  const defaultValues: Record<number, boolean> = {};
-  votingContentResponses.forEach((_, idx) => (defaultValues[idx] = false));
+export const BodyBeforeVote = () => {
+  const navigate = useNavigate();
+  const { voteId } = useParams();
+  const { state: scheduleId } = useLocation();
+
+  const { data: vote, isLoading } = useVoteData({
+    scheduleId: Number(scheduleId),
+    votingId: Number(voteId),
+  });
+
+  const { title, votingContentResponses } = vote;
+  votingContentResponses?.forEach((_, idx) => (defaultValues[idx] = false));
 
   const [checkedOptions, setCheckedOptions] = useState(defaultValues);
 
-  const checkedOptionHandler = (idx: number, isChecked: boolean) => {
+  const checkedOptionHandler = (idx: string, isChecked: boolean) => {
     setCheckedOptions((prev) => ({ ...prev, [idx]: isChecked }));
   };
 
   const checkHandler = ({ target }: any) => {
-    checkedOptionHandler(Number(target.value), target.checked);
+    checkedOptionHandler(target.value, target.checked);
   };
 
-  const onSubmit = () => {
-    alert(JSON.stringify(checkedOptions));
+  const { mutateAsync: modifyVote } = useModifyVote();
+
+  const onSubmit = async () => {
+    const map = { votingMap: checkedOptions };
+
+    await modifyVote({
+      scheduleId: Number(scheduleId),
+      votingId: Number(voteId),
+      data: map,
+    });
+
+    navigate("/note", { state: scheduleId });
   };
 
   return (
     <Stack spacing={4}>
+      {isLoading && (
+        <Center>
+          <Spinner color="cyan.500" />
+        </Center>
+      )}
       <Box minHeight="40px">
         <Input
           fontSize="md"
@@ -99,7 +81,7 @@ export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
               <FormLabel>항목</FormLabel>
             </VisuallyHidden>
             <Stack spacing={2}>
-              {votingContentResponses.map((option, idx) => (
+              {votingContentResponses?.map((option, idx) => (
                 <HStack key={idx} spacing={4}>
                   <Checkbox
                     size="lg"
@@ -123,16 +105,18 @@ export const BodyBeforeVote = ({ voteId, scheduleId }: BodyBeforeVoteProps) => {
               ))}
             </Stack>
           </FormControl>
-          <Button
-            type="submit"
-            size="lg"
-            color="white"
-            bg="cyan.600"
-            isFullWidth
-            onClick={() => onSubmit()}
-          >
-            투표하기
-          </Button>
+          {!isLoading && (
+            <Button
+              type="submit"
+              size="lg"
+              color="white"
+              bg="cyan.600"
+              isFullWidth
+              onClick={() => onSubmit()}
+            >
+              투표하기
+            </Button>
+          )}
         </Stack>
       </Box>
     </Stack>

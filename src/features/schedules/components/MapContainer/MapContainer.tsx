@@ -8,7 +8,7 @@ declare global {
 }
 
 type Marker = {
-  spotId: string;
+  spotId: number;
   addressName: string;
   roadAddressName: string;
   phone: string;
@@ -16,21 +16,22 @@ type Marker = {
   placeName: string;
 };
 
+type DailyPlace = Marker & { dateOrder: number; spotOrder: number };
+
 type MapContainerProps = {
   searchPlace?: string;
-  setSelectedPlace: (value?: Marker) => void;
+  setSelectedPlace?: (value?: Marker) => void;
+  dailyPlaces?: DailyPlace[];
 };
 
-export const MapContainer = ({
-  searchPlace,
-  setSelectedPlace,
-}: MapContainerProps) => {
+export const MapContainer = (props: MapContainerProps) => {
+  const { searchPlace, setSelectedPlace, dailyPlaces } = props;
   const [info, setInfo] = useState<Marker>();
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [map, setMap] = useState<kakao.maps.Map>();
 
   useEffect(() => {
-    setSelectedPlace(info);
+    setSelectedPlace?.(info);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [info]);
 
@@ -50,10 +51,10 @@ export const MapContainer = ({
             // @ts-ignore
             markers.push({
               position: {
-                lat: data[i].y,
-                lng: data[i].x,
+                lat: parseFloat(data[i].y),
+                lng: parseFloat(data[i].x),
               },
-              spotId: data[i].id,
+              spotId: parseInt(data[i].id, 10),
               placeName: data[i].place_name,
               phone: data[i].phone,
               addressName: data[i].address_name,
@@ -62,12 +63,27 @@ export const MapContainer = ({
             // @ts-ignore
             bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
           }
+
           setMarkers(markers);
           map.setBounds(bounds);
         }
       }
     );
   }, [searchPlace, map]);
+
+  useEffect(() => {
+    if (!map || !dailyPlaces?.length) return;
+
+    const bounds = new window.kakao.maps.LatLngBounds();
+    bounds.extend(
+      new window.kakao.maps.LatLng(
+        dailyPlaces[0].position.lat,
+        dailyPlaces[0].position.lng
+      )
+    );
+    setMarkers(dailyPlaces);
+    map.setBounds(bounds);
+  }, [dailyPlaces, map]);
 
   return (
     <Map
@@ -83,9 +99,9 @@ export const MapContainer = ({
       level={3}
       onCreate={setMap}
     >
-      {markers.map((marker) => (
+      {markers.map((marker, idx) => (
         <MapMarker
-          key={`marker-${marker.placeName}-${marker.position.lat},${marker.position.lng}`}
+          key={`marker-${marker.placeName}-${marker.position.lat},${marker.position.lng}-${idx}`}
           position={marker.position}
           onClick={() => setInfo(marker)}
         >

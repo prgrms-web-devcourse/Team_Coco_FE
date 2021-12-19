@@ -6,18 +6,18 @@ import {
   TabPanels,
   TabPanel,
   Box,
+  Button,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { IoChevronBack } from "react-icons/io5";
+import { useLocation, Link } from "react-router-dom";
 
-import { GoToBackButton } from "@/components/GoToBackButton";
 import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
-import { ThumbnailGrid } from "@/features/note/components";
+import { MemoList, VoteList } from "@/features/note/components";
 
 export const NotePage = () => {
-  const { state } = useLocation();
-  const scheduleId = state.scheduleId;
+  const { state: scheduleId } = useLocation();
 
   const tabs = ["memo", "vote"];
   const [tabIndex, setTabIndex] = useState(0);
@@ -27,7 +27,9 @@ export const NotePage = () => {
       title="메모 및 투표"
       header={
         <>
-          <GoToBackButton />
+          <Button as={Link} to={`/schedules/${scheduleId}`} variant="unstyled">
+            <IoChevronBack size={30} />
+          </Button>
           <Heading size="lg">메모 및 투표</Heading>
         </>
       }
@@ -51,18 +53,18 @@ export const NotePage = () => {
               투표
             </Tab>
           </TabList>
+
           <TabPanels height="630px" overflow="auto">
             <TabPanel paddingTop="0">
-              <ThumbnailGrid tab="memo" scheduleId={scheduleId} />
+              <MemoList scheduleId={scheduleId} />
             </TabPanel>
+
             <TabPanel paddingTop="0">
-              <ThumbnailGrid tab="vote" scheduleId={scheduleId} />
+              <VoteList scheduleId={scheduleId} />
             </TabPanel>
           </TabPanels>
         </Tabs>
-        <Box position="absolute" right={5} top={600}>
-          <GoToUpdateButton target={tabs[tabIndex]} />
-        </Box>
+        <GoToUpdateButton target={tabs[tabIndex]} scheduleId={scheduleId} />
       </Box>
     </PrivatePageLayout>
   );

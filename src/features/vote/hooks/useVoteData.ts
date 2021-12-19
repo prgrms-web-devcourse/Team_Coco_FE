@@ -5,29 +5,11 @@ import type {
   VotingRequest,
   VotingCreationRequest,
   VotingDetailResponse,
-  VotingSimpleResponse,
 } from "../types";
 
+import { queryClient } from "./../../../lib/react-query";
+
 import { axios } from "@/lib/axios";
-
-export type GetVotesDTO = {
-  scheduleId: number;
-};
-
-export const getVotes = ({
-  scheduleId,
-}: GetVotesDTO): Promise<VotingSimpleResponse[]> => {
-  return axios.get(`/schedules/${scheduleId}/votings`);
-};
-
-export type UseVotesDataProps = GetVotesDTO;
-
-export const useVotesData = ({ scheduleId }: UseVotesDataProps) => {
-  const { data = [], ...rest } = useQuery(["votes", scheduleId], () =>
-    getVotes({ scheduleId })
-  );
-  return { data, ...rest };
-};
 
 export type GetVoteDTO = {
   scheduleId: number;
@@ -38,7 +20,9 @@ export const getVote = ({
   scheduleId,
   votingId,
 }: GetVoteDTO): Promise<VotingDetailResponse> => {
-  return axios.get(`/schedules/${scheduleId}/votings/${votingId}`);
+  return axios
+    .get(`/schedules/${scheduleId}/votings/${votingId}`)
+    .then((response) => response.data);
 };
 
 export type UseVoteDataProps = GetVoteDTO;
@@ -64,13 +48,11 @@ export const createVote = ({
 };
 
 export const useCreateVote = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation(createVote, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["votes"]);
-      navigate(`/memos/${data}`);
     },
   });
 };

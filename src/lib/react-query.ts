@@ -1,7 +1,9 @@
 import { createStandaloneToast } from "@chakra-ui/react";
 import { QueryClient, DefaultOptions } from "react-query";
 
-const toast = createStandaloneToast();
+import theme from "@/theme";
+
+const toast = createStandaloneToast({ theme });
 
 const queryErrorHandler = (error: unknown) => {
   const title =
@@ -14,6 +16,7 @@ const queryErrorHandler = (error: unknown) => {
     variant: "subtle",
     position: "top",
     isClosable: true,
+    duration: 2000,
   });
 };
 

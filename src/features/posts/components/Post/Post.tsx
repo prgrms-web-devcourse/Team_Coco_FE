@@ -1,33 +1,51 @@
-import {
-  LinkBox,
-  Box,
-  LinkOverlay,
-  Heading,
-  HStack,
-  Flex,
-} from "@chakra-ui/react";
+import { LinkBox, LinkOverlay, Heading, HStack, Flex } from "@chakra-ui/react";
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
+import { cityMap } from "../../constants";
+
 import { TextWithIcon } from "@/components/TextWithIcon";
 import { User } from "@/components/User";
+import { ThemeTag } from "@/features/schedules/components/ThemeTag";
+import type { Theme } from "@/features/schedules/types";
 
-export const Post = () => {
+export type PostProps = {
+  city: string;
+  startDate: string;
+  endDate: string;
+  nickname: string;
+  postId: number;
+  themes: Theme[];
+  title: string;
+};
+export const Post = ({
+  city,
+  nickname,
+  startDate,
+  endDate,
+  themes,
+  title,
+  postId,
+}: PostProps) => {
   return (
     <LinkBox p={4} w="full" bg="gray.50">
       <HStack justify="space-between">
-        <User size="sm" />
-        <Box>테마</Box>
+        <User size="sm" nickname={nickname} />
+        {themes.map((theme) => {
+          return <ThemeTag key={theme} theme={theme} />;
+        })}
       </HStack>
       <Heading size="md" my={4}>
-        <LinkOverlay as={Link} to="id">
-          제목
+        <LinkOverlay as={Link} to={`/posts/${postId}`}>
+          {title}
         </LinkOverlay>
       </Heading>
       <Flex justify="space-between">
-        <TextWithIcon icon={<IoLocationSharp />}>도시명</TextWithIcon>
+        <TextWithIcon icon={<IoLocationSharp />}>
+          {cityMap[city as keyof typeof cityMap]}
+        </TextWithIcon>
         <TextWithIcon icon={<IoCalendarSharp />}>
-          2021-12-05 ~ 2021-12-12
+          {`${startDate} ~ ${endDate}`}
         </TextWithIcon>
       </Flex>
     </LinkBox>

@@ -1,10 +1,10 @@
-import type { Omit } from "./types";
+import type { Omit, Dict, Entries } from "./types";
 
-export const omit = <T extends Record<string, any>, K extends keyof T>(
+export const omit = <T extends Dict, K extends keyof T>(
   object: T,
   keys: K[]
 ) => {
-  const result: Record<string, any> = {};
+  const result: Dict = {};
 
   Object.keys(object).forEach((key) => {
     if (keys.includes(key as K)) return;
@@ -13,3 +13,31 @@ export const omit = <T extends Record<string, any>, K extends keyof T>(
 
   return result as Omit<T, K>;
 };
+
+type FilterFn<T> = (value: any, key: string, object: T) => boolean;
+
+export const objectFilter = <T extends Dict>(object: T, fn: FilterFn<T>) => {
+  const result: Dict = {};
+
+  Object.keys(object).forEach((key) => {
+    const value = object[key];
+    const shouldPass = fn(value, key, object);
+    if (shouldPass) {
+      result[key] = value;
+    }
+  });
+
+  return result;
+};
+
+export const filterUndefined = (object: Dict) =>
+  objectFilter(object, (val) => val !== null && val !== undefined);
+
+export const filterFalsy = (object: Dict) =>
+  objectFilter(object, (val) => !!val);
+
+export const objectKeys = <T extends Dict>(obj: T) =>
+  Object.keys(obj) as unknown as (keyof T)[];
+
+export const objectEntries = <T extends Dict>(obj: T): Entries<T> =>
+  Object.entries(obj);

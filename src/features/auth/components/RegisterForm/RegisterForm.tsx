@@ -66,7 +66,7 @@ export const RegisterForm = () => {
     resolver: yupResolver(schema),
   });
 
-  const { mutate: signUp } = useSignUpData();
+  const { mutateAsync: signUp } = useSignUpData();
 
   const onSubmit: SubmitHandler<FormValues> = async ({
     birthDate,
@@ -76,7 +76,6 @@ export const RegisterForm = () => {
       data: {
         birth: format(birthDate, "yyyy-MM-dd"),
         ...omit(rest, ["confirmPassword"]),
-        phoneNumber: "01000000000",
       },
     });
   };

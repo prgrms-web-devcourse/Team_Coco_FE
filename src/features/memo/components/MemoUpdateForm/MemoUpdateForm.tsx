@@ -10,59 +10,14 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
-const dummy = [
-  {
-    userId: 1,
-    id: 1,
-    title:
-      "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-    content: "ㅇㄹ\n\nㅇㄹㅇㄹ",
-  },
-  {
-    userId: 1,
-    id: 2,
-    title: "qui est esse",
-    content:
-      "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla",
-  },
-  {
-    userId: 1,
-    id: 3,
-    title: "ea molestias quasi exercitationem repellat qui ipsa sit aut",
-    content:
-      "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut",
-  },
-  {
-    userId: 1,
-    id: 4,
-    title: "eum et est occaecati",
-    content:
-      "ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit",
-  },
-  {
-    userId: 1,
-    id: 5,
-    title: "nesciunt quas odio",
-    content:
-      "repudiandae veniam quaerat sunt sed\nalias aut fugiat sit autem sed est\nvoluptatem omnis possimus esse voluptatibus quis\nest aut tenetur dolor neque",
-  },
-  {
-    userId: 1,
-    id: 6,
-    title: "dolorem eum magni eos aperiam quia",
-    content:
-      "ut aspernatur corporis harum nihil quis provident sequi\nmollitia nobis aliquid molestiae\nperspiciatis et ea nemo ab reprehenderit accusantium quas\nvoluptate dolores velit et doloremque molestiae",
-  },
-  {
-    userId: 1,
-    id: 7,
-    title: "magnam facilis autem",
-    content:
-      "dolore placeat quibusdam ea quo vitae\nmagni quis enim qui quis quo nemo aut saepe\nquidem repellat excepturi ut quia\nsunt ut sequi eos ea sed quas",
-  },
-];
+import {
+  useMemoData,
+  useCreateMemo,
+  useModifyMemoData,
+} from "@/features/memo/hooks";
 
 const schema = yup.object().shape({
   title: yup
@@ -82,13 +37,16 @@ type FormValues = {
   content: string;
 };
 
-type MemoUpdateFormProps = {
-  memoId?: string;
-  scheduleId?: string;
-};
+export const MemoUpdateForm = () => {
+  const navigate = useNavigate();
+  const { memoId } = useParams();
+  const { state: scheduleId } = useLocation();
 
-export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
-  const memo = dummy.find((data) => data.id === Number(memoId));
+  const { data: memo } = useMemoData({
+    memoId: memoId ? Number(memoId) : null,
+    scheduleId: Number(scheduleId),
+    enabled: !!memoId,
+  });
 
   const defaultValues: FormValues = {
     title: memo?.title || "",
@@ -99,21 +57,30 @@ export const MemoUpdateForm = ({ memoId, scheduleId }: MemoUpdateFormProps) => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    watch,
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const { mutateAsync: createMemo } = useCreateMemo();
+  const { mutateAsync: modifyMemo } = useModifyMemoData();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await sleep(1000);
-    alert(JSON.stringify(data));
-  };
+    if (memo.title) {
+      await modifyMemo({
+        scheduleId: Number(scheduleId),
+        memoId: Number(memoId),
+        data,
+      });
+    } else {
+      await createMemo({
+        data,
+        scheduleId: Number(scheduleId),
+      });
+    }
 
-  console.log(watch());
+    navigate("/note", { state: scheduleId });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

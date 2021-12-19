@@ -28,7 +28,7 @@ export const Dailys = (props: DailysProps) => {
           key={`Daily-${idx}`}
           idx={idx}
           focus={selectedDateIdx === idx ? true : false}
-          dailyPlaces={dailyPlaces}
+          dailyPlacesSummary={dailyPlaces}
           onClick={setSelectedDateIdx}
           className={className}
           onDelete={onDelete}

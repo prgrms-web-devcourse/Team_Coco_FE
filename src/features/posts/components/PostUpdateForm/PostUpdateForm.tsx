@@ -11,27 +11,38 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
+import { cities } from "@/features/posts/constants";
+import {
+  useCreatePostData,
+  useModifyPostData,
+  usePostData,
+} from "@/features/posts/hooks";
+import type { City } from "@/features/posts/types";
+import { useSchedulesData } from "@/features/schedules/hooks";
+import { isEmpty } from "@/utils/assertion";
+
 const schema = yup.object().shape({
   title: yup.string().min(1).max(16).required(),
-  body: yup.string().min(1).required(),
+  content: yup.string().min(1).max(10000).required(),
+  scheduleId: yup.number().required(),
+  city: yup.string().required(),
 });
 
 const defaultValues: FormValues = {
-  city: "all",
-  plan: "",
+  city: "서울",
+  content: "",
   title: "",
-  body: "",
 };
 
 type FormValues = {
-  city: string;
-  plan: string;
+  city: City;
+  content: string;
+  scheduleId?: number;
   title: string;
-  body: string;
 };
 
 type PostUpdateFormProps = {
@@ -42,18 +53,37 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const { data: schedules } = useSchedulesData();
+  const { data: post } = usePostData({
+    postId: postId ? Number(postId) : null,
+    enabled: !!postId,
+  });
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await sleep(1000);
-    alert(JSON.stringify(data));
+  const { mutateAsync: createPost } = useCreatePostData();
+  const { mutateAsync: modifyPost } = useModifyPostData();
+
+  const mode = postId ? "modify" : "create";
+  useEffect(() => {
+    if (isEmpty(post)) return;
+    const { content, title } = post;
+    reset({ content, title });
+  }, [post, reset]);
+
+  const onSubmit: SubmitHandler<FormValues> = async ({
+    scheduleId,
+    ...rest
+  }) => {
+    if (!scheduleId) return;
+    await (mode === "create"
+      ? createPost({ data: { scheduleId, ...rest } })
+      : modifyPost({ data: { scheduleId, ...rest }, postId: Number(postId!) }));
   };
 
   return (
@@ -64,34 +94,36 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             <VisuallyHidden>
               <FormLabel>도시</FormLabel>
             </VisuallyHidden>
-            <Select placeholder="도시를 선택해 주세요" {...register("city")}>
-              <option value="all">전체</option>
-              <option>서울</option>
-              <option>제주</option>
-              <option>부산</option>
-              <option>대전</option>
+            <Select isInvalid={Boolean(errors.city)} {...register("city")}>
+              {cities.map((city, idx) => {
+                return (
+                  <option key={`city-${idx}`} value={city}>
+                    {city}
+                  </option>
+                );
+              })}
             </Select>
           </FormControl>
           <Box flexShrink={0} ml={4}>
-            <FormControl id="plan">
+            <FormControl id="schedule">
               <VisuallyHidden>
                 <FormLabel>일정</FormLabel>
               </VisuallyHidden>
               <Select
                 placeholder="자랑할 여행을 선택해 주세요"
-                {...register("plan")}
+                {...register("scheduleId")}
               >
-                <option>경주졸업여행</option>
-                <option>4박5일 댕댕이와 제주 여행</option>
-                <option>부산먹방투어</option>
-                <option>무박2일</option>
+                {schedules.map(({ id: scheduleId, title }) => {
+                  return (
+                    <option key={scheduleId} value={scheduleId}>
+                      {title}
+                    </option>
+                  );
+                })}
               </Select>
             </FormControl>
           </Box>
         </Flex>
-        <Box bgColor="gray.100" minHeight={200}>
-          <i>여행 세부 일정 컴포넌트</i>
-        </Box>
         <FormControl id="title" isInvalid={Boolean(errors.title)}>
           <VisuallyHidden>
             <FormLabel>제목</FormLabel>
@@ -103,7 +135,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             variant="flushed"
           />
         </FormControl>
-        <FormControl id="body" isInvalid={Boolean(errors.body)}>
+        <FormControl id="body" isInvalid={Boolean(errors.content)}>
           <VisuallyHidden>
             <FormLabel>본문</FormLabel>
           </VisuallyHidden>
@@ -112,20 +144,19 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             maxHeight={220}
             variant="unstyled"
             placeholder="내용을 입력해주세요."
-            {...register("body")}
+            {...register("content")}
           />
         </FormControl>
       </Stack>
       <Button
         type="submit"
-        color="white"
-        bg="cyan.600"
+        colorScheme="cyan"
         size="lg"
         isFullWidth
         my={4}
         isLoading={isSubmitting}
       >
-        포스트 게시하기
+        포스트 {mode === "modify" ? "수정" : "작성"}하기
       </Button>
     </form>
   );

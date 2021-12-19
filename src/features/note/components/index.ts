@@ -1,3 +1,2 @@
-export * from "./ThumbnailGrid";
-export * from "./MemoThumbnail";
-export * from "./VoteThumbnail";
+export * from "./MemoList";
+export * from "./VoteList";
