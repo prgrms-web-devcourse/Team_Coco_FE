@@ -11,14 +11,19 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
 import { cities } from "@/features/posts/constants";
-import { useCreatePostData } from "@/features/posts/hooks";
+import {
+  useCreatePostData,
+  useModifyPostData,
+  usePostData,
+} from "@/features/posts/hooks";
 import type { City } from "@/features/posts/types";
 import { useSchedulesData } from "@/features/schedules/hooks";
+import { isEmpty } from "@/utils/assertion";
 
 const schema = yup.object().shape({
   title: yup.string().min(1).max(16).required(),
@@ -48,6 +53,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues,
@@ -55,15 +61,29 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
   });
 
   const { data: schedules } = useSchedulesData();
+  const { data: post } = usePostData({
+    postId: postId ? Number(postId) : null,
+    enabled: !!postId,
+  });
 
   const { mutateAsync: createPost } = useCreatePostData();
+  const { mutateAsync: modifyPost } = useModifyPostData();
+
+  const mode = postId ? "modify" : "create";
+  useEffect(() => {
+    if (isEmpty(post)) return;
+    const { content, title } = post;
+    reset({ content, title });
+  }, [post, reset]);
 
   const onSubmit: SubmitHandler<FormValues> = async ({
     scheduleId,
     ...rest
   }) => {
     if (!scheduleId) return;
-    await createPost({ data: { scheduleId, ...rest } });
+    await (mode === "create"
+      ? createPost({ data: { scheduleId, ...rest } })
+      : modifyPost({ data: { scheduleId, ...rest }, postId: Number(postId!) }));
   };
 
   return (
@@ -136,7 +156,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
         my={4}
         isLoading={isSubmitting}
       >
-        포스트 게시하기
+        포스트 {mode === "modify" ? "수정" : "작성"}하기
       </Button>
     </form>
   );

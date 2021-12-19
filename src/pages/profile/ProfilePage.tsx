@@ -22,9 +22,9 @@ import { LikedPosts, MyPosts } from "@/features/posts/components";
 import { useMyProfileData } from "@/features/user/hooks";
 
 export const ProfilePage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const friendsDisclosure = useDisclosure();
   const { data: profile } = useMyProfileData();
-  const { gender, nickname } = profile;
+  const { nickname } = profile;
 
   return (
     <PrivatePageLayout
@@ -33,7 +33,7 @@ export const ProfilePage = () => {
     >
       <Stack pt={4} spacing={4}>
         <Flex justify="space-between" align="center">
-          <User size="md" gender={gender} nickname={nickname} />
+          <User size="md" nickname={nickname} />
           <ActionsMenu icon={<IoEllipsisHorizontal />}>
             <Box>로그아웃</Box>
             <Box>회원 정보 수정</Box>
@@ -45,14 +45,14 @@ export const ProfilePage = () => {
           <Button
             rightIcon={<IoArrowForward />}
             variant="ghost"
-            onClick={onOpen}
+            onClick={friendsDisclosure.onOpen}
           >
             더 보기
           </Button>
           <CustomizedModal
             head="나의 친구"
-            isOpen={isOpen}
-            onClose={onClose}
+            isOpen={friendsDisclosure.isOpen}
+            onClose={friendsDisclosure.onClose}
           ></CustomizedModal>
         </Flex>
         <Tabs isFitted>

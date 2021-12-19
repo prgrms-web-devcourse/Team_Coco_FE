@@ -1,16 +1,13 @@
-import {
-  LinkBox,
-  Box,
-  LinkOverlay,
-  Heading,
-  HStack,
-  Flex,
-} from "@chakra-ui/react";
+import { LinkBox, LinkOverlay, Heading, HStack, Flex } from "@chakra-ui/react";
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
+import { cityMap } from "../../constants";
+
 import { TextWithIcon } from "@/components/TextWithIcon";
 import { User } from "@/components/User";
+import { ThemeTag } from "@/features/schedules/components/ThemeTag";
+import type { Theme } from "@/features/schedules/types";
 
 export type PostProps = {
   city: string;
@@ -18,10 +15,9 @@ export type PostProps = {
   endDate: string;
   nickname: string;
   postId: number;
-  themes: string[];
+  themes: Theme[];
   title: string;
 };
-
 export const Post = ({
   city,
   nickname,
@@ -35,7 +31,9 @@ export const Post = ({
     <LinkBox p={4} w="full" bg="gray.50">
       <HStack justify="space-between">
         <User size="sm" nickname={nickname} />
-        <Box>{themes.toString()}</Box>
+        {themes.map((theme) => {
+          return <ThemeTag key={theme} theme={theme} />;
+        })}
       </HStack>
       <Heading size="md" my={4}>
         <LinkOverlay as={Link} to={`/posts/${postId}`}>
@@ -43,7 +41,9 @@ export const Post = ({
         </LinkOverlay>
       </Heading>
       <Flex justify="space-between">
-        <TextWithIcon icon={<IoLocationSharp />}>{city}</TextWithIcon>
+        <TextWithIcon icon={<IoLocationSharp />}>
+          {cityMap[city as keyof typeof cityMap]}
+        </TextWithIcon>
         <TextWithIcon icon={<IoCalendarSharp />}>
           {`${startDate} ~ ${endDate}`}
         </TextWithIcon>

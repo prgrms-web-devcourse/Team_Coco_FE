@@ -1,6 +1,8 @@
 import { Heading, Stack } from "@chakra-ui/react";
+import { Spinner, Center } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
 import { PrivatePageLayout } from "@/components/Layout";
@@ -16,7 +18,7 @@ import { isEmpty } from "@/utils/assertion";
 
 export const PostPage = () => {
   const { postId } = useParams();
-  const { data: post } = usePostData({
+  const { data: post, isLoading } = usePostData({
     postId: postId ? Number(postId) : null,
     enabled: !!postId,
   });
@@ -36,12 +38,17 @@ export const PostPage = () => {
         </>
       }
     >
-      {isEmpty(post) ? (
-        <div>빈 포스트에요</div>
+      {isLoading ? (
+        <Center sx={{ height: "calc(100vh - 80px)" }}>
+          <Spinner />
+        </Center>
+      ) : isEmpty(post) ? (
+        <Navigate to="/posts" />
       ) : (
         <Stack py={4} spacing={4}>
           <PostDetailHeader
             writerId={post.writerId}
+            postId={postId}
             nickname={post.nickname}
             city={post.city}
             createdAt={post.createdAt}
