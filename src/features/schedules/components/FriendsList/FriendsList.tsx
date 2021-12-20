@@ -10,16 +10,22 @@ import { isEmpty } from "@/utils/assertion";
 
 type FriendsListProps = {
   members: MemberSimpleResponse[];
-  scheduleId: number;
+  scheduleId?: number;
+  setMembers?: any;
 };
 
-export const FriendsList = ({ members, scheduleId }: FriendsListProps) => {
+export const FriendsList = ({
+  members,
+  scheduleId,
+  setMembers,
+}: FriendsListProps) => {
   const { data: friends, isLoading: friendsLoading } = useFriendsData();
   const { mutate: addMember, isLoading: addMemberLoading } = useAddMember();
 
   const identifyMember = (userId: number) =>
     members.some((member) => member.id === userId);
 
+  const isGetSchedule = scheduleId || scheduleId === 0;
   return (
     <Stack spacing={4}>
       <Heading size="sm" color="gray.600">
@@ -48,10 +54,22 @@ export const FriendsList = ({ members, scheduleId }: FriendsListProps) => {
                 colorScheme={isMember ? "cyan" : "cyan"}
                 color="gray.50"
                 onClick={() => {
-                  addMember({
-                    scheduleId: scheduleId,
-                    data: { friendId: friend.id },
-                  });
+                  if (isGetSchedule) {
+                    addMember({
+                      scheduleId: scheduleId,
+                      data: { friendId: friend.id },
+                    });
+                  } else {
+                    setMembers &&
+                      setMembers((prev: MemberSimpleResponse[]) => [
+                        ...prev,
+                        {
+                          id: friend.id,
+                          imageUrl: null,
+                          nickname: friend.nickname,
+                        },
+                      ]);
+                  }
                 }}
                 isLoading={addMemberLoading}
                 disabled={isMember}

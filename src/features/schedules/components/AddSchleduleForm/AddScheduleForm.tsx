@@ -19,7 +19,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addDays } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SubmitHandler,
   useForm,
@@ -40,6 +40,7 @@ import { SearchPlace } from "../SearchPlace";
 
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { DatePicker } from "@/components/DatePicker";
+import { MemberSimpleResponse } from "@/features/memo/types";
 import { getTotalDays } from "@/utils/date";
 import { formatDateToString } from "@/utils/date";
 
@@ -124,6 +125,7 @@ export const AddScheduleForm = () => {
     name: "dailySchedulePlaces",
   });
 
+  const [members, setMembers] = useState<MemberSimpleResponse[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -139,6 +141,7 @@ export const AddScheduleForm = () => {
       startDate: formatDateToString(data.startDate),
       endDate: formatDateToString(data.endDate),
       dailyScheduleSpotCreationRequests: data.dailySchedulePlaces,
+      idsOfFriends: members.map((member) => member.id),
     };
 
     await createSchedule({ data: formattedData });
@@ -191,18 +194,22 @@ export const AddScheduleForm = () => {
           <FormLabel>멤버</FormLabel>
           <HStack>
             <AvatarGroup size="md" max={5}>
-              <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-              <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
-              <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
+              {members.map((member) => (
+                <Avatar
+                  key={`Member-${member.id}`}
+                  name={member.nickname}
+                  src={member.imageUrl}
+                />
+              ))}
             </AvatarGroup>
-            <IoAdd color="718096" />
+            {members.length && <IoAdd color="718096" />}
             <RoundUserAddButton onClick={onOpen} />
             <CustomizedModal
               head="멤버 초대하기"
               isOpen={isOpen}
               onClose={onClose}
             >
-              <FriendsList members={[]} scheduleId={0} />
+              <FriendsList members={members} setMembers={setMembers} />
             </CustomizedModal>
           </HStack>
         </FormControl>
