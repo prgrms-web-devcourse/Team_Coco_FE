@@ -83,11 +83,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
         <AvatarGroup size="md" max={5}>
           {schedule.memberSimpleResponses.map((member) => {
             return (
-              <Avatar
-                key={`Avatar-${member.id}`}
-                name={member.nickname}
-                src={member.imageUrl}
-              />
+              <Avatar key={`Avatar-${member.id}`} name={member.nickname} />
             );
           })}
         </AvatarGroup>
