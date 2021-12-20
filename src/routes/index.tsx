@@ -6,7 +6,7 @@ import React, {
   useLayoutEffect,
   PropsWithChildren,
 } from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
 import { Router, Routes, Route, RoutesProps } from "react-router-dom";
 
 import { CustomSpinner } from "@/components/CustomSpinner";
@@ -62,6 +62,7 @@ const App = () => {
 export const AppRoutes = () => {
   return (
     <CustomRouter history={history}>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<LandingPage />} />
@@ -110,4 +111,14 @@ export const PrivateRoutes = ({ children, ...rest }: RoutesProps) => {
   ) : (
     <Navigate to="/login" />
   );
+};
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
 };
