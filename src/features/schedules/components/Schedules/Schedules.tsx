@@ -1,6 +1,4 @@
 import { Center, Stack, Text } from "@chakra-ui/layout";
-import { Skeleton } from "@chakra-ui/react";
-import { useEffect } from "react";
 
 import { useSchedulesData } from "../../hooks";
 import { Schedule } from "../Schedule";
@@ -9,15 +7,8 @@ import { CustomSpinner } from "@/components/CustomSpinner";
 import { isEmpty } from "@/utils/assertion";
 
 export const Schedules = () => {
-  const {
-    data: schedules,
-    isLoading,
-    isFetching,
-    isRefetchError,
-  } = useSchedulesData();
-  useEffect(() => {
-    console.log(isFetching, isRefetchError);
-  }, [isFetching, isRefetchError]);
+  const { data: schedules, isLoading } = useSchedulesData();
+
   return isLoading ? (
     <Center sx={{ height: "calc(100vh - 5rem)" }}>
       <CustomSpinner />
@@ -30,26 +21,16 @@ export const Schedules = () => {
     </Center>
   ) : (
     <Stack spacing={4}>
-      {schedules.map((schedule, idx) =>
-        !schedule.id ? (
-          <Skeleton
-            key={`Schedule-${schedule.id}-${idx}`}
-            height="167px"
-            maxW="sm"
-            borderRadius="xl"
-            shadow="md"
-          />
-        ) : (
-          <Schedule
-            key={`Schedule-${schedule.id}-${idx}`}
-            id={schedule.id}
-            title={schedule.title}
-            startedDate={schedule.startDate}
-            endedDate={schedule.endDate}
-            themes={schedule.themes}
-          />
-        )
-      )}
+      {schedules.map((schedule, idx) => (
+        <Schedule
+          key={`Schedule-${idx}`}
+          id={schedule.id}
+          title={schedule.title}
+          startedDate={schedule.startDate}
+          endedDate={schedule.endDate}
+          themes={schedule.themes}
+        />
+      ))}
     </Stack>
   );
 };

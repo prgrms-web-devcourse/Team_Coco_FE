@@ -43,7 +43,7 @@ export type UseScheduleDataProps = GetScheduleDTO;
 
 export const useScheduleData = ({ scheduleId }: UseScheduleDataProps) => {
   const { data = {} as ScheduleDetailResponse, ...rest } = useQuery(
-    ["schedules", scheduleId],
+    ["schedule", scheduleId],
     () => getSchedule({ scheduleId })
   );
 
@@ -145,7 +145,10 @@ export const useCreateScheduleData = () => {
       >(["schedules"]);
 
       if (previousSchedules) {
-        queryClient.setQueriesData(["schedules"], [...previousSchedules, data]);
+        queryClient.setQueriesData(
+          ["schedules"],
+          [...previousSchedules, { ...data, isLoading: true }]
+        );
       }
       return { previousSchedules };
     },
