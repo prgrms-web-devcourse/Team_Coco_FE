@@ -15,12 +15,12 @@ import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
-import { cities } from "@/features/posts/constants";
 import {
   useCreatePostData,
   useModifyPostData,
   usePostData,
 } from "@/features/posts/hooks";
+import { useCitiesData } from "@/features/posts/hooks";
 import type { City } from "@/features/posts/types";
 import { useSchedulesData } from "@/features/schedules/hooks";
 import { isEmpty } from "@/utils/assertion";
@@ -64,16 +64,19 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
   const { data: post } = usePostData({
     postId: postId ? Number(postId) : null,
     enabled: !!postId,
+    refetchOnWindowFocus: false,
   });
+  const { data: cities } = useCitiesData();
 
   const { mutateAsync: createPost } = useCreatePostData();
   const { mutateAsync: modifyPost } = useModifyPostData();
 
   const mode = postId ? "modify" : "create";
+
   useEffect(() => {
     if (isEmpty(post)) return;
-    const { content, title } = post;
-    reset({ content, title });
+    const { content, title, scheduleId, city } = post;
+    reset({ content, title, scheduleId, city });
   }, [post, reset]);
 
   const onSubmit: SubmitHandler<FormValues> = async ({
@@ -95,9 +98,9 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
               <FormLabel>도시</FormLabel>
             </VisuallyHidden>
             <Select isInvalid={Boolean(errors.city)} {...register("city")}>
-              {cities.map((city, idx) => {
+              {cities.map((city) => {
                 return (
-                  <option key={`city-${idx}`} value={city}>
+                  <option key={city} value={city}>
                     {city}
                   </option>
                 );

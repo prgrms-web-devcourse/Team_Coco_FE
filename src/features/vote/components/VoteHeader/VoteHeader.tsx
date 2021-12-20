@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { User } from "@/components/User";
+import { useMyProfileData } from "@/features/user/hooks";
 import { useVoteData, useDeleteVote } from "@/features/vote/hooks";
 
 type VoteHeaderProps = {
@@ -17,6 +18,8 @@ export const VoteHeader = ({ voteId, scheduleId }: VoteHeaderProps) => {
     scheduleId: Number(scheduleId),
     votingId: Number(voteId),
   });
+
+  const { data: myprofile } = useMyProfileData();
 
   const { mutateAsync: deleteVote } = useDeleteVote();
 
@@ -36,12 +39,14 @@ export const VoteHeader = ({ voteId, scheduleId }: VoteHeaderProps) => {
       <Flex height="100px" alignItems="center">
         <User size="md" nickname={memberSimpleResponse?.nickname} />
         <Spacer />
-        <ActionsMenu icon={<IoEllipsisHorizontalSharp />}>
-          <Box onClick={() => onDelete()} color="red">
-            삭제
-          </Box>
-          <Box color="gray.500">취소</Box>
-        </ActionsMenu>
+        {myprofile?.id === memberSimpleResponse?.id ? (
+          <ActionsMenu icon={<IoEllipsisHorizontalSharp />}>
+            <Box onClick={() => onDelete()} color="red">
+              삭제
+            </Box>
+            <Box color="gray.500">취소</Box>
+          </ActionsMenu>
+        ) : null}
       </Flex>
     </Box>
   );

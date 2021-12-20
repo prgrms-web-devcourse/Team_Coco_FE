@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
+import { DailyPlace, Marker } from "../../types";
+
 declare global {
   interface Window {
     kakao: any;
   }
 }
-
-type Marker = {
-  spotId: number;
-  addressName: string;
-  roadAddressName: string;
-  phone: string;
-  position: { lat: number; lng: number };
-  placeName: string;
-};
-
-type DailyPlace = Marker & { dateOrder: number; spotOrder: number };
 
 type MapContainerProps = {
   searchPlace?: string;

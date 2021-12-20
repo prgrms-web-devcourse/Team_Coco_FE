@@ -2,15 +2,14 @@ import { LinkBox, LinkOverlay, Heading, HStack, Flex } from "@chakra-ui/react";
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-import { cityMap } from "../../constants";
-
 import { TextWithIcon } from "@/components/TextWithIcon";
 import { User } from "@/components/User";
+import type { City } from "@/features/posts/types";
 import { ThemeTag } from "@/features/schedules/components/ThemeTag";
 import type { Theme } from "@/features/schedules/types";
 
 export type PostProps = {
-  city: string;
+  city: City;
   startDate: string;
   endDate: string;
   nickname: string;
@@ -41,9 +40,7 @@ export const Post = ({
         </LinkOverlay>
       </Heading>
       <Flex justify="space-between">
-        <TextWithIcon icon={<IoLocationSharp />}>
-          {cityMap[city as keyof typeof cityMap]}
-        </TextWithIcon>
+        <TextWithIcon icon={<IoLocationSharp />}>{city}</TextWithIcon>
         <TextWithIcon icon={<IoCalendarSharp />}>
           {`${startDate} ~ ${endDate}`}
         </TextWithIcon>

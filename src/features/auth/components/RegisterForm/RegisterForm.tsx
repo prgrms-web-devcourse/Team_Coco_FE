@@ -12,7 +12,6 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { format } from "date-fns";
 import React from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -20,11 +19,14 @@ import * as yup from "yup";
 
 import { DatePicker } from "@/components/DatePicker";
 import { useSignUpData } from "@/features/auth/hooks";
-import { omit } from "@/utils/object";
+import { genderMap } from "@/features/user/constants";
+import type { Gender } from "@/features/user/types";
+import { formatDateToString } from "@/utils/date";
+import { omit, objectEntries, objectKeys } from "@/utils/object";
 
 const schema = yup.object().shape({
   name: yup.string().min(2).max(255).required(),
-  gender: yup.string().oneOf(["MALE", "FEMALE"]).required(),
+  gender: yup.string().oneOf(objectKeys(genderMap)).required(),
   birthDate: yup.date().required(),
   nickname: yup.string().min(2).max(255).required(),
   email: yup.string().email().required(),
@@ -47,7 +49,7 @@ const defaultValues: FormValues = {
 
 type FormValues = {
   name: string;
-  gender: "MALE" | "FEMALE";
+  gender: Gender;
   birthDate: Date;
   nickname: string;
   email: string;
@@ -74,7 +76,7 @@ export const RegisterForm = () => {
   }) => {
     await signUp({
       data: {
-        birth: format(birthDate, "yyyy-MM-dd"),
+        birth: formatDateToString(birthDate),
         ...omit(rest, ["confirmPassword"]),
       },
     });
@@ -99,8 +101,13 @@ export const RegisterForm = () => {
             <FormControl id="gender" isInvalid={Boolean(errors.gender)}>
               <FormLabel>성별</FormLabel>
               <Select {...register("gender")}>
-                <option value="MALE">남성</option>
-                <option value="FEMALE">여성</option>
+                {objectEntries(genderMap).map(([gender, label], idx) => {
+                  return (
+                    <option key={`${gender}-${idx}`} value={gender}>
+                      {label}
+                    </option>
+                  );
+                })}
               </Select>
               <FormErrorMessage>
                 {errors.gender && "성별은 남성/여성 중 하나여야 합니다."}

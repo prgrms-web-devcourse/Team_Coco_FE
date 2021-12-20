@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { format, addDays } from "date-fns";
+import { addDays } from "date-fns";
 import { useState } from "react";
 import {
   SubmitHandler,
@@ -30,7 +30,7 @@ import { IoAdd } from "react-icons/io5";
 import * as yup from "yup";
 
 import { useCreateScheduleData } from "../../hooks";
-import type { DailyPlaceTemp, SpotResponse, Theme } from "../../types";
+import type { DailyPlace, Marker, Theme } from "../../types";
 import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
 import { FriendsList } from "../FriendsList";
@@ -41,13 +41,14 @@ import { SearchPlace } from "../SearchPlace";
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { DatePicker } from "@/components/DatePicker";
 import { getTotalDays } from "@/utils/date";
+import { formatDateToString } from "@/utils/date";
 
 type FormValues = {
   title: string;
   themes: Theme;
   startDate: Date;
   endDate: Date;
-  dailySchedulePlaces: DailyPlaceTemp[];
+  dailySchedulePlaces: DailyPlace[];
 };
 
 const defaultValues: FormValues = {
@@ -85,9 +86,8 @@ const schema = yup.object().shape({
         startDate &&
         schema.max(
           addDays(startDate, 6),
-          `완료날짜는 ${format(
-            addDays(startDate, 6),
-            "yyyy-MM-dd"
+          `완료날짜는 ${formatDateToString(
+            addDays(startDate, 6)
           )}이전이여야 합니다`
         )
     ),
@@ -101,6 +101,7 @@ const schema = yup.object().shape({
         placeName: yup.string(),
         roadAddressName: yup.string(),
         spotId: yup.string(),
+        spotOrder: yup.number().min(1).max(6),
       })
     )
     .min(1, "최소 하나의 여행 장소를 추가해 주세요"),
@@ -123,7 +124,7 @@ export const AddScheduleForm = () => {
     name: "dailySchedulePlaces",
   });
 
-  const [selectedPlace, setSelectedPlace] = useState<SpotResponse>();
+  const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const tempStartDate = watch("startDate");
@@ -135,11 +136,9 @@ export const AddScheduleForm = () => {
     const formattedData = {
       title: data.title,
       themes: Array.isArray(data.themes) ? data.themes : [data.themes],
-      startDate: format(data.startDate, "yyyy-MM-dd"),
-      endDate: format(data.endDate, "yyyy-MM-dd"),
-      dailyScheduleSpotCreationRequests: data.dailySchedulePlaces.map(
-        ({ order: spotOrder, ...rest }) => ({ spotOrder, ...rest }) // 추후에 백엔드 측에서 GET-schedule-detail 내 order속성 명이 spotOrder로 바뀌면 컴포넌트 단에서 spotOrder로 통일할 예정
-      ),
+      startDate: formatDateToString(data.startDate),
+      endDate: formatDateToString(data.endDate),
+      dailyScheduleSpotCreationRequests: data.dailySchedulePlaces,
     };
 
     await createSchedule({ data: formattedData });
@@ -161,7 +160,7 @@ export const AddScheduleForm = () => {
 
         <SimpleGrid columns={2} spacing={2}>
           <Stack>
-            <FormControl id="startDate">
+            <FormControl id="start-date">
               <FormLabel>출발 날짜</FormLabel>
               <Controller
                 control={control}
@@ -174,7 +173,7 @@ export const AddScheduleForm = () => {
           </Stack>
 
           <Stack>
-            <FormControl id="endDate" isInvalid={Boolean(errors.endDate)}>
+            <FormControl id="end-date" isInvalid={Boolean(errors.endDate)}>
               <FormLabel>완료 날짜</FormLabel>
               <Controller
                 control={control}
@@ -266,12 +265,21 @@ export const AddScheduleForm = () => {
             <RoundAddButton
               onClick={() => {
                 if (!selectedPlace) return;
+                if (
+                  fields.filter(
+                    (dailyPlace: DailyPlace) =>
+                      dailyPlace.dateOrder === selectedDateIdx + 1
+                  ).length > 5
+                )
+                  return;
                 append({
                   ...selectedPlace,
                   dateOrder: selectedDateIdx + 1,
-                  order: fields.filter(
-                    (dailyPlace: any) => dailyPlace.date === selectedDateIdx
-                  ).length,
+                  spotOrder:
+                    fields.filter(
+                      (dailyPlace: DailyPlace) =>
+                        dailyPlace.dateOrder === selectedDateIdx + 1
+                    ).length + 1,
                 });
               }}
             />

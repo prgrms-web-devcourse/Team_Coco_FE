@@ -17,9 +17,9 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-import { cities } from "@/features/posts/constants";
-import { searchThemes } from "@/features/posts/constants";
 import type { GetPostsDTO } from "@/features/posts/hooks";
+import { useCitiesData } from "@/features/posts/hooks";
+import { themeMap } from "@/features/schedules/constants";
 import { objectEntries } from "@/utils/object";
 import type { Omit } from "@/utils/types";
 
@@ -31,6 +31,7 @@ type FormValues = Omit<GetPostsDTO, "sorting">;
 
 export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
   const { handleSubmit, register, control } = useForm<FormValues>();
+  const { data: cities } = useCitiesData();
 
   const onSubmit: SubmitHandler<FormValues> = (values) => {
     setSearchState((prevState) => ({ ...prevState, ...values }));
@@ -47,9 +48,9 @@ export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
             {...register("searchingCity")}
           >
             <option value="전체">전체</option>
-            {cities.map((city, idx) => {
+            {cities.map((city) => {
               return (
-                <option key={`city-${idx}`} value={city}>
+                <option key={city} value={city}>
                   {city}
                 </option>
               );
@@ -65,16 +66,20 @@ export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
             render={({ field: { ref, ...rest } }) => (
               <RadioGroup colorScheme="cyan" defaultValue="ALL" {...rest}>
                 <HStack>
-                  {objectEntries(searchThemes).map(([key, value]) => {
+                  <Flex direction="column" alignItems="center" flexGrow={1}>
+                    <Radio value="ALL"></Radio>
+                    <Text color="gray.400">전체</Text>
+                  </Flex>
+                  {objectEntries(themeMap).map(([theme, label]) => {
                     return (
                       <Flex
                         direction="column"
                         alignItems="center"
                         flexGrow={1}
-                        key={key}
+                        key={theme}
                       >
-                        <Radio value={key}></Radio>
-                        <Text color="gray.400">{value}</Text>
+                        <Radio value={theme}></Radio>
+                        <Text color="gray.400">{label}</Text>
                       </Flex>
                     );
                   })}
