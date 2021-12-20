@@ -6,12 +6,11 @@ import {
   TabPanels,
   TabPanel,
   Box,
-  Button,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { IoChevronBack } from "react-icons/io5";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
+import { GoToBackButton } from "@/components/GoToBackButton";
 import { GoToUpdateButton } from "@/components/GoToUpdateButton";
 import { PrivatePageLayout } from "@/components/Layout";
 import { MemoList, VoteList } from "@/features/note/components";
@@ -27,9 +26,7 @@ export const NotePage = () => {
       title="메모 및 투표"
       header={
         <>
-          <Button as={Link} to={`/schedules/${scheduleId}`} variant="unstyled">
-            <IoChevronBack size={30} />
-          </Button>
+          <GoToBackButton target={`/schedules/${scheduleId}`} />
           <Heading size="lg">메모 및 투표</Heading>
         </>
       }

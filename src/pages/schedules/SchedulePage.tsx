@@ -25,7 +25,7 @@ export const SchedulePage = () => {
         title="id"
         header={
           <>
-            <GoToBackButton />
+            <GoToBackButton target={"/schedules"} />
             <Heading size="lg">스케줄 보기</Heading>
           </>
         }
