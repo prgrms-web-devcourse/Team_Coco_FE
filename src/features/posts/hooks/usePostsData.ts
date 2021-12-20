@@ -203,7 +203,7 @@ export const useDeletePostData = () => {
 };
 
 export type ModifyLikedPostDTO = {
-  data: { flag: boolean; schedulePostId: number | null };
+  data: { flag: boolean };
   postId: number | null;
 };
 
