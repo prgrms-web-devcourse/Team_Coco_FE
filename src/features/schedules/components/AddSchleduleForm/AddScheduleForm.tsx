@@ -19,7 +19,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addDays } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   SubmitHandler,
   useForm,
@@ -40,7 +40,7 @@ import { SearchPlace } from "../SearchPlace";
 
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { DatePicker } from "@/components/DatePicker";
-import { MemberSimpleResponse } from "@/features/memo/types";
+import { UserSimpleResponse } from "@/features/user/types";
 import { getTotalDays } from "@/utils/date";
 import { formatDateToString } from "@/utils/date";
 
@@ -125,7 +125,7 @@ export const AddScheduleForm = () => {
     name: "dailySchedulePlaces",
   });
 
-  const [members, setMembers] = useState<MemberSimpleResponse[]>([]);
+  const [members, setMembers] = useState<UserSimpleResponse[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -141,7 +141,9 @@ export const AddScheduleForm = () => {
       startDate: formatDateToString(data.startDate),
       endDate: formatDateToString(data.endDate),
       dailyScheduleSpotCreationRequests: data.dailySchedulePlaces,
-      idsOfFriends: members.map((member) => member.id),
+      idsOfFriends: members
+        .map((member) => member.id)
+        .filter((memberId) => typeof memberId === "number"),
     };
 
     await createSchedule({ data: formattedData });
@@ -195,11 +197,7 @@ export const AddScheduleForm = () => {
           <HStack>
             <AvatarGroup size="md" max={5}>
               {members.map((member) => (
-                <Avatar
-                  key={`Member-${member.id}`}
-                  name={member.nickname}
-                  src={member.imageUrl}
-                />
+                <Avatar key={`Member-${member.id}`} name={member.nickname} />
               ))}
             </AvatarGroup>
             {members.length && <IoAdd color="718096" />}
@@ -209,7 +207,12 @@ export const AddScheduleForm = () => {
               isOpen={isOpen}
               onClose={onClose}
             >
-              <FriendsList members={members} setMembers={setMembers} />
+              <FriendsList
+                members={members}
+                handleClick={(member) =>
+                  setMembers((prev) => [...prev, member])
+                }
+              />
             </CustomizedModal>
           </HStack>
         </FormControl>
