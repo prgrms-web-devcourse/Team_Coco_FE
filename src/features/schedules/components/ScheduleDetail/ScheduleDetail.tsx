@@ -84,9 +84,9 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
           {schedule.memberSimpleResponses.map((member) => {
             return (
               <Avatar
+                alt={"Member"}
                 key={`Avatar-${member.id}`}
                 name={member.nickname}
-                src={member.imageUrl}
               />
             );
           })}

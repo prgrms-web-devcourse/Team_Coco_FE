@@ -1,4 +1,4 @@
-import { Stack, Button, Center, Flex } from "@chakra-ui/react";
+import { Stack, Button, Center, Flex, Heading } from "@chakra-ui/react";
 
 import { useAddMember } from "../../hooks";
 
@@ -7,15 +7,6 @@ import { User } from "@/components/User";
 import { MemberSimpleResponse } from "@/features/memo/types";
 import { useFriendsData } from "@/features/user/hooks";
 import { isEmpty } from "@/utils/assertion";
-
-type Friend = {
-  src: string;
-  alt: string;
-  nickName: string;
-  age: number;
-  gender: string;
-  role: string;
-};
 
 type FriendsListProps = {
   members: MemberSimpleResponse[];
@@ -31,6 +22,9 @@ export const FriendsList = ({ members, scheduleId }: FriendsListProps) => {
 
   return (
     <Stack spacing={4}>
+      <Heading size="sm" color="gray.600">
+        나의 친구 목록
+      </Heading>
       {friendsLoading ? (
         <Center w="100%">
           <CustomSpinner />

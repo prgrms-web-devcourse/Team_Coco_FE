@@ -128,6 +128,33 @@ export const useAddMember = () => {
   const toast = useToast();
 
   return useMutation(addMember, {
+    onMutate: async ({ scheduleId, data }) => {
+      await queryClient.cancelQueries(["schedules", scheduleId]);
+      const previousSchedule = queryClient.getQueryData<ScheduleDetailResponse>(
+        ["schedules", scheduleId]
+      );
+
+      if (previousSchedule) {
+        queryClient.setQueriesData(["schedules", scheduleId], {
+          ...previousSchedule,
+          memberSimpleResponses: [
+            ...previousSchedule.memberSimpleResponses,
+            { id: data.friendId },
+          ],
+        });
+      }
+      return { previousSchedule };
+    },
+
+    onError: (error, _, context: any) => {
+      if (context?.previousSchedule) {
+        queryClient.setQueryData<ScheduleDetailResponse>(
+          ["schedules", context.previousSchedule.id],
+          context.previousSchedule
+        );
+      }
+    },
+
     onSettled: (_, error, { scheduleId }) => {
       toast({
         title: "친구를 초대하였습니다.",
