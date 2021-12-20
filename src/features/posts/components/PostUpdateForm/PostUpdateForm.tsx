@@ -64,6 +64,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
   const { data: post } = usePostData({
     postId: postId ? Number(postId) : null,
     enabled: !!postId,
+    refetchOnWindowFocus: false,
   });
   const { data: cities } = useCitiesData();
 

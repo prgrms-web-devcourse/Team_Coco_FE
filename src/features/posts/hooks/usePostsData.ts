@@ -44,11 +44,15 @@ export const getPostById = ({ postId }: GetPostByIdDTO) => {
 
 export type UsePostDataProps = GetPostByIdDTO & UseQueryOptions;
 
-export const usePostData = ({ postId, enabled }: UsePostDataProps) => {
+export const usePostData = ({
+  postId,
+  enabled,
+  refetchOnWindowFocus,
+}: UsePostDataProps) => {
   const { data = {} as PostDetailResponse, ...rest } = useQuery(
     ["post", postId],
     () => getPostById({ postId }),
-    { enabled }
+    { enabled, refetchOnWindowFocus }
   );
   return { data, ...rest };
 };
