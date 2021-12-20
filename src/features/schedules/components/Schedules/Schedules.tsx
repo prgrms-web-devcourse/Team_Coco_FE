@@ -23,7 +23,7 @@ export const Schedules = () => {
     <Stack spacing={4}>
       {schedules.map((schedule, idx) => (
         <Schedule
-          key={`Schedule-${idx}`}
+          key={`Schedule-${schedule.id}-${idx}`}
           id={schedule.id}
           title={schedule.title}
           startedDate={schedule.startDate}
