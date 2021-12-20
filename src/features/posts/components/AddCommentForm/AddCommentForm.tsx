@@ -13,6 +13,7 @@ import { IoSendSharp } from "react-icons/io5";
 import * as yup from "yup";
 
 import { useCreateCommentData } from "@/features/posts/hooks";
+import { useMyProfileData } from "@/features/user/hooks";
 
 const schema = yup.object().shape({
   comment: yup.string().min(1).max(255).required(),
@@ -24,10 +25,9 @@ type FormValues = {
 
 export type AddCommentFormProps = {
   postId: number | null;
-  nickname: string;
 };
 
-export const AddCommentForm = ({ postId, nickname }: AddCommentFormProps) => {
+export const AddCommentForm = ({ postId }: AddCommentFormProps) => {
   const {
     handleSubmit,
     register,
@@ -36,6 +36,7 @@ export const AddCommentForm = ({ postId, nickname }: AddCommentFormProps) => {
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
   });
+  const { data: user } = useMyProfileData();
   const { mutateAsync: createComment } = useCreateCommentData();
 
   const onSubmit: SubmitHandler<FormValues> = async ({ comment }) => {
@@ -46,7 +47,7 @@ export const AddCommentForm = ({ postId, nickname }: AddCommentFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <HStack>
-        <Avatar size="sm" name={nickname} />
+        <Avatar size="sm" name={user.nickname} />
         <InputGroup size="sm">
           <Input
             placeholder="댓글을 입력하세요"

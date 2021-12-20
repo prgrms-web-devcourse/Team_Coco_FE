@@ -64,10 +64,7 @@ export const PostPage = () => {
             postId={postId ? Number(postId) : null}
           />
           <Stack spacing={4}>
-            <AddCommentForm
-              postId={postId ? Number(postId) : null}
-              nickname={post.nickname}
-            />
+            <AddCommentForm postId={postId ? Number(postId) : null} />
             {isEmpty(comments) ? null : (
               <Comments
                 postId={postId ? Number(postId) : null}

@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { TextWithIcon } from "@/components/TextWithIcon";
 import { User } from "@/components/User";
-import { cityMap } from "@/features/posts/constants";
 import { useDeletePostData } from "@/features/posts/hooks";
 import { formatCreatedAt } from "@/utils/date";
 import { storage } from "@/utils/storage";
@@ -54,9 +53,7 @@ export const PostDetailHeader = ({
         ) : null}
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
-        <TextWithIcon icon={<IoLocationSharp />}>
-          {cityMap[city as keyof typeof cityMap]}
-        </TextWithIcon>
+        <TextWithIcon icon={<IoLocationSharp />}>{city}</TextWithIcon>
         <TextWithIcon icon={<IoCalendarSharp />}>
           {formatCreatedAt(createdAt)}
         </TextWithIcon>
