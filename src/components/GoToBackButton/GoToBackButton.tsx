@@ -1,7 +1,6 @@
 import { Button } from "@chakra-ui/react";
-import React from "react";
 import { IoChevronBack } from "react-icons/io5";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type GoToBackButtonProps = {
   target?: string;
