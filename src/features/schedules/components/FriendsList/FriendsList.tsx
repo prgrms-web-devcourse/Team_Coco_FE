@@ -1,22 +1,11 @@
-import {
-  Avatar,
-  Text,
-  HStack,
-  Stack,
-  Box,
-  Tag,
-  Button,
-  Center,
-  Flex,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Stack, Button, Center, Flex } from "@chakra-ui/react";
 
 import { useAddMember } from "../../hooks";
 
 import { CustomSpinner } from "@/components/CustomSpinner";
 import { User } from "@/components/User";
 import { MemberSimpleResponse } from "@/features/memo/types";
-import { useFriendsData, useDeleteFriendData } from "@/features/user/hooks";
+import { useFriendsData } from "@/features/user/hooks";
 import { isEmpty } from "@/utils/assertion";
 
 type Friend = {
@@ -35,9 +24,10 @@ type FriendsListProps = {
 
 export const FriendsList = ({ members, scheduleId }: FriendsListProps) => {
   const { data: friends, isLoading: friendsLoading } = useFriendsData();
-  const { mutate: deleteFriend, isLoading: deleteFriendLoading } =
-    useDeleteFriendData();
   const { mutate: addMember, isLoading: addMemberLoading } = useAddMember();
+
+  const identifyMember = (userId: number) =>
+    members.some((member) => member.id === userId);
 
   return (
     <Stack spacing={4}>
@@ -49,6 +39,8 @@ export const FriendsList = ({ members, scheduleId }: FriendsListProps) => {
         <div>친구가 없습니다</div>
       ) : (
         friends.map((friend) => {
+          const isMember = identifyMember(friend.id);
+
           return (
             <Flex
               justifyContent="space-between"
@@ -56,18 +48,21 @@ export const FriendsList = ({ members, scheduleId }: FriendsListProps) => {
               key={friend.id}
             >
               <User size="sm" nickname={friend.nickname} />
+
               <Button
                 size="xs"
-                colorScheme={"cyan"}
+                colorScheme={isMember ? "cyan" : "cyan"}
+                color="gray.50"
                 onClick={() => {
                   addMember({
                     scheduleId: scheduleId,
                     data: { friendId: friend.id },
                   });
                 }}
-                isLoading={deleteFriendLoading}
+                isLoading={addMemberLoading}
+                disabled={isMember}
               >
-                초대
+                {isMember ? "초대 됨" : "초대"}
               </Button>
             </Flex>
           );
@@ -75,31 +70,4 @@ export const FriendsList = ({ members, scheduleId }: FriendsListProps) => {
       )}
     </Stack>
   );
-  // return (
-  //   <Stack spacing={4}>
-  //     {friends.map((friend, idx) => (
-  //       <HStack justify="space-between" key={`friend-${idx}`}>
-  //         <HStack spacing={4}>
-  //           <Avatar src={friend.src} alt={friend.alt} size="md" />
-  //           <Box>
-  //             <Text fontWeight={600}>{friend.nickName}</Text>
-  //             <Text color={"gray.500"}>
-  //               {friend.age}대 / {friend.gender}
-  //             </Text>
-  //           </Box>
-  //         </HStack>
-
-  //         {friend.role === "member" ? (
-  //           <Tag variant="solid" colorScheme="cyan">
-  //             참여 중
-  //           </Tag>
-  //         ) : friend.role === "creator" ? (
-  //           <Tag variant="solid" backgroundColor="cyan.700">
-  //             생성자
-  //           </Tag>
-  //         ) : undefined}
-  //       </HStack>
-  //     ))}
-  //   </Stack>
-  // );
 };

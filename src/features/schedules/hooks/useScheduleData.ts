@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -39,9 +40,6 @@ export const useScheduleData = ({ scheduleId }: UseScheduleDataProps) => {
     () => getSchedule({ scheduleId })
   );
 
-  useQuery(["members", scheduleId], () =>
-    getSchedule({ scheduleId }).then((data) => data.memberSimpleResponses)
-  );
   return { data, ...rest };
 };
 
@@ -127,10 +125,19 @@ export const addMember = ({
 
 export const useAddMember = () => {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation(addMember, {
-    onSettled: () => {
-      queryClient.invalidateQueries(["members"]);
+    onSettled: (_, error, { scheduleId }) => {
+      toast({
+        title: "친구를 초대하였습니다.",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
+      queryClient.invalidateQueries(["schedules", scheduleId]);
     },
   });
 };
