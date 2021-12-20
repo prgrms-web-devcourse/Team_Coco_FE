@@ -1,7 +1,6 @@
 import { Button } from "@chakra-ui/react";
-import React from "react";
 import { IoChevronBack } from "react-icons/io5";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type GoToBackButtonProps = {
   target?: string;
@@ -10,17 +9,13 @@ type GoToBackButtonProps = {
 export const GoToBackButton = ({ target }: GoToBackButtonProps) => {
   const navigate = useNavigate();
 
+  const handleNavigate = () => {
+    target ? navigate(target) : navigate(-1);
+  };
+
   return (
-    <>
-      {target ? (
-        <Button as={Link} to={target} variant="unstyled">
-          <IoChevronBack size={30} />
-        </Button>
-      ) : (
-        <Button onClick={() => navigate(-1)} variant="unstyled">
-          <IoChevronBack size={30} />
-        </Button>
-      )}
-    </>
+    <Button onClick={() => handleNavigate()} variant="unstyled">
+      <IoChevronBack size={30} />
+    </Button>
   );
 };
