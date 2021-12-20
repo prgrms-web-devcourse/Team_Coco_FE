@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -106,6 +107,64 @@ export const useCreateScheduleData = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["schedules"]);
       navigate(`/schedules`);
+    },
+  });
+};
+
+export type addMemberDTO = {
+  scheduleId: number;
+  data: { friendId: number };
+};
+
+export const addMember = ({
+  scheduleId,
+  data,
+}: addMemberDTO): Promise<number> => {
+  return axios.post(`/schedules/${scheduleId}/members`, data);
+};
+
+export const useAddMember = () => {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+
+  return useMutation(addMember, {
+    onMutate: async ({ scheduleId, data }) => {
+      await queryClient.cancelQueries(["schedules", scheduleId]);
+      const previousSchedule = queryClient.getQueryData<ScheduleDetailResponse>(
+        ["schedules", scheduleId]
+      );
+
+      if (previousSchedule) {
+        queryClient.setQueriesData(["schedules", scheduleId], {
+          ...previousSchedule,
+          memberSimpleResponses: [
+            ...previousSchedule.memberSimpleResponses,
+            { id: data.friendId },
+          ],
+        });
+      }
+      return { previousSchedule };
+    },
+
+    onError: (error, _, context: any) => {
+      if (context?.previousSchedule) {
+        queryClient.setQueryData<ScheduleDetailResponse>(
+          ["schedules", context.previousSchedule.id],
+          context.previousSchedule
+        );
+      }
+    },
+
+    onSettled: (_, error, { scheduleId }) => {
+      toast({
+        title: "친구를 초대하였습니다.",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
+      queryClient.invalidateQueries(["schedules", scheduleId]);
     },
   });
 };

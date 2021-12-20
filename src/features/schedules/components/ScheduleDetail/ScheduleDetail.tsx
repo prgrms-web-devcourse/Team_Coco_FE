@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
 
-import { useScheduleData } from "../../hooks";
+import { useAddMember, useScheduleData } from "../../hooks";
 import { ThemeTag } from "../ThemeTag";
 
 import { ActionsMenu } from "@/components/ActionsMenu";
@@ -32,6 +32,7 @@ type ScheduleDetailProps = {
 export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
   const { data: schedule, isLoading } = useScheduleData({ scheduleId });
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { mutate: addMember, isLoading: addMemberLoading } = useAddMember();
 
   if (isLoading) {
     return (
@@ -83,14 +84,27 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
         <AvatarGroup size="md" max={5}>
           {schedule.memberSimpleResponses.map((member) => {
             return (
-              <Avatar key={`Avatar-${member.id}`} name={member.nickname} />
+              <Avatar
+                alt={"Member"}
+                key={`Avatar-${member.id}`}
+                name={member.nickname}
+              />
             );
           })}
         </AvatarGroup>
         <IoAdd color="718096" />
         <RoundUserAddButton onClick={onOpen} />
         <CustomizedModal head="멤버 초대하기" isOpen={isOpen} onClose={onClose}>
-          <FriendsList showRole={true} showInvitation={true} />
+          <FriendsList
+            members={schedule.memberSimpleResponses}
+            isButtonLoading={addMemberLoading}
+            handleClick={(member) =>
+              addMember({
+                scheduleId,
+                data: { friendId: member.id },
+              })
+            }
+          />
         </CustomizedModal>
       </HStack>
       <DailyCarouselWithInfos
