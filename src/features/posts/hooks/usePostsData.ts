@@ -21,6 +21,17 @@ import type { Theme } from "@/features/schedules/types";
 import { axios } from "@/lib/axios";
 import { filterFalsy } from "@/utils/object";
 
+export const getCities = () => {
+  return axios
+    .get<City[]>(`/posts/schedules/cities`)
+    .then((response) => response.data);
+};
+
+export const useCitiesData = () => {
+  const { data = [], ...rest } = useQuery(["cities"], getCities);
+  return { data, ...rest };
+};
+
 export type GetPostByIdDTO = {
   postId: number | null;
 };
@@ -33,11 +44,15 @@ export const getPostById = ({ postId }: GetPostByIdDTO) => {
 
 export type UsePostDataProps = GetPostByIdDTO & UseQueryOptions;
 
-export const usePostData = ({ postId, enabled }: UsePostDataProps) => {
+export const usePostData = ({
+  postId,
+  enabled,
+  refetchOnWindowFocus,
+}: UsePostDataProps) => {
   const { data = {} as PostDetailResponse, ...rest } = useQuery(
     ["post", postId],
     () => getPostById({ postId }),
-    { enabled }
+    { enabled, refetchOnWindowFocus }
   );
   return { data, ...rest };
 };
@@ -192,7 +207,7 @@ export const useDeletePostData = () => {
 };
 
 export type ModifyLikedPostDTO = {
-  data: { flag: boolean; schedulePostId: number | null };
+  data: { flag: boolean };
   postId: number | null;
 };
 

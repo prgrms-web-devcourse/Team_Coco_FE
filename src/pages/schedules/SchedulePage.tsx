@@ -22,7 +22,7 @@ export const SchedulePage = () => {
 
     return (
       <PrivatePageLayout
-        title="id"
+        title="스케줄 보기"
         header={
           <>
             <GoToBackButton target={"/schedules"} />

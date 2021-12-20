@@ -21,7 +21,7 @@ export const PostLikeButton = ({
       onClick={() => {
         modifyLikedPost({
           postId,
-          data: { flag: !isLiked, schedulePostId: postId },
+          data: { flag: !isLiked },
         });
       }}
       isLoading={isLoading}

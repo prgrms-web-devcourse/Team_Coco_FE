@@ -10,7 +10,41 @@ export type DailyScheduleSpotResponse = {
 
 export type Sorting = "조회순" | "좋아요순" | "댓글순" | "최신순";
 
-export type City = "SEOUL" | "BUSAN" | "INCHEON" | "JEJU";
+export type City =
+  | "서울"
+  | "부산"
+  | "인천"
+  | "제주"
+  | "대구"
+  | "대전"
+  | "광주"
+  | "수원"
+  | "울산"
+  | "화성"
+  | "전주"
+  | "천안"
+  | "김해"
+  | "평택"
+  | "포항"
+  | "원주"
+  | "세종"
+  | "진주"
+  | "아산"
+  | "춘천"
+  | "여수"
+  | "순천"
+  | "경주"
+  | "거제"
+  | "목포"
+  | "강릉"
+  | "양주"
+  | "안동"
+  | "논산"
+  | "동해"
+  | "속초"
+  | "삼척"
+  | "가평"
+  | "울릉";
 
 export type PostCreationRequest = {
   city: City;

@@ -17,8 +17,8 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-import { cityMap } from "@/features/posts/constants";
 import type { GetPostsDTO } from "@/features/posts/hooks";
+import { useCitiesData } from "@/features/posts/hooks";
 import { themeMap } from "@/features/schedules/constants";
 import { objectEntries } from "@/utils/object";
 import type { Omit } from "@/utils/types";
@@ -31,6 +31,7 @@ type FormValues = Omit<GetPostsDTO, "sorting">;
 
 export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
   const { handleSubmit, register, control } = useForm<FormValues>();
+  const { data: cities } = useCitiesData();
 
   const onSubmit: SubmitHandler<FormValues> = (values) => {
     setSearchState((prevState) => ({ ...prevState, ...values }));
@@ -47,10 +48,10 @@ export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
             {...register("searchingCity")}
           >
             <option value="전체">전체</option>
-            {objectEntries(cityMap).map(([city, label]) => {
+            {cities.map((city) => {
               return (
-                <option key={`${city}`} value={label}>
-                  {label}
+                <option key={city} value={city}>
+                  {city}
                 </option>
               );
             })}

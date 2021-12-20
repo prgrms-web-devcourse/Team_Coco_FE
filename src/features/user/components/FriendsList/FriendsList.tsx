@@ -7,10 +7,9 @@ import { isEmpty } from "@/utils/assertion";
 
 export const FriendsList = () => {
   const { data: friends, isLoading: friendsLoading } = useFriendsData();
-  const { mutate: deleteFriend, isLoading: deleteFriendLoading } =
-    useDeleteFriendData();
+  const { mutate: deleteFriend } = useDeleteFriendData();
   return (
-    <Stack spacing={4}>
+    <Stack spacing={4} minH="50vh">
       {friendsLoading ? (
         <Center w="100%">
           <CustomSpinner />
@@ -32,7 +31,6 @@ export const FriendsList = () => {
                 onClick={() => {
                   deleteFriend({ friendId: friend.id });
                 }}
-                isLoading={deleteFriendLoading}
               >
                 삭제
               </Button>
