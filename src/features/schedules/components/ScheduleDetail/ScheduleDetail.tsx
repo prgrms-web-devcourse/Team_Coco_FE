@@ -94,7 +94,10 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
         <IoAdd color="718096" />
         <RoundUserAddButton onClick={onOpen} />
         <CustomizedModal head="멤버 초대하기" isOpen={isOpen} onClose={onClose}>
-          <FriendsList showRole={true} showInvitation={true} />
+          <FriendsList
+            members={schedule.memberSimpleResponses}
+            scheduleId={scheduleId}
+          />
         </CustomizedModal>
       </HStack>
       <DailyCarouselWithInfos

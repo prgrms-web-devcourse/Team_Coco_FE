@@ -39,6 +39,9 @@ export const useScheduleData = ({ scheduleId }: UseScheduleDataProps) => {
     () => getSchedule({ scheduleId })
   );
 
+  useQuery(["members", scheduleId], () =>
+    getSchedule({ scheduleId }).then((data) => data.memberSimpleResponses)
+  );
   return { data, ...rest };
 };
 
@@ -106,6 +109,28 @@ export const useCreateScheduleData = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["schedules"]);
       navigate(`/schedules`);
+    },
+  });
+};
+
+export type addMemberDTO = {
+  scheduleId: number;
+  data: { friendId: number };
+};
+
+export const addMember = ({
+  scheduleId,
+  data,
+}: addMemberDTO): Promise<number> => {
+  return axios.post(`/schedules/${scheduleId}/members`, data);
+};
+
+export const useAddMember = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addMember, {
+    onSettled: () => {
+      queryClient.invalidateQueries(["members"]);
     },
   });
 };

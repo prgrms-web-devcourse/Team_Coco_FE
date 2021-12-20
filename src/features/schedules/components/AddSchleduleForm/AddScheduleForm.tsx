@@ -202,7 +202,7 @@ export const AddScheduleForm = () => {
               isOpen={isOpen}
               onClose={onClose}
             >
-              <FriendsList showRole={true} showInvitation={true} />
+              <FriendsList members={[]} scheduleId={0} />
             </CustomizedModal>
           </HStack>
         </FormControl>
