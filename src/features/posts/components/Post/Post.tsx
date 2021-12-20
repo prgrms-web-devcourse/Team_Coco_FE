@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import { TextWithIcon } from "@/components/TextWithIcon";
 import { User } from "@/components/User";
-import { cityMap } from "@/features/posts/constants";
 import type { City } from "@/features/posts/types";
 import { ThemeTag } from "@/features/schedules/components/ThemeTag";
 import type { Theme } from "@/features/schedules/types";
@@ -41,7 +40,7 @@ export const Post = ({
         </LinkOverlay>
       </Heading>
       <Flex justify="space-between">
-        <TextWithIcon icon={<IoLocationSharp />}>{cityMap[city]}</TextWithIcon>
+        <TextWithIcon icon={<IoLocationSharp />}>{city}</TextWithIcon>
         <TextWithIcon icon={<IoCalendarSharp />}>
           {`${startDate} ~ ${endDate}`}
         </TextWithIcon>

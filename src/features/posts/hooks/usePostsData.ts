@@ -21,6 +21,17 @@ import type { Theme } from "@/features/schedules/types";
 import { axios } from "@/lib/axios";
 import { filterFalsy } from "@/utils/object";
 
+export const getCities = () => {
+  return axios
+    .get<City[]>(`/posts/schedules/cities`)
+    .then((response) => response.data);
+};
+
+export const useCitiesData = () => {
+  const { data = [], ...rest } = useQuery(["cities"], getCities);
+  return { data, ...rest };
+};
+
 export type GetPostByIdDTO = {
   postId: number | null;
 };
