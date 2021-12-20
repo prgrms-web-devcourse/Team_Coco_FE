@@ -41,6 +41,7 @@ import { SearchPlace } from "../SearchPlace";
 import { CustomizedModal } from "@/components/CustomizedModal";
 import { DatePicker } from "@/components/DatePicker";
 import { UserSimpleResponse } from "@/features/user/types";
+import { isEmpty } from "@/utils/assertion";
 import { getTotalDays } from "@/utils/date";
 import { formatDateToString } from "@/utils/date";
 
@@ -200,7 +201,7 @@ export const AddScheduleForm = () => {
                 <Avatar key={`Member-${member.id}`} name={member.nickname} />
               ))}
             </AvatarGroup>
-            {members.length && <IoAdd color="718096" />}
+            {!isEmpty(members) && <IoAdd color="718096" />}
             <RoundUserAddButton onClick={onOpen} />
             <CustomizedModal
               head="멤버 초대하기"
