@@ -16,7 +16,14 @@ export const getSchedules = (): Promise<ScheduleSimpleResponse[]> => {
 };
 
 export const useSchedulesData = () => {
-  const { data = [], ...rest } = useQuery(["schedules"], getSchedules);
+  const { data = [] as ScheduleSimpleResponse[], ...rest } = useQuery(
+    ["schedules"],
+    getSchedules,
+    {
+      select: (data) => [...data].reverse(),
+    }
+  );
+
   return { data, ...rest };
 };
 
@@ -80,11 +87,37 @@ export const deleteSchedule = ({
 export const useDeleteScheduleData = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation(deleteSchedule, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["schedules"]);
-      navigate(`/schedules`);
+    onMutate: async ({ scheduleId }) => {
+      await queryClient.cancelQueries(["schedules"]);
+
+      const previousSchedules = queryClient.getQueryData<
+        ScheduleDetailResponse[]
+      >(["schedules"]);
+
+      if (previousSchedules) {
+        queryClient.setQueryData(
+          ["schedules"],
+          previousSchedules.filter((schedule) => schedule.id !== scheduleId)
+        );
+      }
+
+      return { previousSchedules };
+    },
+
+    onSettled: (data, error, { scheduleId }) => {
+      queryClient.invalidateQueries("schedules", { exact: true });
+      toast({
+        title: "플랜을 삭제하였습니다.",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
+      navigate(`/schedules`, { replace: true });
     },
   });
 };
@@ -102,10 +135,40 @@ export const createSchedule = ({
 export const useCreateScheduleData = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation(createSchedule, {
-    onSuccess: () => {
+    onMutate: async ({ data }) => {
+      await queryClient.cancelQueries(["schedules"]);
+      const previousSchedules = queryClient.getQueryData<
+        ScheduleSimpleResponse[]
+      >(["schedules"]);
+
+      if (previousSchedules) {
+        queryClient.setQueriesData(["schedules"], [...previousSchedules, data]);
+      }
+      return { previousSchedules };
+    },
+
+    onError: (error, _, context: any) => {
+      if (context?.previousSchedule) {
+        queryClient.setQueryData<ScheduleSimpleResponse[]>(
+          ["schedules"],
+          context.previousSchedules
+        );
+      }
+    },
+
+    onSettled: () => {
       queryClient.invalidateQueries(["schedules"]);
+      toast({
+        title: "새 플랜을 생성하였습니다.",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
       navigate(`/schedules`);
     },
   });
