@@ -195,13 +195,13 @@ export const useAddMember = () => {
 
   return useMutation(addMember, {
     onMutate: async ({ scheduleId, data }) => {
-      await queryClient.cancelQueries(["schedules", scheduleId]);
+      await queryClient.cancelQueries(["schedule", scheduleId]);
       const previousSchedule = queryClient.getQueryData<ScheduleDetailResponse>(
-        ["schedules", scheduleId]
+        ["schedule", scheduleId]
       );
 
       if (previousSchedule) {
-        queryClient.setQueriesData(["schedules", scheduleId], {
+        queryClient.setQueriesData(["schedule", scheduleId], {
           ...previousSchedule,
           memberSimpleResponses: [
             ...previousSchedule.memberSimpleResponses,
@@ -215,7 +215,7 @@ export const useAddMember = () => {
     onError: (error, _, context: any) => {
       if (context?.previousSchedule) {
         queryClient.setQueryData<ScheduleDetailResponse>(
-          ["schedules", context.previousSchedule.id],
+          ["schedule", context.previousSchedule.id],
           context.previousSchedule
         );
       }
@@ -230,7 +230,7 @@ export const useAddMember = () => {
         duration: 2000,
         isClosable: true,
       });
-      queryClient.invalidateQueries(["schedules", scheduleId]);
+      queryClient.invalidateQueries(["schedule", scheduleId]);
     },
   });
 };
