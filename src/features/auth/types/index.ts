@@ -1,3 +1,5 @@
+import type { Gender } from "@/features/user/types";
+
 export type LoginRequest = {
   email: string;
   password: string;
@@ -11,7 +13,7 @@ export type LoginResponse = {
 export type SignUpRequest = {
   birth: string;
   email: string;
-  gender: "MALE" | "FEMALE";
+  gender: Gender;
   name: string;
   nickname: string;
   password: string;

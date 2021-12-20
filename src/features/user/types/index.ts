@@ -1,4 +1,4 @@
-export type Gender = "DEFAULT" | "FEMALE" | "MALE";
+export type Gender = "FEMALE" | "MALE";
 
 export type UserDetailResponse = {
   id: number;
@@ -9,3 +9,10 @@ export type UserDetailResponse = {
   nickname: string;
   profileImage: string;
 };
+
+export type UserSimpleResponse = {
+  id: number;
+  nickname: string;
+};
+
+export type Friends = UserSimpleResponse[];

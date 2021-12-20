@@ -21,7 +21,9 @@ import { CustomSpinner } from "@/components/CustomSpinner";
 import { DailyCarouselWithInfos } from "@/features/schedules/components/DailyCarouselWithInfos";
 import { FriendsList } from "@/features/schedules/components/FriendsList";
 import { RoundUserAddButton } from "@/features/schedules/components/RoundUserAddButton";
+import { isEmpty } from "@/utils/assertion";
 import { getTotalDays } from "@/utils/date";
+import { objectKeys } from "@/utils/object";
 
 type ScheduleDetailProps = {
   scheduleId: number;
@@ -39,7 +41,7 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
     );
   }
 
-  if (Object.keys(schedule).length === 0) {
+  if (isEmpty(objectKeys(schedule))) {
     return (
       <Center sx={{ height: "calc(100vh - 5rem)" }}>
         <Text>schedule정보를 찾을 수 없습니다</Text>
