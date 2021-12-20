@@ -101,6 +101,7 @@ const schema = yup.object().shape({
         placeName: yup.string(),
         roadAddressName: yup.string(),
         spotId: yup.string(),
+        spotOrder: yup.number().min(1).max(6),
       })
     )
     .min(1, "최소 하나의 여행 장소를 추가해 주세요"),
@@ -264,6 +265,13 @@ export const AddScheduleForm = () => {
             <RoundAddButton
               onClick={() => {
                 if (!selectedPlace) return;
+                if (
+                  fields.filter(
+                    (dailyPlace: DailyPlace) =>
+                      dailyPlace.dateOrder === selectedDateIdx + 1
+                  ).length > 5
+                )
+                  return;
                 append({
                   ...selectedPlace,
                   dateOrder: selectedDateIdx + 1,
