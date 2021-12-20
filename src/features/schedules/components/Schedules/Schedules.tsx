@@ -21,18 +21,16 @@ export const Schedules = () => {
     </Center>
   ) : (
     <Stack spacing={4}>
-      {schedules.map((schedule, idx) => {
-        return (
-          <Schedule
-            key={`Schedule-${schedule.id}-${idx}`}
-            id={schedule.id}
-            title={schedule.title}
-            startedDate={schedule.startDate}
-            endedDate={schedule.endDate}
-            themes={schedule.themes}
-          />
-        );
-      })}
+      {schedules.map((schedule, idx) => (
+        <Schedule
+          key={`Schedule-${schedule.id}-${idx}`}
+          id={schedule.id}
+          title={schedule.title}
+          startedDate={schedule.startDate}
+          endedDate={schedule.endDate}
+          themes={schedule.themes}
+        />
+      ))}
     </Stack>
   );
 };
