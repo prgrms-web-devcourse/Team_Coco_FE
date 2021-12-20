@@ -10,17 +10,13 @@ type GoToBackButtonProps = {
 export const GoToBackButton = ({ target }: GoToBackButtonProps) => {
   const navigate = useNavigate();
 
+  const handleNavigate = () => {
+    target ? navigate(target) : navigate(-1);
+  };
+
   return (
-    <>
-      {target ? (
-        <Button as={Link} to={target} variant="unstyled">
-          <IoChevronBack size={30} />
-        </Button>
-      ) : (
-        <Button onClick={() => navigate(-1)} variant="unstyled">
-          <IoChevronBack size={30} />
-        </Button>
-      )}
-    </>
+    <Button onClick={() => handleNavigate()} variant="unstyled">
+      <IoChevronBack size={30} />
+    </Button>
   );
 };
