@@ -1,5 +1,5 @@
 import { Heading, Flex } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import { useParams, useLocation } from "react-router-dom";
 
 import { GoToBackButton } from "@/components/GoToBackButton";
@@ -14,7 +14,6 @@ import { useVoteData } from "@/features/vote/hooks";
 export const VotePage = () => {
   const { voteId } = useParams();
   const { state: scheduleId } = useLocation();
-  const [isJoined, setIsJoined] = useState(false);
 
   const { data: vote } = useVoteData({
     scheduleId: Number(scheduleId),
@@ -23,11 +22,9 @@ export const VotePage = () => {
 
   const { votingContentResponses } = vote;
 
-  votingContentResponses?.forEach((response) => {
-    if (response.participantFlag) {
-      setIsJoined(true);
-    }
-  });
+  const isJoined = votingContentResponses
+    ?.map(({ participantFlag }) => participantFlag)
+    .filter((flag) => flag).length;
 
   return (
     <PrivatePageLayout
