@@ -1,6 +1,7 @@
 import {
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Flex,
   Stack,
   VisuallyHidden,
@@ -61,7 +62,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
   });
 
   const { data: schedules } = useSchedulesData();
-  const { data: post } = usePostData({
+  const { data: post, isFetching } = usePostData({
     postId: postId ? Number(postId) : null,
     enabled: !!postId,
     refetchOnWindowFocus: false,
@@ -136,7 +137,11 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             placeholder="제목을 입력해주세요."
             {...register("title")}
             variant="flushed"
+            disabled={isFetching}
           />
+          <FormErrorMessage>
+            {errors.title && "제목은 1 ~ 16자 이내여야 합니다."}
+          </FormErrorMessage>
         </FormControl>
         <FormControl id="body" isInvalid={Boolean(errors.content)}>
           <VisuallyHidden>
@@ -147,6 +152,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             maxHeight={220}
             variant="unstyled"
             placeholder="내용을 입력해주세요."
+            disabled={isFetching}
             {...register("content")}
           />
         </FormControl>

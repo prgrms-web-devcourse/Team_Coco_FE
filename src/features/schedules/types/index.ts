@@ -57,6 +57,7 @@ export type ScheduleCreationRequest = {
   endDate: string;
   themes: Theme[];
   title: string;
+  idsOfFriends: number[];
 };
 
 export type ScheduleModificationRequest = {
