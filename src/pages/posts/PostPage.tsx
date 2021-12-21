@@ -58,6 +58,8 @@ export const PostPage = () => {
             title={post.title}
             content={post.content}
             dailyPlaces={post.dailyScheduleSpots}
+            startDate={post.startDate}
+            endDate={post.endDate}
             views={post.views}
             isLiked={post.isLiked}
             likeCount={post.likeCount}

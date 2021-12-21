@@ -153,6 +153,7 @@ export const PostUpdateForm = ({ postId }: PostUpdateFormProps) => {
             variant="unstyled"
             placeholder="내용을 입력해주세요."
             disabled={isFetching}
+            whiteSpace="pre-line"
             {...register("content")}
           />
         </FormControl>

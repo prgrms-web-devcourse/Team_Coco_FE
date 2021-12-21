@@ -5,6 +5,7 @@ import { PostLikeButton } from "@/features/posts/components/PostLikeButton";
 import type { DailyScheduleSpotResponse } from "@/features/posts/types";
 import { Carousel } from "@/features/schedules/components/Carousel";
 import { Dailys } from "@/features/schedules/components/Dailys";
+import { getTotalDays } from "@/utils/date";
 
 type PostDetailContentProps = {
   title: string;
@@ -14,6 +15,8 @@ type PostDetailContentProps = {
   isLiked: boolean;
   likeCount: number;
   postId: number | null;
+  startDate: string;
+  endDate: string;
 };
 
 export const PostDetailContent = ({
@@ -24,8 +27,12 @@ export const PostDetailContent = ({
   isLiked,
   likeCount,
   postId,
+  startDate,
+  endDate,
 }: PostDetailContentProps) => {
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
+
+  const totalDays = getTotalDays(new Date(endDate), new Date(startDate));
 
   return (
     <VStack spacing={4} align="stretch">
@@ -39,14 +46,14 @@ export const PostDetailContent = ({
       />
       <Carousel perViewInfo={{ base: 2 }}>
         <Dailys
-          totalDays={dailyPlaces.length}
+          totalDays={totalDays}
           selectedDateIdx={selectedDateIdx}
           setSelectedDateIdx={setSelectedDateIdx}
           dailyPlaces={dailyPlaces}
           className="keen-slider__slide"
         />
       </Carousel>
-      <Text fontSize="sm" color="gray.500">
+      <Text fontSize="sm" color="gray.500" whiteSpace="pre-line">
         {content}
       </Text>
       <Flex justifyContent="space-between">
