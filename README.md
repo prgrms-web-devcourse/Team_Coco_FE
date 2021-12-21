@@ -3,7 +3,7 @@
 <div align='center'>
   <img src='https://user-images.githubusercontent.com/37530109/146879939-cbd67eb2-770a-4f01-902f-d1ab54fa15e2.png'>
 
-📆 2021.11.16 ~ 2021.12.21
+📆 2021.11.26 ~ 2021.12.21
 
 </div>
 
