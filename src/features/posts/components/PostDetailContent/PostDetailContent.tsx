@@ -53,7 +53,7 @@ export const PostDetailContent = ({
           className="keen-slider__slide"
         />
       </Carousel>
-      <Text fontSize="sm" color="gray.500" sx={{ whiteSpace: "pre-line" }}>
+      <Text fontSize="sm" color="gray.500" whiteSpace="pre-line">
         {content}
       </Text>
       <Flex justifyContent="space-between">
