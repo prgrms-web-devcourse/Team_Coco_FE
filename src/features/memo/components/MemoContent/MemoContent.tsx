@@ -1,12 +1,4 @@
-import {
-  Stack,
-  Flex,
-  Center,
-  Spinner,
-  Box,
-  Textarea,
-  Input,
-} from "@chakra-ui/react";
+import { Stack, Flex, Center, Box, Textarea, Input } from "@chakra-ui/react";
 
 import { CustomSpinner } from "@/components/CustomSpinner";
 import { useMemoData } from "@/features/memo/hooks";

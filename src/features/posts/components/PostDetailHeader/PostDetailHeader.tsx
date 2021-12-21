@@ -1,4 +1,4 @@
-import { Stack, Flex, Box } from "@chakra-ui/react";
+import { Stack, Flex } from "@chakra-ui/react";
 import { IoLocationSharp, IoCalendarSharp } from "react-icons/io5";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";

@@ -15,12 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
-import {
-  useForm,
-  SubmitHandler,
-  Controller,
-  useFieldArray,
-} from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { IoCloseSharp, IoAddSharp } from "react-icons/io5";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
@@ -59,7 +54,6 @@ export const VoteUpdateForm = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    control,
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(schema),
