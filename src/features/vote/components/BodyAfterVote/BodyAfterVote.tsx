@@ -9,21 +9,18 @@ export const BodyAfterVote = () => {
   const { voteId } = useParams();
   const { state: scheduleId } = useLocation();
 
-  const counts: number[] = [];
-
   const { data: vote } = useVoteData({
     scheduleId: Number(scheduleId),
     votingId: Number(voteId),
   });
 
   const { title, votingContentResponses } = vote;
-  // votingContentResponses?.forEach((_, idx) => (defaultValues[idx] = false));
 
-  votingContentResponses.forEach((option: VotingContentResponse) =>
-    counts.push(option.numOfParticipants)
+  const maxCount = Math.max(
+    ...(votingContentResponses || []).map(
+      ({ numOfParticipants }) => numOfParticipants
+    )
   );
-
-  const maxCount = Math.max(...counts);
 
   return (
     <Stack spacing={4}>
@@ -36,9 +33,9 @@ export const BodyAfterVote = () => {
         value={title}
         disabled
       />
-      {votingContentResponses.map(
+      {votingContentResponses?.map(
         (option: VotingContentResponse, index: number) => (
-          <HStack key={index} spacing={4} flex={1}>
+          <HStack key={option.id} spacing={4} flex={1}>
             <Box width={8} aria-hidden>
               {option.participantFlag && (
                 <IoCheckmarkSharp width={4} size={24} color="#00A3C4" />

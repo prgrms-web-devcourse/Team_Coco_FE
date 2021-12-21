@@ -31,7 +31,6 @@ export const BodyBeforeVote = () => {
   });
 
   const { title, votingContentResponses } = vote;
-  votingContentResponses?.forEach((_, idx) => (defaultValues[idx] = false));
 
   const [checkedOptions, setCheckedOptions] = useState(defaultValues);
 
@@ -47,7 +46,6 @@ export const BodyBeforeVote = () => {
 
   const onSubmit = async () => {
     const map = { votingMap: checkedOptions };
-
     await modifyVote({
       scheduleId: Number(scheduleId),
       votingId: Number(voteId),
@@ -70,7 +68,7 @@ export const BodyBeforeVote = () => {
           color="gray.600"
           fontWeight="bold"
           variant="flushed"
-          value={title}
+          value={title || ""}
           disabled
         />
       </Box>
@@ -81,13 +79,13 @@ export const BodyBeforeVote = () => {
               <FormLabel>항목</FormLabel>
             </VisuallyHidden>
             <Stack spacing={2}>
-              {votingContentResponses?.map((option, idx) => (
-                <HStack key={idx} spacing={4}>
+              {votingContentResponses?.map((option) => (
+                <HStack key={option.id} spacing={4}>
                   <Checkbox
                     size="lg"
                     colorScheme="cyan"
-                    value={idx}
-                    onChange={(e) => checkHandler(e)}
+                    value={option.id}
+                    onChange={checkHandler}
                   />
                   <HStack
                     w="100%"
