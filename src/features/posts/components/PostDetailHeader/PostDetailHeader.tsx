@@ -35,20 +35,24 @@ export const PostDetailHeader = ({
         <User size="sm" nickname={nickname} />
         {isWriter ? (
           <ActionsMenu icon={<IoEllipsisHorizontal />}>
-            <Box
+            <Flex
+              w="100%"
+              justifyContent="center"
               onClick={() => {
                 navigate(`/posts/update/${postId}`);
               }}
             >
               수정
-            </Box>
-            <Box
+            </Flex>
+            <Flex
+              w="100%"
+              justifyContent="center"
               onClick={() => {
                 deletePost({ postId: postId ? Number(postId) : null });
               }}
             >
               삭제
-            </Box>
+            </Flex>
           </ActionsMenu>
         ) : null}
       </Flex>

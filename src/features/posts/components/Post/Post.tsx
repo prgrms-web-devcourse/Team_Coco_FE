@@ -34,7 +34,7 @@ export const Post = ({
           return <ThemeTag key={theme} theme={theme} />;
         })}
       </HStack>
-      <Heading size="md" my={4}>
+      <Heading size="sm" my={4}>
         <LinkOverlay as={Link} to={`/posts/${postId}`}>
           {title}
         </LinkOverlay>

@@ -42,11 +42,7 @@ export const PostsSearchForm = ({ setSearchState }: PostsSearchFormProps) => {
       <Stack spacing={4}>
         <FormControl id="searchingCity">
           <FormLabel>도시</FormLabel>
-          <Select
-            placeholder="도시를 선택해 주세요"
-            defaultValue="전체"
-            {...register("searchingCity")}
-          >
+          <Select defaultValue="전체" {...register("searchingCity")}>
             <option value="전체">전체</option>
             {cities.map((city) => {
               return (
