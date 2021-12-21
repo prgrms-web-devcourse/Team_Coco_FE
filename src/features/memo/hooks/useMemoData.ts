@@ -1,11 +1,9 @@
-import { UseQueryProps } from "@chakra-ui/media-query";
 import {
   useQuery,
   useMutation,
   useQueryClient,
   UseQueryOptions,
 } from "react-query";
-import { useNavigate } from "react-router-dom";
 
 import type {
   MemoRequest,

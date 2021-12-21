@@ -7,8 +7,6 @@ import type {
   VotingDetailResponse,
 } from "../types";
 
-import { queryClient } from "./../../../lib/react-query";
-
 import { axios } from "@/lib/axios";
 
 export type GetVoteDTO = {
