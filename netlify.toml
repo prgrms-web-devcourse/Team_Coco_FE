@@ -1,6 +1,6 @@
 [[redirects]]
   from = "/api/*"
-  to = "http://teruteru.ddns.net:39999/:splat"
+  to = "http://ec2-13-209-224-77.ap-northeast-2.compute.amazonaws.com:8080/:splat"
   status = 200
   force = true
 
