@@ -125,5 +125,5 @@
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix"
   },
-  "proxy": "http://teruteru.ddns.net:39999"
+  "proxy": "http://ec2-13-209-224-77.ap-northeast-2.compute.amazonaws.com:8080"
 }
