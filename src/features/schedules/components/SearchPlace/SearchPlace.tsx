@@ -32,7 +32,7 @@ export const SearchPlace = ({ setSelectedPlace }: SearchPlaceProps) => {
         </VisuallyHidden>
         <InputGroup w="full">
           <Input
-            placeholder="장소를 검색하세요"
+            placeholder="추가할 장소를 검색하세요"
             onChange={handleInputChange}
             value={inputText}
           />
