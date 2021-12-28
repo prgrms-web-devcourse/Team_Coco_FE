@@ -33,7 +33,7 @@ export const ScheduleUpdatePage = () => {
             </Heading>
           </Box>
           <Box px={4} py={6}>
-            <AddScheduleForm />
+            <AddScheduleForm scheduleId={scheduleId} />
           </Box>
         </Box>
       </Flex>

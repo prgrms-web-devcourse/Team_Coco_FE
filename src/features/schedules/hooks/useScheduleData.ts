@@ -62,13 +62,27 @@ export const modifySchedule = ({
   return axios.put(`/schedules/${scheduleId}`, data);
 };
 
-export const useModifyScheduleData = () => {
+export type UseModifyScheduleDataProps = GetScheduleDTO;
+
+export const useModifyScheduleData = ({
+  scheduleId,
+}: UseModifyScheduleDataProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation(modifySchedule, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["schedules"]);
+      toast({
+        title: "게시글 수정에 성공했습니다",
+        status: "success",
+        variant: "subtle",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
+
+      queryClient.invalidateQueries(["schedule", scheduleId]);
       navigate(`/schedules`);
     },
   });

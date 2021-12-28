@@ -63,7 +63,7 @@ export type ScheduleCreationRequest = {
 export type ScheduleModificationRequest = {
   title: string;
   themes: Theme[];
-  dailyScheduleSpotCreationRequest: {}[];
+  dailyScheduleSpotCreationRequests: {}[];
 };
 
 export type ChecklistCreationRequest = {

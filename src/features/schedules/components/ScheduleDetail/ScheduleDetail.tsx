@@ -16,8 +16,10 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { IoEllipsisHorizontal, IoAdd } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 import {
   useAddMember,
@@ -89,7 +91,9 @@ export const ScheduleDetail = ({ scheduleId }: ScheduleDetailProps) => {
         </Heading>
 
         <ActionsMenu icon={<IoEllipsisHorizontal />}>
-          <Box>수정</Box>
+          <ChakraLink as={Link} to={`/schedules/update/${schedule.id}`}>
+            수정
+          </ChakraLink>
           <Box color="red.600" onClick={onAlertOpen}>
             삭제
           </Box>

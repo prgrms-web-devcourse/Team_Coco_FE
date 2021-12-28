@@ -19,7 +19,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addDays } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SubmitHandler,
   useForm,
@@ -29,7 +29,11 @@ import {
 import { IoAdd } from "react-icons/io5";
 import * as yup from "yup";
 
-import { useCreateScheduleData } from "../../hooks";
+import {
+  useCreateScheduleData,
+  useModifyScheduleData,
+  useScheduleData,
+} from "../../hooks";
 import type { DailyPlace, Marker, Theme } from "../../types";
 import { Carousel } from "../Carousel";
 import { Dailys } from "../Dailys";
@@ -109,11 +113,16 @@ const schema = yup.object().shape({
     .min(1, "최소 하나의 여행 장소를 추가해 주세요"),
 });
 
-export const AddScheduleForm = () => {
+type AddScheduleFormProps = {
+  scheduleId?: string;
+};
+
+export const AddScheduleForm = ({ scheduleId }: AddScheduleFormProps) => {
   const {
     handleSubmit,
     register,
     control,
+    reset,
     watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
@@ -126,14 +135,22 @@ export const AddScheduleForm = () => {
     name: "dailySchedulePlaces",
   });
 
+  const { mutateAsync: createSchedule } = useCreateScheduleData();
+  const { mutateAsync: modifySchedule } = useModifyScheduleData({
+    scheduleId: Number(scheduleId),
+  });
+  const { data: schedule } = useScheduleData({
+    scheduleId: Number(scheduleId),
+  });
   const [members, setMembers] = useState<UserSimpleResponse[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
+  const [watchedStartDate, watchedEndDate] = [
+    watch("startDate"),
+    watch("endDate"),
+  ];
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const tempStartDate = watch("startDate");
-  const tempEndDate = watch("endDate");
-  const totalDays = getTotalDays(tempEndDate, tempStartDate);
-  const { mutateAsync: createSchedule } = useCreateScheduleData();
+  const totalDays = getTotalDays(watchedEndDate, watchedStartDate);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formattedData = {
@@ -147,8 +164,44 @@ export const AddScheduleForm = () => {
         .filter((memberId) => typeof memberId === "number"),
     };
 
-    await createSchedule({ data: formattedData });
+    await (mode === "create"
+      ? createSchedule({ data: formattedData })
+      : modifySchedule({
+          data: formattedData,
+          scheduleId: Number(scheduleId),
+        }));
   };
+
+  const mode = scheduleId ? "modify" : "create";
+
+  useEffect(() => {
+    if (isEmpty(schedule)) return;
+    const {
+      memberSimpleResponses,
+      scheduleSimpleResponse,
+      spotResponseList: dailySchedulePlaces,
+    } = schedule;
+    const {
+      endDate: endDateString,
+      startDate: startDateString,
+      themes,
+      title,
+    } = scheduleSimpleResponse;
+    const [startDate, endDate] = [startDateString, endDateString].map(
+      (dateString) => new Date(dateString)
+    );
+
+    reset({
+      title,
+      startDate,
+      endDate,
+      themes: themes[0],
+      dailySchedulePlaces,
+    });
+
+    setMembers(memberSimpleResponses);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schedule]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
