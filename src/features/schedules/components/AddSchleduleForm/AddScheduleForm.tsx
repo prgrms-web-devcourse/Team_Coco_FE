@@ -113,11 +113,11 @@ const schema = yup.object().shape({
     .min(1, "최소 하나의 여행 장소를 추가해 주세요"),
 });
 
-type AddScheduleProps = {
+type AddScheduleFormProps = {
   scheduleId?: string;
 };
 
-export const AddScheduleForm = ({ scheduleId }: AddScheduleProps) => {
+export const AddScheduleForm = ({ scheduleId }: AddScheduleFormProps) => {
   const {
     handleSubmit,
     register,
@@ -145,10 +145,12 @@ export const AddScheduleForm = ({ scheduleId }: AddScheduleProps) => {
   const [members, setMembers] = useState<UserSimpleResponse[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<Marker>();
   const [selectedDateIdx, setSelectedDateIdx] = useState(0);
+  const [watchedStartDate, watchedEndDate] = [
+    watch("startDate"),
+    watch("endDate"),
+  ];
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const tempStartDate = watch("startDate");
-  const tempEndDate = watch("endDate");
-  const totalDays = getTotalDays(tempEndDate, tempStartDate);
+  const totalDays = getTotalDays(watchedEndDate, watchedStartDate);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formattedData = {
@@ -185,8 +187,9 @@ export const AddScheduleForm = ({ scheduleId }: AddScheduleProps) => {
       themes,
       title,
     } = scheduleSimpleResponse;
-    const startDate = new Date(startDateString);
-    const endDate = new Date(endDateString);
+    const [startDate, endDate] = [startDateString, endDateString].map(
+      (dateString) => new Date(dateString)
+    );
 
     reset({
       title,
