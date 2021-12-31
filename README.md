@@ -37,9 +37,9 @@
             <a href="https://github.com/Baek2back"><I>Baek2back</I></a>
         </td>
         <td>
-            <img src="https://github.com/kimin3004.png?size=100">
+            <img src="https://github.com/minimalKim.png?size=100">
             <br>
-            <a href="https://github.com/kimin3004"><I>kimin3004</I></a>
+            <a href="https://github.com/minimalKim"><I>minimalKim</I></a>
         </td>
         <td>
             <img src="https://github.com/JeeyoungPark.png?size=100">
